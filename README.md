@@ -1,6 +1,6 @@
-# Velum Client — recovered source project
+# Rockstar Client — recovered source project
 
-Recovered from `source archive` as a buildable Fabric project.
+Recovered from `rockstar-client.jar` as a buildable Fabric project.
 
 ## Recovered environment
 
@@ -16,7 +16,7 @@ Recovered from `source archive` as a buildable Fabric project.
 Minecraft symbols were remapped to Yarn named symbols before decompilation.
 Case-insensitive class-name collisions and JVM-only member collisions introduced
 by obfuscation received deterministic temporary names. The main package was
-normalized to `velum.client`; 112 module implementations, the client
+normalized to `rockstar.client`; 112 module implementations, the client
 singleton, module infrastructure, setting infrastructure, and their obvious
 public API methods were renamed from metadata and verified behavior. Symbols
 whose purpose cannot be established from bytecode keep deterministic temporary
@@ -52,7 +52,7 @@ The build completed successfully, including `validateAccessWidener`,
 resources from the input JAR, one generated refmap, all 119 configured Mixin
 classes, and all 12 embedded dependency JARs. No duplicate ZIP entries remain.
 
-`runClient` was also verified through Fabric startup, Velum initialization,
+`runClient` was also verified through Fabric startup, Rockstar initialization,
 resource reload, sound-engine startup, and atlas creation. Warnings for absent
 Sodium targets are optional-compatibility warnings. The embedded FTE SDK uses
 intermediary Minecraft names and therefore warns only in Loom's named dev
