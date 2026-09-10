@@ -1,3 +1,4 @@
+cat > .github/workflows/build.yml <<'EOF'
 name: Build Velum Client
 
 on:
@@ -15,25 +16,26 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Java 21
+      - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
           cache: gradle
 
-      - name: Grant execute permission
-        run: chmod +x ./gradlew
+      - name: Make Gradle executable
+        run: chmod +x gradlew
 
-      - name: Build with Gradle
+      - name: Build
         run: ./gradlew build --no-daemon
 
-      - name: Upload JAR
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: velum-client
           path: build/libs/*.jar
           if-no-files-found: error
+EOF
