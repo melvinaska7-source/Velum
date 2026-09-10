@@ -1,0 +1,10 @@
+package pyvelum.events.game;
+
+import velum.client.IiIIIIIi_Class66;
+import velum.client.IiIIIIiI_Class67;
+
+@IiIIIIiI_Class67(I_method_80b3cd54="world_change")
+public class WorldChangeEvent
+extends IiIIIIIi_Class66 {
+}
+
