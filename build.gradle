@@ -33,11 +33,10 @@ dependencies {
     compileOnly 'io.netty:netty-codec-http:4.1.115.Final'
     implementation 'io.projectreactor.netty:reactor-netty-http:1.1.25'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    // Bundle OkHttp and its runtime dependencies inside the Fabric mod JAR.
-    // Fabric does not put ordinary implementation dependencies on the runtime classpath.
+
     include 'com.squareup.okhttp3:okhttp:4.12.0'
-    include 'com.squareup.okio:okio-jvm:3.6.1'
-    include 'org.jetbrains.kotlin:kotlin-stdlib:1.9.10'
+    include 'com.squareup.okio:okio-jvm:3.7.0'
+    include 'org.jetbrains.kotlin:kotlin-stdlib:1.9.24'
     implementation 'org.openjfx:javafx-base:21.0.2:win'
     implementation 'org.openjfx:javafx-graphics:21.0.2:win'
     implementation 'org.openjfx:javafx-controls:21.0.2:win'
