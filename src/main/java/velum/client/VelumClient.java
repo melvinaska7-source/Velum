@@ -6,7 +6,6 @@ import globals.client.auth.SessionManager;
 import globals.client.snowball.SnowballManager;
 import globals.client.ui.RocknetMenu;
 import lombok.Generated;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.funtimeevents.api.FunTimeEventsAPI;
@@ -31,7 +30,6 @@ public enum VelumClient implements iIIiIIiIi_Class294 {
    public static final String ii_field_523beb0a = "https://velum.pub";
    public static final Logger I_field_ab0f6068 = LoggerFactory.getLogger(II_field_523beb0a);
    public static Entity I_field_77e0818c;
-   private static boolean startupSoundPlayed;
    private IiIIIiIi_Class70 I_field_3d937321;
    private IiIIIiiII_Class141 I_field_74e906ac;
    private ModuleManager I_field_75f17721;
@@ -75,18 +73,6 @@ public enum VelumClient implements iIIiIIiIi_Class294 {
       SessionManager.bootstrapEarly("https://velum.pub/api/v1");
       IiIIiiIi_Class78.I_method_e728808c();
       this.I_field_990d8ecc = new iiIiIIIiI_Class419();
-      // Create Velum/music on startup and initialize the local player backend.
-      VelumLocalMusic.getInstance();
-      ClientTickEvents.END_CLIENT_TICK.register(client -> {
-         if (!startupSoundPlayed && client.getSoundManager() != null) {
-            startupSoundPlayed = true;
-            try {
-               iiIiIIIII_Class417.iI_field_34b2ba6c.I_method_87d2e181(1.0F);
-            } catch (Throwable t) {
-               I_field_ab0f6068.warn("Не удалось воспроизвести стартовый звук Velum: {}", t.toString());
-            }
-         }
-      });
       this.I_field_a9b29e8c = new IiIIiIIII_Class145();
       this.I_field_8385b28c = new IIiiIIiiI_Class103();
       this.I_field_3d937321 = new IiIIIiIi_Class70();
