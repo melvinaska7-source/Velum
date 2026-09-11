@@ -14,20 +14,12 @@ public final class VelumMusicUi {
             .height(16.0F)
             .radius(6.0F)
             .background(state -> IiiiiIIIi_Class242.III_field_d0c8ec5.mulAlpha(0.22F + 0.12F * state.hover() + 0.06F * state.press()))
-            .textInset(22.0F)
+            .image(VelumClient.id("icons/music.png"), 12.0F, 0.0F, ColorRGBA.WHITE)
             .text(
                 IIiIiI_Class11.i_field_857c0621.I_method_3a2d5e3(7.0F),
                 () -> "Music",
                 state -> IiiiiIIIi_Class242.iII_field_d0c8ec5.mulAlpha(0.72F + 0.28F * state.hover())
             )
-            .paint((draw, state) -> draw.drawTexture(
-                VelumClient.id("icons/music.png"),
-                state.x() + 6.0F,
-                state.y() + 2.0F,
-                12.0F,
-                12.0F,
-                ColorRGBA.WHITE.withAlpha(255.0F * (0.72F + 0.28F * state.hover()))
-            ))
             .textAlign(IIi_Class2.i_field_b5755e8c)
             .cursor(iIIIiIIIi_Class274.i_field_aa52e62c)
             .onClick(() -> VelumMusicScreen.open(parent));

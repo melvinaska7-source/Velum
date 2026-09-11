@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.List;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import pyvelum.utility.render.ColorRGBA;
@@ -76,9 +77,9 @@ public final class VelumMusicScreen extends Screen {
             int bg = current ? accent.mulAlpha(0.18F).getRGB() : (hovered ? primary.mulAlpha(0.07F).getRGB() : argb(0, 0, 0, 0));
             if ((bg >>> 24) != 0) context.fill(left + 10, y, left + panelW - 10, y + rowH - 2, bg);
             if (current) {
-                context.drawTexture(VelumClient.id("icons/music.png"), left + 14, y + 5, 14, 14, ColorRGBA.WHITE);
+                context.drawTexture(RenderLayer::getGuiTextured, VelumClient.id("icons/music.png"), left + 14, y + 5, 0.0F, 0.0F, 14, 14, 14, 14);
             }
-            context.drawTextWithShadow(textRenderer, Text.literal(displayName(track)), left + 34, y + 7, current ? accent.getRGB() : primary.getRGB());
+            context.drawTextWithShadow(textRenderer, Text.literal(displayName(track)), left + (current ? 34 : 17), y + 7, current ? accent.getRGB() : primary.getRGB());
         }
 
         if (tracks.isEmpty()) {
@@ -101,7 +102,7 @@ public final class VelumMusicScreen extends Screen {
         String currentTitle = music.getCurrentTitle();
         String time = format(position) + " / " + format(duration);
         context.drawTextWithShadow(textRenderer, Text.literal(currentTitle.isEmpty() ? "No track" : currentTitle), left + 14, controlsY, primary.getRGB());
-        context.drawRightAlignedText(textRenderer, Text.literal(time), left + panelW - 14, controlsY, muted.getRGB());
+        context.drawTextWithShadow(textRenderer, Text.literal(time), left + panelW - 14 - textRenderer.getWidth(time), controlsY, muted.getRGB());
 
         int buttonY = top + panelH - 35;
         drawButton(context, left + 14, buttonY, 58, 20, "‹", mouseX, mouseY, music::previous);
