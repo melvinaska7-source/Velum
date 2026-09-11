@@ -108,7 +108,7 @@ public class IiIiiiiii_Class192 extends IiIiiiIiI_Class187 implements iIIiIIiIi_
    }
 
    private IiIiiiiii_Class192.Nested1_4325a420 I_method_e41961e6(boolean var1) {
-      List<ArmorStandEntity> var2 = this.I_method_35a97a08();
+      List var2 = this.I_method_35a97a08();
       if (var2.isEmpty()) {
          return null;
       } else {
@@ -117,12 +117,9 @@ public class IiIiiiiii_Class192 extends IiIiiiIiI_Class187 implements iIIiIIiIi_
             return null;
          } else {
             Vec3d var4 = var3.getPos();
-            // FIX: elements here are ArmorStandEntity, not BlockPos.
-            // Previously this cast to BlockPos, which threw ClassCastException
-            // whenever this ran (it always does, since var2 is a List<ArmorStandEntity>).
-            List<ArmorStandEntity> var5 = var2.stream()
-               .filter(var2x -> this.I_method_cdee50cd(var2x.getPos(), var4) <= 64.0)
-               .sorted(Comparator.comparingDouble(var0 -> -var0.getPos().getY()))
+            List var5 = var2.stream()
+               .filter(var2x -> this.I_method_cdee50cd(((net.minecraft.entity.Entity)var2x).getPos(), var4) <= 64.0)
+               .sorted(Comparator.comparingDouble(var0 -> -((net.minecraft.util.math.BlockPos)var0).getY()))
                .toList();
             return new IiIiiiiii_Class192.Nested1_4325a420(var4, var5);
          }
