@@ -68,6 +68,10 @@ public final class VelumLocalMusic {
         return path == null ? "" : displayName(path);
     }
 
+    public Path getCurrentPath() {
+        return current;
+    }
+
     public boolean isPlaying() {
         Object p = player;
         if (p == null || !prepared) return false;
@@ -237,9 +241,9 @@ public final class VelumLocalMusic {
                     Object p = player;
                     if (p == null || !prepared) continue;
                     boolean playing = isPlaying();
-                    if (!playing && !paused && getDurationMs() > 0 && getPositionMs() >= getDurationMs() - 250L) {
-                        next();
-                    }
+                    // Track changes are controlled by MusicModule. When a track
+                    // reaches the end, the module disables itself instead of
+                    // silently jumping to the next song.
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;

@@ -103,21 +103,22 @@ public class IiIiiIIII_Class177 extends IiIiIIiII_Class165 implements iIIiIIiIi_
       this.renderLocalMusicIsland(var1);
    }
 
-   /** Small local-player island; intentionally compact so it never becomes a full HUD panel. */
+   /** Compact Velum music status shared by both ClickGUIs. */
    private void renderLocalMusicIsland(III draw) {
+      MusicModule module = VelumClient.getInstance().getModuleManager().getModule(MusicModule.class);
+      if (module == null) {
+         return;
+      }
+
       VelumLocalMusic music = VelumLocalMusic.getInstance();
-      if (!music.isPlaying()) {
-         return;
-      }
-
-      String title = music.getCurrentTitle();
+      String title = module.isEnabled() && music.isPlaying() ? music.getCurrentTitle() : "Music Off";
       if (title.isEmpty()) {
-         return;
+         title = "Music Off";
       }
+      title = title.length() > 30 ? title.substring(0, 27) + "..." : title;
 
-      title = title.length() > 34 ? title.substring(0, 31) + "..." : title;
-      String time = formatMusicTime(music.getPositionMs());
-      float width = Math.max(86.0F, Math.min(220.0F, 22.0F + title.length() * 3.45F + 26.0F));
+      String time = module.isEnabled() && music.isPlaying() ? formatMusicTime(music.getPositionMs()) : "";
+      float width = Math.max(92.0F, Math.min(220.0F, 32.0F + title.length() * 3.45F + (time.isEmpty() ? 0.0F : 28.0F)));
       float height = 18.0F;
       float x = (this.width - width) / 2.0F;
       float y = 7.0F;
@@ -126,9 +127,10 @@ public class IiIiiIIII_Class177 extends IiIiIIiII_Class165 implements iIIiIIiIi_
 
       draw.drawShadow(x, y, width, height, 12.0F, IIiii_Class8.I_method_893b2757(9.0F), accent.mulAlpha(0.16F));
       draw.drawRoundedRect(x, y, width, height, IIiii_Class8.I_method_893b2757(9.0F), IiiiiIIIi_Class242.Ii_method_a0f56f71().mulAlpha(0.86F));
-      draw.drawTexture(VelumClient.id("icons/music.png"), x + 5.0F, y + 3.0F, 12.0F, 12.0F, ColorRGBA.WHITE);
-      draw.drawText(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(7.0F), title, x + 20.0F, y + 5.0F, text.mulAlpha(0.9F));
-      draw.drawText(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(6.0F), time, x + width - 25.0F, y + 6.0F, text.mulAlpha(0.55F));
+      draw.drawText(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(7.0F), title, x + 8.0F, y + 5.0F, text.mulAlpha(0.9F));
+      if (!time.isEmpty()) {
+         draw.drawText(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(6.0F), time, x + width - 25.0F, y + 6.0F, text.mulAlpha(0.55F));
+      }
    }
 
    private static String formatMusicTime(long ms) {

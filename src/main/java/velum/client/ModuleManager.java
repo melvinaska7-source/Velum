@@ -71,6 +71,7 @@ import velum.client.EspModule;
 import velum.client.InterfaceModule;
 import velum.client.KillEffectsModule;
 import velum.client.MenuModule;
+import velum.client.MusicModule;
 import velum.client.ObjectInfoModule;
 import velum.client.PredictionModule;
 import velum.client.RemovalsModule;
@@ -211,6 +212,7 @@ public class ModuleManager {
         this.registerModule(new SpiderModule());
         this.registerModule(new ElytraStrafeModule());
         this.registerModule(new MenuModule());
+        this.registerModule(new MusicModule());
         this.registerModule(new EspModule());
         this.registerModule(new WaypointsModule());
         this.registerModule(new RemovalsModule());
