@@ -766,6 +766,8 @@ public class IiiIiIiiI_Class215 extends IiiIIiiiI_Class207 implements IiiIiIIiI_
                var8.add(this.I_field_a567c40b.computeIfAbsent(var10, this::I_method_bf3023f6));
             }
 
+            // Velum Music lives directly below the module list and uses the same themed controls.
+            var8.add(VelumMusicUi.button(this));
             this.I_field_b584628c.II_method_244860a9(var8);
             this.I_field_7865b31 = new ArrayList<>(var3);
             this.I_field_523beb0a = var2;

@@ -491,6 +491,8 @@ public class IiiIiIiii_Class216 extends IIiI_Class3 implements IiiIiIIiI_Class21
             var2.I_method_8939bffd(var10);
          }
 
+         // Keep the classic panel GUI compatible with the same Velum Music player.
+         var2.I_method_8939bffd(VelumMusicUi.button(this));
          this.I_field_bac0a97e.run();
          this.I_field_a2c190c1 = var4x -> {
             int var5x = var5[0] + var4x;

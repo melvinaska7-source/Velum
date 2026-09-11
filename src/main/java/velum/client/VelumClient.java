@@ -73,6 +73,8 @@ public enum VelumClient implements iIIiIIiIi_Class294 {
       SessionManager.bootstrapEarly("https://velum.pub/api/v1");
       IiIIiiIi_Class78.I_method_e728808c();
       this.I_field_990d8ecc = new iiIiIIIiI_Class419();
+      // Create Velum/music on startup and initialize the local player backend.
+      VelumLocalMusic.getInstance();
       this.I_field_a9b29e8c = new IiIIiIIII_Class145();
       this.I_field_8385b28c = new IIiiIIiiI_Class103();
       this.I_field_3d937321 = new IiIIIiIi_Class70();
