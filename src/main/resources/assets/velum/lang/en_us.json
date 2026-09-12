@@ -1,0 +1,10 @@
+{
+  "module.profile": "Profile",
+  "modules.descriptions.profile": "Visual player profile: models, pets, accessories and cosmetics.",
+  "modules.settings.profile.player_model": "Player Model",
+  "modules.settings.profile.pets": "Pets",
+  "modules.settings.profile.accessories": "Accessories",
+  "modules.settings.profile.cosmetics": "Cosmetics",
+  "modules.settings.profile.animate_pets": "Animate Pets",
+  "modules.settings.profile.show_in_third_person": "Show in Third Person"
+}

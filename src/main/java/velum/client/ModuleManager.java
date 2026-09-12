@@ -122,6 +122,7 @@ import velum.client.SuperFireworkModule;
 import velum.client.TimerModule;
 import velum.client.WaterSpeedModule;
 import velum.client.AdminskyModule;
+import velum.client.profile.ProfileModule;
 import ua.mintantileak.spk.Compile;
 
 public class ModuleManager {
@@ -279,6 +280,7 @@ public class ModuleManager {
         this.registerModule(new GuiMoveModule());
         this.registerModule(new TestModule());
         this.registerModule(new AdminskyModule());
+        this.registerModule(new ProfileModule());
         this.registerModule(new AutoBuyModule());
         this.registerModule(new AssistModule());
         this.registerModule(new SoundsModule());
