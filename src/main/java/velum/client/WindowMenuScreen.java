@@ -1,9 +1,7 @@
 package velum.client;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import net.minecraft.client.gui.screen.Screen;
 import pyvelum.utility.render.ColorRGBA;
 
 /**
@@ -96,11 +94,12 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
         }
 
         List<iii_Class8> columns = List.of(col1, col2, col3);
+        int visibleIndex = 0;
         for (ModuleEntry module : modules) {
-            int column = Math.floorMod(module.getCategory().ordinal(), 3);
+            int column = visibleIndex++ % 3;
             Iii_Class4 card = new Iii_Class4();
             card.height(31.0F).fillWidth().radius(7.0F).padding(IIII.I_method_14640aa3(7.0F));
-            card.text(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e(7.0F), module.getName(),
+            card.text(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(7.0F), module.getName(),
                 c -> module.isEnabled()
                     ? new ColorRGBA(255.0F, 255.0F, 255.0F, 255.0F)
                     : new ColorRGBA(205.0F, 205.0F, 215.0F, 220.0F));
@@ -108,7 +107,10 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
                 ? new ColorRGBA(87.0F, 126.0F, 255.0F, 100.0F)
                 : new ColorRGBA(255.0F, 255.0F, 255.0F, 16.0F));
             card.visibleWhen(() -> module.getCategory() == selectedCategory);
-            card.onClick(() -> selectedModule = module);
+            card.onClick(() -> {
+                selectedModule = module;
+                module.toggle();
+            });
             columns.get(column).I_method_8939bffd(card);
         }
 
@@ -118,7 +120,7 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
         moduleArea.fillHeight();
         Iii_Class4 modulesTitle = new Iii_Class4();
         modulesTitle.height(20.0F).fillWidth();
-        modulesTitle.text(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e(8.0F), "Modules",
+        modulesTitle.text(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(8.0F), "Modules",
             c -> IiiiiIIIi_Class242.iI_method_8e08d3b1());
         modulesTitle.padding(IIII.I_method_14640aa3(3.0F));
         moduleArea.I_method_8939bffd(modulesTitle);
@@ -130,7 +132,7 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
         settings.fillHeight();
         Iii_Class4 settingsTitle = new Iii_Class4();
         settingsTitle.height(28.0F).fillWidth();
-        settingsTitle.text(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e(8.0F),
+        settingsTitle.text(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(8.0F),
             () -> selectedModule == null ? "Settings" : selectedModule.getName(),
             c -> IiiiiIIIi_Class242.iI_method_8e08d3b1());
         settingsTitle.padding(IIII.I_method_14640aa3(7.0F));
@@ -182,5 +184,31 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
     @Override
     public float I_method_9833b22f() {
         return 1.0F;
+    }
+
+    @Override
+    public float i_method_98423e0f() {
+        return 0.0F;
+    }
+
+    @Override
+    public boolean I_method_9833b243() {
+        return false;
+    }
+
+    @Override
+    public float II_method_6e518cf2() {
+        return 1.0F;
+    }
+
+    @Override
+    public float Ii_method_6e6018d2() {
+        return 1.0F;
+    }
+
+    @Override
+    public List<IiiIiIIiI_Class211.Nested1_972f6c40> I_method_cb1d7a28() {
+        return List.of(new IiiIiIIiI_Class211.Nested1_972f6c40(
+            "window", 0.0F, 0.0F, WIDTH, HEIGHT));
     }
 }
