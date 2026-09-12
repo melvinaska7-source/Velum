@@ -55,14 +55,14 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
         iii_Class8 content = new iii_Class8()
             .I_method_3301fdd(iII_Class5.II_field_b583e68c)
             .fillWidth()
-            .IiI_method_31d4c97(440.0F)
+            .height(440.0F)
             .I_method_70a38517(8.0F);
 
         iii_Class8 categories = new iii_Class8()
             .I_method_3301fdd(iII_Class5.I_field_b583e68c)
             .IIi_method_4dfc88d7(118.0F)
             .fillHeight()
-            .I_method_70a38517(4.0F);
+            ;
 
         for (ModuleCategory category : ModuleCategory.values()) {
             categories.I_method_8939bffd(new Iii_Class4()
@@ -87,12 +87,12 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
             .I_method_3301fdd(iII_Class5.II_field_b583e68c)
             .fillWidth()
             .fillHeight()
-            .I_method_70a38517(6.0F);
+            ;
 
         List<iii_Class8> columns = List.of(
-            new iii_Class8().I_method_3301fdd(iII_Class5.I_field_b583e68c).fillWidth().fillHeight().I_method_70a38517(5.0F),
-            new iii_Class8().I_method_3301fdd(iII_Class5.I_field_b583e68c).fillWidth().fillHeight().I_method_70a38517(5.0F),
-            new iii_Class8().I_method_3301fdd(iII_Class5.I_field_b583e68c).fillWidth().fillHeight().I_method_70a38517(5.0F)
+            new iii_Class8().I_method_3301fdd(iII_Class5.I_field_b583e68c).fillWidth().fillHeight(),
+            new iii_Class8().I_method_3301fdd(iII_Class5.I_field_b583e68c).fillWidth().fillHeight(),
+            new iii_Class8().I_method_3301fdd(iII_Class5.I_field_b583e68c).fillWidth().fillHeight()
         );
         columns.forEach(moduleColumns::I_method_8939bffd);
 
@@ -119,7 +119,7 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
             .I_method_3301fdd(iII_Class5.I_field_b583e68c)
             .fillWidth()
             .fillHeight()
-            .I_method_70a38517(5.0F);
+            ;
         moduleArea.I_method_8939bffd(new Iii_Class4()
             .height(20.0F).fillWidth()
             .text(IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(8.0F), "Modules",
@@ -131,7 +131,7 @@ public final class WindowMenuScreen extends IIiI_Class3 implements IiiIiIIiI_Cla
             .I_method_3301fdd(iII_Class5.I_field_b583e68c)
             .IIi_method_4dfc88d7(250.0F)
             .fillHeight()
-            .I_method_70a38517(4.0F)
+            
             .I_method_f136b1d8((ctx, box) -> ctx.drawRoundedRect(box.x(), box.y(), box.w(), box.h(),
                 IIiii_Class8.I_method_893b2757(8.0F), new ColorRGBA(255.0F, 255.0F, 255.0F, 10.0F)));
 
