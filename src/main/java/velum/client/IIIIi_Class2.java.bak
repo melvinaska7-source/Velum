@@ -83,7 +83,7 @@ public class IIIIi_Class2 extends iii_Class8 implements IIiiiIIiI_Class115 {
    private static final String II_field_523beb0a = "\u0439\u0446\u0443\u043a\u0435\u043d\u0433\u0448\u0449\u0437\u0445\u044a\u0444\u044b\u0432\u0430\u043f\u0440\u043e\u043b\u0434\u0436\u044d\u044f\u0447\u0441\u043c\u0438\u0442\u044c\u0431\u044e.";
 
    private static String I_method_63e463a1() {
-      return "DLC";
+      return "LEEK";
    }
 
    public IIIIi_Class2(iiI_Class7 var1, BiConsumer<ModuleEntry, Setting> var2) {

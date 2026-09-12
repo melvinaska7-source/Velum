@@ -280,6 +280,7 @@ public class ModuleManager {
         this.registerModule(new GuiMoveModule());
         this.registerModule(new TestModule());
         this.registerModule(new AdminskyModule());
+        this.registerModule(new ProfileModule());
         this.registerModule(new AutoBuyModule());
         this.registerModule(new AssistModule());
         this.registerModule(new SoundsModule());
