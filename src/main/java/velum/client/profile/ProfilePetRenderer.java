@@ -18,6 +18,7 @@ public final class ProfilePetRenderer {
     private double x;
     private double y;
     private double z;
+    private float petYaw;
     private boolean initialized;
 
     public void render(Render3DEvent event, ProfileModule module) {
@@ -52,23 +53,35 @@ public final class ProfilePetRenderer {
         float yaw = client.player.getYaw(tickDelta);
         double yawRad = Math.toRadians(yaw);
 
-        // Slightly behind and to the side of the player, like a small companion.
-        double back = 1.15;
-        double side = 0.65;
-        double targetX = playerPos.x - Math.sin(yawRad) * back + Math.cos(yawRad) * side;
-        double targetZ = playerPos.z + Math.cos(yawRad) * back + Math.sin(yawRad) * side;
+        // Keep the companion clearly BEHIND the player.  Minecraft's forward vector is
+        // (-sin(yaw), cos(yaw)), so the backward vector is its opposite.
+        // A small side offset keeps the pet visible when looking around in first person.
+        double back = 1.55;
+        double side = 0.38;
+        double targetX = playerPos.x + Math.sin(yawRad) * back + Math.cos(yawRad) * side;
+        double targetZ = playerPos.z - Math.cos(yawRad) * back + Math.sin(yawRad) * side;
         double targetY = playerPos.y;
 
         if (!initialized) {
             x = targetX;
             y = targetY;
             z = targetZ;
+            petYaw = yaw + 180.0f;
             initialized = true;
         } else {
-            double smoothing = module.getAnimatePetsSetting().i_method_9b12da03() ? 0.18 : 1.0;
+            // Deliberately slow down the follow motion. The pet should visibly lag behind
+            // turns and movement instead of snapping to the player every frame.
+            double smoothing = module.getAnimatePetsSetting().i_method_9b12da03() ? 0.075 : 1.0;
             x = MathHelper.lerp(smoothing, x, targetX);
             y = MathHelper.lerp(smoothing, y, targetY);
             z = MathHelper.lerp(smoothing, z, targetZ);
+
+            if (module.getAnimatePetsSetting().i_method_9b12da03()) {
+                float targetPetYaw = yaw + 180.0f;
+                petYaw = lerpAngle(petYaw, targetPetYaw, 0.075f);
+            } else {
+                petYaw = yaw + 180.0f;
+            }
         }
 
         // Tiny idle bob. It is purely visual and does not allocate anything per frame.
@@ -84,7 +97,8 @@ public final class ProfilePetRenderer {
         matrices.push();
         try {
             matrices.translate(x - cameraX, y - cameraY + 0.02D + bob, z - cameraZ);
-            matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Y.rotationDegrees(-yaw));
+            // Pet models use the opposite forward direction from the player.
+            matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Y.rotationDegrees(-petYaw));
 
             if (pet == PetManager.Pet.JELLIE) {
                 ObjModelRenderer.render(JELLIE_MODEL, JELLIE_TEXTURE, matrices, 0.8f / 16.0f);
@@ -94,5 +108,10 @@ public final class ProfilePetRenderer {
         } finally {
             matrices.pop();
         }
+    }
+
+    private static float lerpAngle(float current, float target, float amount) {
+        float delta = MathHelper.wrapDegrees(target - current);
+        return current + delta * amount;
     }
 }
