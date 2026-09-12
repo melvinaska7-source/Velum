@@ -25,7 +25,18 @@ public final class ProfilePetRenderer {
         if (client.player == null || client.world == null) {
             return;
         }
-        if (module.getPetsSetting().I_method_1544ce2d("None")) {
+        // Keep the runtime selection synchronized with the GUI before deciding whether there is a pet.
+        PetManager.Pet pet;
+        if (module.getPetsSetting().I_method_1544ce2d("Jellie")) {
+            pet = PetManager.Pet.JELLIE;
+        } else if (module.getPetsSetting().I_method_1544ce2d("T-Rex")) {
+            pet = PetManager.Pet.TREX;
+        } else {
+            pet = PetManager.Pet.NONE;
+        }
+        module.getPetManager().setSelected(pet);
+
+        if (pet == PetManager.Pet.NONE) {
             initialized = false;
             return;
         }
@@ -35,19 +46,6 @@ public final class ProfilePetRenderer {
                 && !module.getShowInThirdPersonSetting().i_method_9b12da03()) {
             return;
         }
-
-        PetManager.Pet pet = module.getPetManager().getSelected();
-        if (pet == PetManager.Pet.NONE) {
-            return;
-        }
-
-        // Keep the manager state synchronized with the GUI setting.
-        if (module.getPetsSetting().I_method_1544ce2d("Jellie")) {
-            pet = PetManager.Pet.JELLIE;
-        } else if (module.getPetsSetting().I_method_1544ce2d("T-Rex")) {
-            pet = PetManager.Pet.TREX;
-        }
-        module.getPetManager().setSelected(pet);
 
         float tickDelta = event.getTickDelta();
         Vec3d playerPos = client.player.getLerpedPos(tickDelta);

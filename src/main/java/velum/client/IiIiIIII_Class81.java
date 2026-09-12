@@ -88,7 +88,23 @@ public final class IiIiIIII_Class81 {
             return string2;
         }
         String string3 = IiIiIIIi_Class82.I_method_865ff82a(string);
-        return string3 != null ? string3 : string;
+        if (string3 != null) {
+            return string3;
+        }
+        if (i_field_3f56db61 == IiIIiiii_Class80.i_field_3f56db61) {
+            switch (string) {
+                case "module.profile": return "Профиль";
+                case "modules.descriptions.profile": return "Модели игрока, питомцы, аксессуары и косметика.";
+                case "modules.settings.profile.player_model": return "Модель игрока";
+                case "modules.settings.profile.pets": return "Питомцы";
+                case "modules.settings.profile.accessories": return "Аксессуары";
+                case "modules.settings.profile.cosmetics": return "Косметика";
+                case "modules.settings.profile.animate_pets": return "Анимация питомцев";
+                case "modules.settings.profile.show_in_third_person": return "Показывать от третьего лица";
+                default: break;
+            }
+        }
+        return string;
     }
 
     @Compile
