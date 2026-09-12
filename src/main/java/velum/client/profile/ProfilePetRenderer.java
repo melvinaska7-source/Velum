@@ -112,13 +112,13 @@ public final class ProfilePetRenderer {
             // Pet models use the opposite forward direction from the player.
             matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Y.rotationDegrees(-petYaw));
 
-            // Jellie was authored in Blockbench with Z as its vertical axis.
-            // The generic OBJ loader grounds models using their original Y axis, so
-            // Jellie needs a model-specific axis correction after that normalization.
+            // Jellie is authored with the body lying across the horizontal plane but
+            // its model's local forward axis is rotated relative to Minecraft. The
+            // previous X-axis correction tipped the cat onto its nose. A Z-axis quarter
+            // turn fixes the source orientation without changing the grounded Y axis.
             if (pet == PetManager.Pet.JELLIE) {
                 float scale = 0.8f / 16.0f;
-                matrices.translate(0.0D, 10.2100D * scale, 0.0D);
-                matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(90.0f));
+                matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Z.rotationDegrees(90.0f));
                 ObjModelRenderer.render(JELLIE_MODEL, JELLIE_TEXTURE, matrices, scale);
             } else if (pet == PetManager.Pet.TREX) {
                 ObjModelRenderer.render(TREX_MODEL, TREX_TEXTURE, matrices, 0.8f / 16.0f);

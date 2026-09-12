@@ -123,6 +123,14 @@ public enum VelumClient implements iIIiIIiIi_Class294 {
       this.I_field_c7d5b781.I_method_bb63b4cc();
       this.I_field_3f47d381.i_method_b4765cac();
       this.I_field_4ef00546.connect();
+      // The local profile is authoritative for the device. Re-apply it after the
+      // network config bootstrap so a remote/default profile cannot reset module
+      // enabled states, keybinds, or settings on the next launch.
+      try {
+         this.I_field_3f47d381.I_method_de9edf96("client");
+      } catch (Throwable ignored) {
+         I_field_ab0f6068.warn("Failed to re-apply local client profile: {}", ignored.toString());
+      }
       SessionManager.bootstrapAsync(this.I_field_4ef00546);
       ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
          public Identifier getFabricId() {

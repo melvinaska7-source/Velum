@@ -88,7 +88,6 @@ implements ModuleEntry {
         // Persist module keybind changes through the active config. During config loading
         // the autosave manager is suppressed, so this is safe for both load and runtime.
         if (VelumClient.getInstance().I_method_5198232b() != null) {
-            VelumClient.getInstance().I_method_5198232b().II_method_1fbeeff5();
             if (VelumClient.getInstance().I_method_7a4c3f0b().I_method_3272b401("client") instanceof IiIIiIiI_Class75 clientConfig) {
                 clientConfig.scheduleAutoSave();
             }
@@ -148,7 +147,6 @@ implements ModuleEntry {
         }
         // Enabled state is part of the module config and must survive restarts.
         if (VelumClient.getInstance().I_method_5198232b() != null) {
-            VelumClient.getInstance().I_method_5198232b().II_method_1fbeeff5();
             if (VelumClient.getInstance().I_method_7a4c3f0b().I_method_3272b401("client") instanceof IiIIiIiI_Class75 clientConfig) {
                 clientConfig.scheduleAutoSave();
             }
