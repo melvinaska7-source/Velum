@@ -28,7 +28,6 @@ extends Module {
     private KeybindSetting I_field_ba20522c;
     private Screen I_field_bf52cf84;
     private IiiIiIiii_Class216 I_field_a5e7424c;
-    private WindowMenuScreen I_field_window;
     private static boolean I_field_5a;
 
     public MenuModule() {
@@ -40,17 +39,18 @@ extends Module {
         this.I_field_bbe33e6c = new ModeSetting(this, "modules.settings.menu.mode");
         this.I_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.dropdown");
         this.i_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.modern").select();
-        new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.window");
         this.I_field_ba20522c = new KeybindSetting(this, "modules.settings.menu.hide_key").I_method_4288e15a(342);
     }
 
     @Override
     public void onEnable() {
         boolean bl = this.i_field_500d0627.isSelected();
-        boolean window = this.I_field_bbe33e6c.I_method_1544ce2d("modules.settings.menu.mode.window");
-        if (bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiiI_Class215) return;
-        if (!bl && !window && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216) return;
-        if (window && MenuModule.I_field_3a9bda27.currentScreen instanceof WindowMenuScreen) return;
+        if (bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiiI_Class215) {
+            return;
+        }
+        if (!bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216) {
+            return;
+        }
         this.I_field_bf52cf84 = this.I_method_83034dbb();
         I_field_5a = true;
         I_field_3a9bda27.setScreen(this.I_field_bf52cf84);
@@ -67,10 +67,6 @@ extends Module {
             IiiIIiiiI_Class207 iiiIIiiiI_Class2072 = iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215 ? iiiIIiiiI_Class207 : new IiiIiIiiI_Class215();
             VelumClient.getInstance().I_method_577f3d5a(iiiIIiiiI_Class2072);
             return iiiIIiiiI_Class2072;
-        }
-        if (this.I_field_bbe33e6c.I_method_1544ce2d("modules.settings.menu.mode.window")) {
-            if (this.I_field_window == null) this.I_field_window = new WindowMenuScreen();
-            return this.I_field_window;
         }
         if (this.I_field_a5e7424c == null) {
             this.I_field_a5e7424c = new IiiIiIiii_Class216();
