@@ -90,7 +90,13 @@ public enum VelumClient implements iIIiIIiIi_Class294 {
       this.I_field_8c56b3ec = new iiIiiii_Class112();
       this.I_field_3f47d381.I_method_b467d0cc();
       this.I_field_75f17721.registerModules();
-      this.I_field_75f17721.enableDefaultModules();
+      // Do not auto-enable annotated default modules. Config is the single source of truth;
+      // on a fresh install everything starts disabled until the user enables it.
+      for (ModuleEntry module : this.I_field_75f17721.getModules()) {
+         if (module instanceof Module && !(module instanceof MenuModule) && !(module instanceof GlobalsMenuModule)) {
+            module.setEnabled(false, true);
+         }
+      }
       this.I_field_4ef00546 = RockNetClient.init("velum.pub", 443, true);
       this.I_field_4ef00546.setListener(new RocknetListener());
 

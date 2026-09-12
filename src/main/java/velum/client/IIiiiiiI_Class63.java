@@ -301,8 +301,13 @@ public class IIiiiiiI_Class63 {
       try {
          IIiiiiIi_Class62.I_method_16b850ac();
 
+         // A reset / first-launch baseline is deliberately clean: no gameplay or visual
+         // module is enabled just because its annotation has enabledByDefault=true.
+         // A real saved config will explicitly restore the modules it had enabled.
          for (ModuleEntry var2 : VelumClient.getInstance().getModuleManager().getModules()) {
-            var2.setEnabled(var2.isEnabledByDefault(), true);
+            if (var2 instanceof Module && !(var2 instanceof MenuModule) && !(var2 instanceof GlobalsMenuModule)) {
+               var2.setEnabled(false, true);
+            }
          }
       } finally {
          this.I_field_1232aa16.set(false);

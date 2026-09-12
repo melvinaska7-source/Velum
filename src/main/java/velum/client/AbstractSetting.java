@@ -32,6 +32,11 @@ implements Setting {
 
     public final void notifyChanged() {
         IIiiiIIIi_Class114.I_method_d0b91cc7(this);
+        // Settings are serialized by the active config. This makes boolean/mode/slider/
+        // color/text/keybind-setting changes persist even when the GUI is not closed.
+        if (VelumClient.getInstance().I_method_5198232b() != null) {
+            VelumClient.getInstance().I_method_5198232b().II_method_1fbeeff5();
+        }
     }
 
     @Override

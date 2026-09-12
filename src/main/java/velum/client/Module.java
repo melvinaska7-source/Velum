@@ -85,6 +85,11 @@ implements ModuleEntry {
         }
         this.I_field_49 = n;
         VelumClient.getInstance().I_method_7897deab().I_method_e7f802ad(new IiIiiiII_Class93(this));
+        // Persist module keybind changes through the active config. During config loading
+        // the autosave manager is suppressed, so this is safe for both load and runtime.
+        if (VelumClient.getInstance().I_method_5198232b() != null) {
+            VelumClient.getInstance().I_method_5198232b().II_method_1fbeeff5();
+        }
     }
 
     @Override
@@ -137,6 +142,10 @@ implements ModuleEntry {
                 VelumClient.getInstance().I_method_5cb1af22().I_method_8ee48d11(iiiIIII_Class113.i_field_c11fcfcc, this.I_field_523beb0a.replace(" ", "") + " " + IiIiIIII_Class81.I_method_f25a980a("disabled") + (IiIiIIII_Class81.I_method_21a4cfeb() == IiIIiiii_Class80.i_field_3f56db61 ? iIIIIiIiI_Class267.I_method_c7255d57(this.I_field_523beb0a) : ""));
             }
             this.onDisable();
+        }
+        // Enabled state is part of the module config and must survive restarts.
+        if (VelumClient.getInstance().I_method_5198232b() != null) {
+            VelumClient.getInstance().I_method_5198232b().II_method_1fbeeff5();
         }
     }
 
