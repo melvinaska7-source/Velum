@@ -20,6 +20,7 @@ public final class ProfilePetRenderer {
     private double z;
     private float petYaw;
     private boolean initialized;
+    private float followYaw;
 
     public void render(Render3DEvent event, ProfileModule module) {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -51,7 +52,17 @@ public final class ProfilePetRenderer {
         float tickDelta = event.getTickDelta();
         Vec3d playerPos = client.player.getLerpedPos(tickDelta);
         float yaw = client.player.getYaw(tickDelta);
-        double yawRad = Math.toRadians(yaw);
+
+        // Do not rotate/reposition the pet just because the player turns while standing still.
+        // The companion only receives a new follow direction while the player is actually moving.
+        Vec3d velocity = client.player.getVelocity();
+        boolean moving = velocity.x * velocity.x + velocity.z * velocity.z > 0.00035D;
+        if (!initialized) {
+            followYaw = yaw;
+        } else if (moving) {
+            followYaw = yaw;
+        }
+        double yawRad = Math.toRadians(followYaw);
 
         // Keep the companion clearly BEHIND the player.  Minecraft's forward vector is
         // (-sin(yaw), cos(yaw)), so the backward vector is its opposite.
@@ -66,26 +77,27 @@ public final class ProfilePetRenderer {
             x = targetX;
             y = targetY;
             z = targetZ;
-            petYaw = yaw + 180.0f;
+            petYaw = followYaw + 180.0f;
             initialized = true;
         } else {
-            // Deliberately slow down the follow motion. The pet should visibly lag behind
-            // turns and movement instead of snapping to the player every frame.
-            double smoothing = module.getAnimatePetsSetting().i_method_9b12da03() ? 0.075 : 1.0;
+            // Strong positional lag: the pet visibly trails behind while moving.
+            // While the player is standing still, targetX/Z remain unchanged, so turning
+            // the camera does not drag the pet around the player.
+            double smoothing = module.getAnimatePetsSetting().i_method_9b12da03() ? 0.045 : 1.0;
             x = MathHelper.lerp(smoothing, x, targetX);
             y = MathHelper.lerp(smoothing, y, targetY);
             z = MathHelper.lerp(smoothing, z, targetZ);
 
-            if (module.getAnimatePetsSetting().i_method_9b12da03()) {
-                float targetPetYaw = yaw + 180.0f;
-                petYaw = lerpAngle(petYaw, targetPetYaw, 0.075f);
-            } else {
-                petYaw = yaw + 180.0f;
+            if (module.getAnimatePetsSetting().i_method_9b12da03() && moving) {
+                // Rotation follows even more slowly than position, so the pet can actually
+                // remain visible when the player changes direction.
+                float targetPetYaw = followYaw + 180.0f;
+                petYaw = lerpAngle(petYaw, targetPetYaw, 0.018f);
             }
         }
 
         // Tiny idle bob. It is purely visual and does not allocate anything per frame.
-        double bob = module.getAnimatePetsSetting().i_method_9b12da03()
+        double bob = module.getAnimatePetsSetting().i_method_9b12da03() && moving
                 ? Math.sin((client.player.age + tickDelta) * 0.16D) * 0.035D
                 : 0.0D;
 
@@ -100,7 +112,10 @@ public final class ProfilePetRenderer {
             // Pet models use the opposite forward direction from the player.
             matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Y.rotationDegrees(-petYaw));
 
+            // Jellie's OBJ is authored with Z as its vertical axis, so without this
+            // correction the cat lies on its side. T-Rex already uses Y as up.
             if (pet == PetManager.Pet.JELLIE) {
+                matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(90.0f));
                 ObjModelRenderer.render(JELLIE_MODEL, JELLIE_TEXTURE, matrices, 0.8f / 16.0f);
             } else if (pet == PetManager.Pet.TREX) {
                 ObjModelRenderer.render(TREX_MODEL, TREX_TEXTURE, matrices, 0.8f / 16.0f);
