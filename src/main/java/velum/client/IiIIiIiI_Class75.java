@@ -14,6 +14,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import lombok.Generated;
 import net.minecraft.util.math.Vec3d;
 import pyvelum.utility.render.ColorRGBA;
@@ -27,6 +31,13 @@ public class IiIIiIiI_Class75 extends IiIIIiii_Class72 implements iIIiIIiIi_Clas
    private int i_field_49;
    private volatile boolean I_field_5a;
    private volatile boolean i_field_5a;
+   private volatile boolean I_field_loading;
+   private final ScheduledExecutorService I_field_autosaveExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
+      Thread t = new Thread(r, "Velum-LocalConfig-Autosave");
+      t.setDaemon(true);
+      return t;
+   });
+   private volatile ScheduledFuture<?> I_field_autosaveFuture;
 
    @Override
    public void I_method_fb62088c() {
@@ -52,6 +63,10 @@ public class IiIIiIiI_Class75 extends IiIIIiii_Class72 implements iIIiIIiIi_Clas
       var1.add("waypoints", this.II_method_c2f2c991());
       var1.add("macros", this.iI_method_600bd1b1());
       var1.add("enabledScripts", this.Ii_method_d8883d71());
+      // Keep the local client profile self-contained: module enabled states, keybinds
+      // and every module setting are persisted here as well. This works without the
+      // remote config service and is the source restored on the next launch.
+      var1.add("modules", IIiiiiIi_Class62.I_method_50733716().get("modules"));
       String var2 = VelumClient.getInstance().I_method_5198232b().I_method_5c2e4534();
       if (var2 != null) {
          var1.addProperty("lastConfig", var2);
@@ -69,6 +84,7 @@ public class IiIIiIiI_Class75 extends IiIIIiii_Class72 implements iIIiIIiIi_Clas
 
    @Override
    public void i_method_fb70946c() {
+      this.I_field_loading = true;
       try {
          try (FileReader var1 = new FileReader(this.I_method_aa990001())) {
             JsonObject var2 = (JsonObject)IiIIiIII_Class73.I_field_fbd77e28.fromJson(var1, JsonObject.class);
@@ -86,7 +102,22 @@ public class IiIIiIiI_Class75 extends IiIIIiii_Class72 implements iIIiIIiIi_Clas
       } catch (Exception var6) {
          this.Ii_method_d4d567d5();
          VelumClient.I_field_ab0f6068.error("Failed to read client data", var6);
+      } finally {
+         this.I_field_loading = false;
       }
+   }
+
+   public void scheduleAutoSave() {
+      if (this.I_field_loading) return;
+      ScheduledFuture<?> current = this.I_field_autosaveFuture;
+      if (current != null) current.cancel(false);
+      this.I_field_autosaveFuture = this.I_field_autosaveExecutor.schedule(() -> {
+         try {
+            this.I_method_fb62088c();
+         } catch (Throwable throwable) {
+            VelumClient.I_field_ab0f6068.error("Failed to autosave local client config", throwable);
+         }
+      }, 600L, TimeUnit.MILLISECONDS);
    }
 
    public IiIIiIiI_Class75.Nested1_a5b02cb3 I_method_43faa9a(JsonObject var1) {
@@ -300,6 +331,17 @@ public class IiIIiIiI_Class75 extends IiIIIiii_Class72 implements iIIiIIiIi_Clas
             } catch (Exception var10) {
                var3 = true;
                this.I_method_daa5f564("autoSaveConfigs", var1, var10);
+            }
+         }
+
+         if (var1.has("modules") && var1.get("modules").isJsonArray()) {
+            try {
+               JsonObject localModules = new JsonObject();
+               localModules.add("modules", var1.get("modules"));
+               IIiiiiIi_Class62.I_method_f332e29a(localModules);
+            } catch (Exception exception) {
+               var3 = true;
+               VelumClient.I_field_ab0f6068.error("Failed to load local module state", exception);
             }
          }
 

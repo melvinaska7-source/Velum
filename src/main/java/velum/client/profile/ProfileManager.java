@@ -9,6 +9,7 @@ public final class ProfileManager {
     private static ProfileManager instance;
 
     private final ProfilePetRenderer petRenderer = new ProfilePetRenderer();
+    private final ProfileAccessoryRenderer accessoryRenderer = new ProfileAccessoryRenderer();
     private final IiIIIiII_Class69<Render3DEvent> onRender3D = this::render3D;
     private ProfileModule module;
     private boolean registered;
@@ -48,5 +49,6 @@ public final class ProfileManager {
             return;
         }
         petRenderer.render(event, module);
+        accessoryRenderer.render(event, module);
     }
 }

@@ -28,8 +28,8 @@ public final class ProfileModule extends Module {
         profileManager.setModule(this);
         playerModel.I_method_15e42ca0("Default", "Amogus", "Rabbit", "Demon", "Freddy");
         pets.I_method_15e42ca0("None", "Jellie", "T-Rex");
-        accessories.I_method_15e42ca0("None");
-        cosmetics.I_method_15e42ca0("None");
+        accessories.I_method_15e42ca0("None", "Back Sword");
+        cosmetics.I_method_15e42ca0("None", "Halo");
         animatePets.I_method_4e1408b5(true);
         showInThirdPerson.I_method_4e1408b5(true);
     }

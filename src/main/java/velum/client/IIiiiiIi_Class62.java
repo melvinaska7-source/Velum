@@ -52,7 +52,7 @@ public final class IIiiiiIi_Class62 {
    private static JsonObject I_method_8acdbc15(ModuleEntry var0) {
       JsonObject var1 = new JsonObject();
       var1.addProperty("name", var0.getName());
-      var1.addProperty("enabled", var0.isEnabled() && !i_method_45e34af1(var0));
+      var1.addProperty("enabled", var0.isEnabled());
       var1.addProperty("key", var0.getKeybind());
       var1.add("settings", I_method_609390bb(var0.getSettings(), var0.getName()));
       return var1;

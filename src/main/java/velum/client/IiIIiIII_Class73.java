@@ -119,6 +119,10 @@ public class IiIIiIII_Class73 {
         for (IiIIIiii_Class72 iiIIIiii_Class72 : this.I_field_7865b31) {
             this.I_method_516d7f0d(iiIIIiii_Class72);
         }
+        IiIIIiii_Class72 client = this.I_method_3272b401("client");
+        if (client instanceof IiIIiIiI_Class75 localClient && !client.I_method_aa990001().exists()) {
+            localClient.I_method_fb62088c();
+        }
     }
 
     public void II_method_d8a14015() {

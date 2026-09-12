@@ -117,8 +117,8 @@ public final class ProfilePetRenderer {
             // Jellie needs a model-specific axis correction after that normalization.
             if (pet == PetManager.Pet.JELLIE) {
                 float scale = 0.8f / 16.0f;
-                matrices.translate(0.0D, 22.28602849D * scale, 0.0D);
-                matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(-90.0f));
+                matrices.translate(0.0D, 10.2100D * scale, 0.0D);
+                matrices.multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(90.0f));
                 ObjModelRenderer.render(JELLIE_MODEL, JELLIE_TEXTURE, matrices, scale);
             } else if (pet == PetManager.Pet.TREX) {
                 ObjModelRenderer.render(TREX_MODEL, TREX_TEXTURE, matrices, 0.8f / 16.0f);
