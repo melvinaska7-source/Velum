@@ -17,6 +17,7 @@ final class IiIiiiIIi_Class186 {
     static void I_method_f1735467(MultiSelectSetting iIiiiiiii_Class128) {
         new IiiIIIIiI_Class195(iIiiiiiii_Class128);
         new IiiIIIIII_Class193(iIiiiiiii_Class128);
+        new TrainerDynamicIslandStatus(iIiiiiiii_Class128);
         new IiIiiiiII_Class189(iIiiiiiii_Class128);
         new IiiIIIIii_Class196(iIiiiiiii_Class128);
         new IiIiiiiiI_Class191(iIiiiiiii_Class128).deselect();

@@ -46,7 +46,7 @@ public class AntiBotModule extends Module {
          this.Iii_method_d272d1cc();
 
          for (PlayerEntity var2 : (Iterable<PlayerEntity>)(Iterable<?>)new ArrayList(I_field_3a9bda27.world.getPlayers())) {
-            if (I_field_3a9bda27.player != var2 && !(var2 instanceof IiiiiiiIi_Class254)) {
+            if (I_field_3a9bda27.player != var2 && !(var2 instanceof IiiiiiiIi_Class254) && !TrainerModule.isTrainer(var2)) {
                boolean var3 = this.i_method_3da9c3e5(var2);
                boolean var4 = this.I_method_21ebb351(var2).I_method_be268aab();
                boolean var5 = this.I_method_eb81005(var2);
@@ -120,7 +120,7 @@ public class AntiBotModule extends Module {
    }
 
    public static boolean I_method_fe179c75(LivingEntity var0) {
-      return var0 instanceof PlayerEntity && I_field_7865b31.contains(var0);
+      return var0 instanceof PlayerEntity && !TrainerModule.isTrainer(var0) && I_field_7865b31.contains(var0);
    }
 
    @Override
