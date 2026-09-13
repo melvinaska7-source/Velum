@@ -38,6 +38,13 @@ public final class TrainerModule extends Module {
     private final TextSetting bestRecord = new TextSetting(this, "modules.settings.trainer.best_record")
         .I_method_2dbacd5a(14).I_method_ec08f9eb(true).I_method_104de33f("Ваш рекорд: --:--:--");
 
+    private OtherClientPlayerEntity trainer;
+    private boolean awakened;
+    private int totemsRemaining;
+    private long startTime;
+    private double orbitAngle;
+    private long lastSwing;
+
     private final IiIIIiII_Class69<AfterAttackEvent> afterAttack = event -> {
         if (!isEnabled() || trainer == null || event.getEntity() != trainer) return;
         if (!awakened) {
@@ -52,13 +59,6 @@ public final class TrainerModule extends Module {
             finish(true);
         }
     };
-
-    private OtherClientPlayerEntity trainer;
-    private boolean awakened;
-    private int totemsRemaining;
-    private long startTime;
-    private double orbitAngle;
-    private long lastSwing;
 
     public TrainerModule() {
         INSTANCE = this;
@@ -197,7 +197,7 @@ public final class TrainerModule extends Module {
         if (I_field_3a9bda27.world != null) {
             RegistryEntry<Enchantment> protection = I_field_3a9bda27.world.getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
-                .getEntry(Enchantments.PROTECTION)
+                .getEntry(Enchantments.PROTECTION.getValue())
                 .orElse(null);
             if (protection != null) {
                 ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(
