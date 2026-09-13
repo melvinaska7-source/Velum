@@ -19,7 +19,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import pyvelum.events.game.AttackEvent;
 
 @ModuleInfo(
     name = "Trainer",
@@ -59,8 +58,14 @@ public final class TrainerModule extends Module {
     private long totemPulseUntil;
 
 
-    private final IiIIIiII_Class69<AttackEvent> attackEvent = event -> {
-        if (!isEnabled() || trainer == null || event.getEntity() != trainer) return;
+    /** Called directly from ClientPlayerInteractionManagerMixin after an entity attack. */
+    public static void onDirectAttack(net.minecraft.entity.Entity entity) {
+        if (INSTANCE == null || !INSTANCE.isEnabled()) return;
+        INSTANCE.handleAttack(entity);
+    }
+
+    private void handleAttack(net.minecraft.entity.Entity entity) {
+        if (trainer == null || entity != trainer) return;
 
         if (!awakened) {
             awakened = true;
@@ -68,12 +73,6 @@ public final class TrainerModule extends Module {
             simulatedHealth = 20.0F;
         }
 
-        /*
-         * Do not treat every hit as an instant life loss. The old Trainer
-         * consumed a totem directly from AfterAttackEvent, so even a bare-hand
-         * tap looked like a lethal hit. We now keep a small local health pool.
-         * A life is consumed only when that pool actually reaches zero.
-         */
         if (simulatedHealth > 0.0F) {
             double attackDamage = I_field_3a9bda27.player == null
                 ? 1.0D
@@ -90,8 +89,7 @@ public final class TrainerModule extends Module {
                 finish(true);
             }
         }
-    };
-
+    }
 
     public TrainerModule() {
         INSTANCE = this;

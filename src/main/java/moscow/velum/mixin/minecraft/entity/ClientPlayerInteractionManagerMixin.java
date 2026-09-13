@@ -31,6 +31,7 @@ import pyvelum.events.game.BlockPlaceEvent;
 import pyvelum.events.game.InternalAttackEvent;
 import pyvelum.events.game.StartBreakBlockEvent;
 import velum.client.NoInteractModule;
+import velum.client.TrainerModule;
 import velum.client.VelumClient;
 import velum.client.iIIiIIiIi_Class294;
 
@@ -52,6 +53,7 @@ implements iIIiIIiIi_Class294 {
 
     @Inject(method={"attackEntity"}, at={@At(value="RETURN")})
     private void velum$critPost(PlayerEntity playerEntity, Entity entity, CallbackInfo callbackInfo) {
+        TrainerModule.onDirectAttack(entity);
         AfterAttackEvent afterAttackEvent = new AfterAttackEvent(entity);
         VelumClient.getInstance().I_method_7897deab().I_method_e7f802ad(afterAttackEvent);
     }
