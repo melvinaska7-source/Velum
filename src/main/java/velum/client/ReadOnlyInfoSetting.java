@@ -53,7 +53,7 @@ public final class ReadOnlyInfoSetting extends AbstractSetting {
 
     @Override
     public iii_Class8 createComponent() {
-        return new iii_Class8()
+        iii_Class8 component = new iii_Class8()
             .I_method_8939bffd(
                 new iiII_Class13(
                     IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(8.0F),
@@ -63,7 +63,8 @@ public final class ReadOnlyInfoSetting extends AbstractSetting {
             .I_method_3301fdd(iII_Class5.II_field_b583e68c)
             .I_method_483797dd(IIi_Class2.i_field_b5755e8c)
             .I_method_7e2bb176(IIII.I_method_12c9a0cb(6.0F, 0.0F, 0.0F, 0.0F))
-            .III_method_9dc17555()
-            .interactive(false);
+            .III_method_9dc17555();
+        component.interactive(false);
+        return component;
     }
 }

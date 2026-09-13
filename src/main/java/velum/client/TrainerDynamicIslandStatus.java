@@ -33,14 +33,12 @@ public final class TrainerDynamicIslandStatus extends IiIiiIiii_Class184 {
             );
 
             root.I_method_8939bffd(
-                new Iiii_Class8(
+                IiIiiIiIi_Class182.I_method_923ba5d7(
                     IIiIiI_Class11.i_field_857c0621.I_method_3a2d5e3(7.0F),
-                    TrainerModule::currentTimer
-                )
-                    .I_method_6e260263(5.0F)
-                    .I_method_124306cb()
-                    .I_method_ab0d6d85(() -> ColorRGBA.WHITE.withAlpha(255.0F * this.animation.I_method_6ac4da6f()))
-                    .interactive(false)
+                    TrainerModule::currentTimer,
+                    () -> ColorRGBA.WHITE.withAlpha(255.0F * this.animation.I_method_6ac4da6f()),
+                    () -> 0.0F
+                ).interactive(false)
             );
             element = root;
         }

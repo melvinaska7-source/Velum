@@ -44,6 +44,21 @@ public final class TrainerModule extends Module {
         "Ваш рекорд: --:--:--"
     );
 
+    private IiiiiiiIi_Class254 trainer;
+    private boolean awakened;
+    private int totemsRemaining;
+    private float simulatedHealth;
+    private long startTime;
+    private double orbitAngle;
+    private long lastSwing;
+    private long nextJumpAt;
+    private long lastStuckCheck;
+    private double lastX;
+    private double lastZ;
+    private int stuckTicks;
+    private long totemPulseUntil;
+
+
     private final IiIIIiII_Class69<AfterAttackEvent> afterAttack = event -> {
         if (!isEnabled() || trainer == null || event.getEntity() != trainer) return;
 
@@ -77,19 +92,6 @@ public final class TrainerModule extends Module {
         }
     };
 
-    private IiiiiiiIi_Class254 trainer;
-    private boolean awakened;
-    private int totemsRemaining;
-    private float simulatedHealth;
-    private long startTime;
-    private double orbitAngle;
-    private long lastSwing;
-    private long nextJumpAt;
-    private long lastStuckCheck;
-    private double lastX;
-    private double lastZ;
-    private int stuckTicks;
-    private long totemPulseUntil;
 
     public TrainerModule() {
         INSTANCE = this;
@@ -349,7 +351,7 @@ public final class TrainerModule extends Module {
         if (I_field_3a9bda27.world != null) {
             RegistryEntry<Enchantment> protection = I_field_3a9bda27.world.getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
-                .getEntry(Enchantments.PROTECTION)
+                .getEntry(Enchantments.PROTECTION.getValue())
                 .orElse(null);
             if (protection != null) {
                 ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(

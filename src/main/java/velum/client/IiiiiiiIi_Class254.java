@@ -15,7 +15,6 @@ public class IiiiiiiIi_Class254 extends OtherClientPlayerEntity {
 
     public IiiiiiiIi_Class254(ClientWorld clientWorld, GameProfile gameProfile) {
         super(clientWorld, gameProfile);
-        this.setStepHeight(0.6F);
     }
 
     public void I_method_5351321f() {
