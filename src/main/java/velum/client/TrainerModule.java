@@ -286,7 +286,7 @@ public final class TrainerModule extends Module {
         if (trainer.isOnGround() && behaviorTicks % 11 == 0) {
             jump(0.42D);
         }
-        smoothLookAt(playerPos.x, playerPos.y + 1.2D, playerPos.z, speedDegrees / 20.0F + 4.0F);
+        smoothLookAt(playerPos.x, playerPos.y + 1.2D, playerPos.z, (float)(speedDegrees / 20.0D + 4.0D));
     }
 
     private boolean shouldJump(boolean easy, boolean medium, boolean hard) {
