@@ -19,7 +19,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import pyvelum.events.game.AfterAttackEvent;
+import pyvelum.events.game.AttackEvent;
 
 @ModuleInfo(
     name = "Trainer",
@@ -59,7 +59,7 @@ public final class TrainerModule extends Module {
     private long totemPulseUntil;
 
 
-    private final IiIIIiII_Class69<AfterAttackEvent> afterAttack = event -> {
+    private final IiIIIiII_Class69<AttackEvent> attackEvent = event -> {
         if (!isEnabled() || trainer == null || event.getEntity() != trainer) return;
 
         if (!awakened) {
