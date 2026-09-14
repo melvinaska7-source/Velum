@@ -180,7 +180,6 @@ public class ModuleManager {
     @Compile(obfuscation=4)
     public final void registerModules() {
         this.registerModule(new AuraModule());
-        this.registerModule(new TrainerModule());
         this.registerModule(new AimAssistModule());
         this.registerModule(new AutoTotemModule());
         this.registerModule(new TriggerBotModule());
