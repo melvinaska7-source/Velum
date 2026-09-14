@@ -53,7 +53,7 @@ public class IIiiiiiI_Class63 {
    private static final GsonBuilder I_field_gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping();
 
    public IIiiiiiI_Class63() {
-      Path runDirectory = I_field_3a9bda27.runDirectory.toPath();
+      Path runDirectory = MinecraftClient.getInstance().runDirectory.toPath();
       this.I_field_localConfigDir = runDirectory.resolve("config").resolve("velum");
       this.I_method_4c0d6f21();
    }
@@ -287,6 +287,80 @@ public class IIiiiiiI_Class63 {
          this.I_method_13058298(data);
       } catch (Exception e) {
          VelumClient.I_field_ab0f6068.error("Config: не удалось откатить конфиг {}", name, e);
+      }
+   }
+
+   public void Ii_method_250d3a5f(String var1) {
+      String name = this.I_method_1d9a0f7c(var1);
+      if (name == null) return;
+      Path target = this.I_method_0f4c5a2d(name);
+      try {
+         if (!Files.exists(target)) {
+            this.ii_method_6b40627f(name);
+            return;
+         }
+         Files.deleteIfExists(target);
+         Files.deleteIfExists(this.I_method_undoPath(name));
+         if (name.equalsIgnoreCase(this.i_field_523beb0a)) {
+            this.i_field_523beb0a = null;
+            this.I_field_6ec681ff = null;
+         }
+         this.I_method_4c0d6f21();
+         iIIIIIIii_Class260.I_method_468cf607(Text.of(IiIiIIII_Class81.I_method_1410d1e5("config.deleted", name)));
+      } catch (Exception e) {
+         VelumClient.I_field_ab0f6068.error("Config: не удалось удалить локальный конфиг {}", name, e);
+         iIIIIIIii_Class260.II_method_e8fd4864(Text.literal("Не удалось удалить конфиг: " + name));
+      }
+   }
+
+   public void I_method_cd7cd400(String var1, String var2) {
+      String oldName = this.I_method_1d9a0f7c(var1);
+      String newName = this.I_method_1d9a0f7c(var2);
+      if (oldName == null || newName == null) return;
+      Path source = this.I_method_0f4c5a2d(oldName);
+      Path target = this.I_method_0f4c5a2d(newName);
+      try {
+         if (!Files.exists(source)) {
+            this.ii_method_6b40627f(oldName);
+            return;
+         }
+         if (Files.exists(target)) {
+            iIIIIIIii_Class260.II_method_e8fd4864(Text.literal("Конфиг с таким именем уже существует: " + newName));
+            return;
+         }
+         Files.move(source, target);
+         Path undo = this.I_method_undoPath(oldName);
+         if (Files.exists(undo)) Files.move(undo, this.I_method_undoPath(newName));
+         if (oldName.equalsIgnoreCase(this.i_field_523beb0a)) this.i_field_523beb0a = newName;
+         this.I_method_4c0d6f21();
+         iIIIIIIii_Class260.I_method_468cf607(Text.literal("Конфиг переименован: " + oldName + " -> " + newName));
+      } catch (Exception e) {
+         VelumClient.I_field_ab0f6068.error("Config: не удалось переименовать локальный конфиг {} -> {}", oldName, newName, e);
+         iIIIIIIii_Class260.II_method_e8fd4864(Text.literal("Не удалось переименовать конфиг"));
+      }
+   }
+
+   public void iI_method_9a890e9f(String var1) {
+      String name = this.I_method_1d9a0f7c(var1);
+      if (name == null) return;
+      Path source = this.I_method_0f4c5a2d(name);
+      try {
+         if (!Files.exists(source)) {
+            this.ii_method_6b40627f(name);
+            return;
+         }
+         String base = name + "_copy";
+         String copyName = base;
+         int index = 2;
+         while (Files.exists(this.I_method_0f4c5a2d(copyName))) {
+            copyName = base + index++;
+         }
+         Files.copy(source, this.I_method_0f4c5a2d(copyName));
+         this.I_method_4c0d6f21();
+         iIIIIIIii_Class260.I_method_468cf607(Text.literal("Конфиг скопирован: " + copyName));
+      } catch (Exception e) {
+         VelumClient.I_field_ab0f6068.error("Config: не удалось скопировать локальный конфиг {}", name, e);
+         iIIIIIIii_Class260.II_method_e8fd4864(Text.literal("Не удалось скопировать конфиг: " + name));
       }
    }
 
