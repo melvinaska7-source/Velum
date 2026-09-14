@@ -1,6 +1,8 @@
 package velum.client;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import globals.client.api.RockNetClient;
 import globals.shared.proto.Packet;
 import globals.shared.proto.Packets;
@@ -13,6 +15,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.ClickEvent;
@@ -42,12 +48,21 @@ public class IIiiiiiI_Class63 {
    });
    private volatile ScheduledFuture<?> I_field_dd9473d7;
    private volatile ScheduledFuture<?> i_field_dd9473d7;
+   private final Path I_field_localConfigDir;
+   private static final String I_field_undoSuffix = ".undo.rock";
+   private static final GsonBuilder I_field_gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping();
+
+   public IIiiiiiI_Class63() {
+      Path runDirectory = I_field_3a9bda27.runDirectory.toPath();
+      this.I_field_localConfigDir = runDirectory.resolve("config").resolve("velum");
+      this.I_method_4c0d6f21();
+   }
 
    public void I_method_7ce4a4ec() {
    }
 
    public void i_method_7cf330cc() {
-      this.I_method_8ed57bdb(new Packets.Nested1_f32063a8());
+      this.I_method_4c0d6f21();
    }
 
    public void I_method_ea3d9dd(List<Packets.Nested1_f320330b> var1) {
@@ -198,94 +213,80 @@ public class IIiiiiiI_Class63 {
    }
 
    private void IiI_method_d9f0f62c() {
-      if (!this.I_field_1232aa16.get() && !this.i_field_1232aa16.get()) {
-         Long var1 = this.I_field_6ec681ff;
-         if (var1 != null) {
-            this.I_method_8ed57bdb(new Packets.Nested1_f3200a8a(var1, null, IIiiiiIi_Class62.I_method_50733716()));
+      if (!this.I_field_1232aa16.get() && !this.i_field_1232aa16.get() && this.i_field_523beb0a != null) {
+         String name = this.i_field_523beb0a;
+         try {
+            Files.createDirectories(this.I_field_localConfigDir);
+            String data = I_field_gson.create().toJson(IIiiiiIi_Class62.I_method_50733716());
+            Files.writeString(this.I_method_0f4c5a2d(name), data, StandardCharsets.UTF_8);
+            this.I_method_4c0d6f21();
+         } catch (Exception e) {
+            VelumClient.I_field_ab0f6068.warn("Config: не удалось выполнить автосохранение {}", name, e);
          }
       }
    }
 
    public void I_method_ce5aebb6(String var1) {
-      if (!i_method_9f123f9a(var1)) {
-         this.i_field_1232aa16.set(false);
-         Long var2 = this.I_method_5e8b6a9f(var1);
-         if (var2 != null) {
-            this.I_method_8ed57bdb(new Packets.Nested1_f3200a8a(var2, null, IIiiiiIi_Class62.I_method_50733716()));
-         } else {
-            this.I_method_8ed57bdb(new Packets.Nested1_f3200a8a(null, var1.trim(), IIiiiiIi_Class62.I_method_50733716()));
-         }
+      String name = this.I_method_1d9a0f7c(var1);
+      if (name == null) {
+         return;
+      }
 
-         iIIIIIIii_Class260.I_method_468cf607(Text.of(IiIiIIII_Class81.I_method_1410d1e5("commands.config.saved", var1.trim())));
+      try {
+         this.I_method_4c0d6f21();
+         Path target = this.I_method_0f4c5a2d(name);
+         if (Files.exists(target)) {
+            Files.copy(target, this.I_method_undoPath(name), StandardCopyOption.REPLACE_EXISTING);
+         }
+         String data = I_field_gson.create().toJson(IIiiiiIi_Class62.I_method_50733716());
+         Files.writeString(target, data, StandardCharsets.UTF_8);
+         this.I_method_4c0d6f21();
+         this.i_field_523beb0a = name;
+         this.I_field_6ec681ff = (long)name.toLowerCase(Locale.ROOT).hashCode();
+         iIIIIIIii_Class260.I_method_468cf607(Text.of(IiIiIIII_Class81.I_method_1410d1e5("commands.config.saved", name)));
+      } catch (Exception e) {
+         VelumClient.I_field_ab0f6068.error("Config: не удалось сохранить локальный конфиг {}", name, e);
+         iIIIIIIii_Class260.II_method_e8fd4864(Text.literal("Не удалось сохранить конфиг: " + name));
       }
    }
 
    public void i_method_9f123f96(String var1) {
-      Long var2 = this.I_method_5e8b6a9f(var1);
-      if (var2 == null) {
-         this.ii_method_6b40627f(var1);
-      } else {
-         this.I_method_8ed57bdb(new Packets.Nested1_fac62d1b(var2));
+      String name = this.I_method_1d9a0f7c(var1);
+      if (name == null) return;
+      Path file = this.I_method_0f4c5a2d(name);
+      try {
+         if (!Files.exists(file)) {
+            this.ii_method_6b40627f(name);
+            return;
+         }
+         JsonObject data = JsonParser.parseString(Files.readString(file, StandardCharsets.UTF_8)).getAsJsonObject();
+         this.i_field_523beb0a = name;
+         this.I_field_6ec681ff = (long)name.toLowerCase(Locale.ROOT).hashCode();
+         this.I_method_4c0d6f21();
+         this.I_method_13058298(data);
+      } catch (Exception e) {
+         VelumClient.I_field_ab0f6068.error("Config: не удалось загрузить локальный конфиг {}", name, e);
+         iIIIIIIii_Class260.II_method_e8fd4864(Text.literal("Не удалось загрузить конфиг: " + name));
       }
    }
 
    public void II_method_5455e67f(String var1) {
-      Long var2 = i_method_9f123f9a(var1) ? this.I_field_6ec681ff : this.I_method_5e8b6a9f(var1);
-      if (var2 == null) {
-         this.ii_method_6b40627f(var1);
-      } else {
-         iIIIIIIii_Class260.I_method_468cf607(Text.of(IiIiIIII_Class81.I_method_f25a980a("config.undo.sent")));
-         if (!var2.equals(this.I_field_6ec681ff)) {
-            this.I_method_8ed57bdb(new Packets.Nested1_f32121f1(var2));
-         } else {
-            this.i_field_1232aa16.set(true);
-            this.Iii_method_d9ff820c();
-            this.I_method_8ed57bdb(new Packets.Nested1_f32121f1(var2));
-            ScheduledFuture var3 = this.i_field_dd9473d7;
-            if (var3 != null) {
-               var3.cancel(false);
-            }
-
-            this.i_field_dd9473d7 = this.I_field_47254ffa
-               .schedule(
-                  () -> {
-                     if (this.i_field_1232aa16.compareAndSet(true, false)) {
-                        MinecraftClient.getInstance()
-                           .execute(() -> iIIIIIIii_Class260.II_method_e8fd4864(Text.of(IiIiIIII_Class81.I_method_f25a980a("config.undo.empty"))));
-                     }
-                  },
-                  5L,
-                  TimeUnit.SECONDS
-               );
+      String name = this.I_method_1d9a0f7c(var1);
+      if (name == null) return;
+      try {
+         Path undo = this.I_method_undoPath(name);
+         Path target = this.I_method_0f4c5a2d(name);
+         if (!Files.exists(undo)) {
+            iIIIIIIii_Class260.II_method_e8fd4864(Text.of(IiIiIIII_Class81.I_method_f25a980a("config.undo.empty")));
+            return;
          }
-      }
-   }
-
-   public void Ii_method_250d3a5f(String var1) {
-      Long var2 = this.I_method_5e8b6a9f(var1);
-      if (var2 == null) {
-         this.ii_method_6b40627f(var1);
-      } else {
-         this.I_method_8ed57bdb(new Packets.Nested1_91e2bf78(var2));
-         iIIIIIIii_Class260.I_method_468cf607(Text.of(IiIiIIII_Class81.I_method_1410d1e5("config.deleted", var1.trim())));
-      }
-   }
-
-   public void I_method_cd7cd400(String var1, String var2) {
-      Long var3 = this.I_method_5e8b6a9f(var1);
-      if (var3 != null && !i_method_9f123f9a(var2)) {
-         this.I_method_8ed57bdb(new Packets.Nested1_a9c7710b(var3, var2.trim()));
-      } else {
-         this.ii_method_6b40627f(var1);
-      }
-   }
-
-   public void iI_method_9a890e9f(String var1) {
-      Long var2 = this.I_method_5e8b6a9f(var1);
-      if (var2 == null) {
-         this.ii_method_6b40627f(var1);
-      } else {
-         this.I_method_8ed57bdb(new Packets.Nested1_3eeaa41e(var2));
+         Files.copy(undo, target, StandardCopyOption.REPLACE_EXISTING);
+         Files.deleteIfExists(undo);
+         this.i_field_523beb0a = name;
+         JsonObject data = JsonParser.parseString(Files.readString(target, StandardCharsets.UTF_8)).getAsJsonObject();
+         this.I_method_13058298(data);
+      } catch (Exception e) {
+         VelumClient.I_field_ab0f6068.error("Config: не удалось откатить конфиг {}", name, e);
       }
    }
 
@@ -301,13 +302,8 @@ public class IIiiiiiI_Class63 {
       try {
          IIiiiiIi_Class62.I_method_16b850ac();
 
-         // A reset / first-launch baseline is deliberately clean: no gameplay or visual
-         // module is enabled just because its annotation has enabledByDefault=true.
-         // A real saved config will explicitly restore the modules it had enabled.
          for (ModuleEntry var2 : VelumClient.getInstance().getModuleManager().getModules()) {
-            if (var2 instanceof Module && !(var2 instanceof MenuModule) && !(var2 instanceof GlobalsMenuModule)) {
-               var2.setEnabled(false, true);
-            }
+            var2.setEnabled(var2.isEnabledByDefault(), true);
          }
       } finally {
          this.I_field_1232aa16.set(false);
@@ -319,37 +315,24 @@ public class IIiiiiiI_Class63 {
    }
 
    public void ii_method_21906bf5() {
-      List var1 = this.I_field_7865b31;
+      this.I_method_4c0d6f21();
+      List<Packets.Nested1_f320330b> var1 = this.I_field_7865b31;
       if (var1.isEmpty()) {
          iIIIIIIii_Class260.I_method_468cf607(Text.of(IiIiIIII_Class81.I_method_f25a980a("config.not_found")));
-      } else {
-         iIIIIIIii_Class260.I_method_468cf607(Text.of(IiIiIIII_Class81.I_method_f25a980a("config.list")));
-         int var2 = 1;
-
-         for (Packets.Nested1_f320330b var4 : (Iterable<Packets.Nested1_f320330b>)(Iterable<?>)var1) {
-            String var5 = var4.name();
-            String var6 = ".cfg load \"" + var5.replace("\"", "\\\"") + "\"";
-            MutableText var7 = Text.literal("[" + var2++ + "] ")
-               .setStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY)))
-               .append(
-                  Text.literal(var5)
-                     .setStyle(
-                        Style.EMPTY
-                           .withColor(TextColor.fromFormatting(var4.active() ? Formatting.GREEN : Formatting.AQUA))
-                           .withClickEvent(new ClickEvent(Action.RUN_COMMAND, var6))
-                           .withHoverEvent(
-                              new HoverEvent(
-                                 net.minecraft.text.HoverEvent.Action.SHOW_TEXT, Text.literal(IiIiIIII_Class81.I_method_f25a980a("config.hover_load"))
-                              )
-                           )
-                     )
-               );
-            if (var4.active()) {
-               var7.append(Text.literal(" \u2714").setStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GREEN))));
-            }
-
-            iIIIIIIii_Class260.Ii_method_12f9d884(var7);
-         }
+         return;
+      }
+      iIIIIIIii_Class260.I_method_468cf607(Text.of(IiIiIIII_Class81.I_method_f25a980a("config.list")));
+      int var2 = 1;
+      for (Packets.Nested1_f320330b var4 : var1) {
+         String var5 = var4.name();
+         String var6 = ".cfg load \"" + var5.replace("\"", "\\\"") + "\"";
+         MutableText var7 = Text.literal("[" + var2++ + "] ")
+            .setStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GRAY)))
+            .append(Text.literal(var5).setStyle(Style.EMPTY.withColor(TextColor.fromFormatting(var4.active() ? Formatting.GREEN : Formatting.AQUA))
+               .withClickEvent(new ClickEvent(Action.RUN_COMMAND, var6))
+               .withHoverEvent(new HoverEvent(net.minecraft.text.HoverEvent.Action.SHOW_TEXT, Text.literal(IiIiIIII_Class81.I_method_f25a980a("config.hover_load"))))));
+         if (var4.active()) var7.append(Text.literal(" ✔").setStyle(Style.EMPTY.withColor(TextColor.fromFormatting(Formatting.GREEN))));
+         iIIIIIIii_Class260.Ii_method_12f9d884(var7);
       }
    }
 
@@ -382,7 +365,55 @@ public class IIiiiiiI_Class63 {
    }
 
    private Long I_method_5e8b6a9f(String var1) {
-      return i_method_9f123f9a(var1) ? null : this.I_field_a567c40b.get(var1.trim().toLowerCase(Locale.ROOT));
+      if (i_method_9f123f9a(var1)) return null;
+      String name = var1.trim();
+      return Files.exists(this.I_method_0f4c5a2d(name)) ? (long)name.toLowerCase(Locale.ROOT).hashCode() : null;
+   }
+
+   private String I_method_1d9a0f7c(String name) {
+      if (i_method_9f123f9a(name)) {
+         iIIIIIIii_Class260.II_method_e8fd4864(Text.of(IiIiIIII_Class81.I_method_f25a980a("config.not_found")));
+         return null;
+      }
+      String result = name.trim();
+      if (result.length() > 64 || result.equals(".") || result.equals("..") || result.contains("/") || result.contains("\\") || result.indexOf('\0') >= 0) {
+         iIIIIIIii_Class260.II_method_e8fd4864(Text.literal("Недопустимое имя конфига"));
+         return null;
+      }
+      return result;
+   }
+
+   private Path I_method_0f4c5a2d(String name) {
+      return this.I_field_localConfigDir.resolve(name + ".rock");
+   }
+
+   private Path I_method_undoPath(String name) {
+      return this.I_field_localConfigDir.resolve(name + I_field_undoSuffix);
+   }
+
+   private void I_method_4c0d6f21() {
+      try {
+         Files.createDirectories(this.I_field_localConfigDir);
+         ArrayList<Packets.Nested1_f320330b> list = new ArrayList<>();
+         HashMap<String, Long> ids = new HashMap<>();
+         try (var stream = Files.list(this.I_field_localConfigDir)) {
+            stream.filter(path -> path.getFileName().toString().endsWith(".rock"))
+               .filter(path -> !path.getFileName().toString().endsWith(I_field_undoSuffix))
+               .sorted()
+               .forEach(path -> {
+                  String fileName = path.getFileName().toString();
+                  String name = fileName.substring(0, fileName.length() - 5);
+                  long id = name.toLowerCase(Locale.ROOT).hashCode();
+                  boolean active = this.i_field_523beb0a != null && name.equalsIgnoreCase(this.i_field_523beb0a);
+                  list.add(new Packets.Nested1_f320330b(id, name, active));
+                  ids.put(name.toLowerCase(Locale.ROOT), id);
+               });
+         }
+         this.I_field_7865b31 = List.copyOf(list);
+         this.I_field_a567c40b = Map.copyOf(ids);
+      } catch (Exception e) {
+         VelumClient.I_field_ab0f6068.warn("Config: не удалось прочитать локальные конфиги", e);
+      }
    }
 
    private void Iii_method_d9ff820c() {
