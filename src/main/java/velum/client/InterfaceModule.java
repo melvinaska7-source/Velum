@@ -110,7 +110,7 @@ extends Module {
     }
 
     public static float I_method_fdcdb22f() {
-        return 0.0f;
+        return 1.0f;
     }
 
     public static float i_method_fddc3e0f() {
@@ -134,7 +134,7 @@ extends Module {
     }
 
     public static boolean Iii_method_c4da86a3() {
-        return false;
+        return true;
     }
 
     public static boolean iII_method_f9a41e83() {

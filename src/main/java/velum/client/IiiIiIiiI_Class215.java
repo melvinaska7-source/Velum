@@ -589,7 +589,7 @@ public class IiiIiIiiI_Class215 extends IiiIIiiiI_Class207 implements IiiIiIIiI_
       float var5 = var2.w();
       float var6 = var2.h();
       ColorRGBA var7 = this.Ii_method_9b0cd771();
-      var1.drawClientRect(var3, var4, var5, var6, 1.0F, 0.0F, 2.0F, 12.0F, false, true);
+      var1.drawClientRect(var3, var4, var5, var6, 0.92F, 0.82F, 2.0F, 14.0F, false, false);
       float var8 = var3 + this.IiiiI_field_46 - 1.0F;
       float var9 = var3 + this.IiiiI_field_46 + this.Iiiii_field_46 - 1.0F;
       var1.drawRect(var8, var4 + 1.0F, 1.0F, var6 - 2.0F, var7);
