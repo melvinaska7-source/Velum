@@ -25,9 +25,11 @@ extends Module {
     private ModeSetting I_field_bbe33e6c;
     private ModeSetting.Nested1_42765c60 I_field_500d0627;
     private ModeSetting.Nested1_42765c60 i_field_500d0627;
+    private ModeSetting.Nested1_42765c60 I_field_windowMode;
     private KeybindSetting I_field_ba20522c;
     private Screen I_field_bf52cf84;
     private IiiIiIiii_Class216 I_field_a5e7424c;
+    private VelumWindowScreen I_field_window;
     private static boolean I_field_5a;
 
     public MenuModule() {
@@ -38,17 +40,22 @@ extends Module {
     private void Iii_method_c57aca5f() {
         this.I_field_bbe33e6c = new ModeSetting(this, "modules.settings.menu.mode");
         this.I_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.dropdown");
-        this.i_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.modern").select();
+        this.i_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.modern", "", () -> true);
+        this.I_field_windowMode = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.window").select();
         this.I_field_ba20522c = new KeybindSetting(this, "modules.settings.menu.hide_key").I_method_4288e15a(342);
     }
 
     @Override
     public void onEnable() {
+        boolean window = this.I_field_windowMode.isSelected();
         boolean bl = this.i_field_500d0627.isSelected();
+        if (window && MenuModule.I_field_3a9bda27.currentScreen instanceof VelumWindowScreen) {
+            return;
+        }
         if (bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiiI_Class215) {
             return;
         }
-        if (!bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216) {
+        if (!window && !bl && !(MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216)) {
             return;
         }
         this.I_field_bf52cf84 = this.I_method_83034dbb();
@@ -62,6 +69,10 @@ extends Module {
     }
 
     public Screen I_method_83034dbb() {
+        if (this.I_field_windowMode.isSelected()) {
+            if (this.I_field_window == null) this.I_field_window = new VelumWindowScreen();
+            return this.I_field_window;
+        }
         if (this.i_field_500d0627.isSelected()) {
             IiiIIiiiI_Class207 iiiIIiiiI_Class207 = VelumClient.getInstance().I_method_96982062();
             IiiIIiiiI_Class207 iiiIIiiiI_Class2072 = iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215 ? iiiIIiiiI_Class207 : new IiiIiIiiI_Class215();
