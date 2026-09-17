@@ -1,6 +1,7 @@
 package velum.client;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import pyvelum.events.render.HudRenderEvent;
 import velum.client.III;
 import velum.client.MenuModule;
@@ -15,9 +16,18 @@ public class IiiIiIIII_Class209
 implements iIIiIIiIi_Class294 {
     private final IiIIIiII_Class69<HudRenderEvent> I_field_3d936f41 = hudRenderEvent -> {
         boolean bl;
+        MenuModule menu = VelumClient.getInstance().getModuleManager().getModule(MenuModule.class);
         IiiIIiiiI_Class207 iiiIIiiiI_Class207 = VelumClient.getInstance().I_method_96982062();
-        if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && VelumClient.getInstance().getModuleManager().getModule(MenuModule.class).I_method_4bdd4450().isSelected() && !(iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215)) {
-            VelumClient.getInstance().I_method_577f3d5a(new IiiIiIiiI_Class215());
+        if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && menu != null && menu.isEnabled()) {
+            Screen current = menu.I_method_83034dbb();
+            if (current instanceof IiiIIiiiI_Class207 windowOrMenu) {
+                iiiIIiiiI_Class207 = windowOrMenu;
+                VelumClient.getInstance().I_method_577f3d5a(windowOrMenu);
+                IiiIiIIII_Class209.I_field_3a9bda27.setScreen(current);
+            }
+        } else if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && menu != null && menu.I_method_4bdd4450().isSelected() && !(iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215)) {
+            iiiIIiiiI_Class207 = new IiiIiIiiI_Class215();
+            VelumClient.getInstance().I_method_577f3d5a(iiiIIiiiI_Class207);
         }
         boolean bl2 = bl = IiiIiIIII_Class209.I_field_3a9bda27.currentScreen instanceof IiiIIiiiI_Class207 || IiiIiIIII_Class209.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216;
         if (!bl && VelumClient.getInstance().getModuleManager().getModule(MenuModule.class).isEnabled()) {
