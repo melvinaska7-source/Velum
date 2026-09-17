@@ -85,15 +85,15 @@ public final class VelumWindowScreen extends IiiIIiiiI_Class207 {
                 new ColorRGBA(24, 28, 48, 74.0f * alpha));
         ctx.drawRoundedBorder(x, y, w, h, 1.0f, shape, new ColorRGBA(255, 255, 255, 38.0f * alpha));
 
-        drawSidebar(ctx, x, y, h, alpha);
+        drawSidebar(ctx, x, y, h, alpha, mouseX, mouseY);
         drawHeader(ctx, x, y, w, alpha);
-        drawModules(ctx, x, y, w, h, alpha);
+        drawModules(ctx, x, y, w, h, alpha, mouseX, mouseY);
         drawDetails(ctx, x, y, w, h, alpha);
 
         ctx.getMatrices().pop();
     }
 
-    private void drawSidebar(III ctx, float x, float y, float h, float alpha) {
+    private void drawSidebar(III ctx, float x, float y, float h, float alpha, double mouseX, double mouseY) {
         float sidebarW = 178.0f;
         ctx.drawRoundedRect(x + 10.0f, y + 10.0f, sidebarW, h - 20.0f,
                 IIiii_Class8.I_method_893b2757(15.0f), GLASS_SOFT.withAlpha(115.0f * alpha));
@@ -138,7 +138,7 @@ public final class VelumWindowScreen extends IiiIIiiiI_Class207 {
                 IIiii_Class8.I_method_893b2757(10.0f), LINE.withAlpha(255.0f * alpha));
     }
 
-    private void drawModules(III ctx, float x, float y, float w, float h, float alpha) {
+    private void drawModules(III ctx, float x, float y, float w, float h, float alpha, double mouseX, double mouseY) {
         float left = x + 208.0f;
         float top = y + 76.0f;
         float right = x + w - 220.0f;
