@@ -42,6 +42,9 @@ public class IiIIiIiI_Class75 extends IiIIIiii_Class72 implements iIIiIIiIi_Clas
    @Override
    public void I_method_fb62088c() {
       try {
+         if (!this.I_method_aa990001().exists()) {
+            this.resetFreshProfileModules();
+         }
          IiIIiIII_Class73.I_method_3b2973c6(this.I_field_3a58077, this.i_field_5a ? new JsonObject() : this.I_method_df2d26d6());
       } catch (Exception var2) {
          var2.printStackTrace();
@@ -97,6 +100,7 @@ public class IiIIiIiI_Class75 extends IiIIIiii_Class72 implements iIIiIIiIi_Clas
                return;
             }
 
+            this.resetFreshProfileModules();
             this.Ii_method_d4d567d5();
          }
       } catch (Exception var6) {
@@ -104,6 +108,23 @@ public class IiIIiIiI_Class75 extends IiIIIiii_Class72 implements iIIiIIiIi_Clas
          VelumClient.I_field_ab0f6068.error("Failed to read client data", var6);
       } finally {
          this.I_field_loading = false;
+      }
+   }
+
+   /** First-run safety: a brand-new local profile starts with gameplay modules disabled. */
+   private void resetFreshProfileModules() {
+      boolean previousLoading = this.I_field_loading;
+      this.I_field_loading = true;
+      try {
+         for (ModuleEntry entry : VelumClient.getInstance().getModuleManager().getModules()) {
+            if (entry instanceof Module module && !(module instanceof MenuModule) && !(module instanceof GlobalsMenuModule)) {
+               module.setEnabled(false, true);
+            }
+         }
+      } catch (Throwable throwable) {
+         VelumClient.I_field_ab0f6068.warn("Failed to reset fresh profile module states", throwable);
+      } finally {
+         this.I_field_loading = previousLoading;
       }
    }
 

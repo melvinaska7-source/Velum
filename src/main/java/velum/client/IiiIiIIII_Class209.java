@@ -19,11 +19,9 @@ implements iIIiIIiIi_Class294 {
         MenuModule menu = VelumClient.getInstance().getModuleManager().getModule(MenuModule.class);
         IiiIIiiiI_Class207 iiiIIiiiI_Class207 = VelumClient.getInstance().I_method_96982062();
         if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && menu != null && menu.isEnabled()) {
-            Screen current = menu.I_method_83034dbb();
+            Screen current = menu.I_method_7e9b4d21();
             if (current instanceof IiiIIiiiI_Class207 windowOrMenu) {
                 iiiIIiiiI_Class207 = windowOrMenu;
-                VelumClient.getInstance().I_method_577f3d5a(windowOrMenu);
-                IiiIiIIII_Class209.I_field_3a9bda27.setScreen(current);
             }
         } else if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && menu != null && menu.I_method_4bdd4450().isSelected() && !(iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215)) {
             iiiIIiiiI_Class207 = new IiiIiIiiI_Class215();

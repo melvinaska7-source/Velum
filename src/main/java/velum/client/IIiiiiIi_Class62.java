@@ -258,62 +258,62 @@ public final class IIiiiiIi_Class62 {
    }
 
    private static boolean I_method_dbe60e5c(JsonObject var0) {
-      if (var0.has("name") && var0.get("name").isJsonPrimitive()) {
-         String var1 = var0.get("name").getAsString();
+      if (!var0.has("name") || !var0.get("name").isJsonPrimitive()) {
+         return false;
+      }
 
-         try {
-            ModuleEntry var2 = VelumClient.getInstance().getModuleManager().getModuleByName(var1);
-            boolean var3 = false;
-            if (var0.has("enabled")) {
-               JsonElement var4 = var0.get("enabled");
-               if (!var4.isJsonPrimitive() || !var4.getAsJsonPrimitive().isBoolean()) {
-                  return false;
-               }
+      String var1 = var0.get("name").getAsString();
+      try {
+         ModuleEntry var2 = VelumClient.getInstance().getModuleManager().getModuleByName(var1);
+         int var10 = var2.getKeybind();
+         boolean hasEnabled = false;
+         boolean var3 = var2.isEnabled();
 
-               var3 = var4.getAsBoolean() && !i_method_45e34af1(var2);
+         // Missing fields must never overwrite a module's real defaults with sentinel values.
+         if (var0.has("enabled")) {
+            JsonElement var4 = var0.get("enabled");
+            if (!var4.isJsonPrimitive() || !var4.getAsJsonPrimitive().isBoolean()) {
+               return false;
             }
-
-            int var10 = -1;
-            if (var0.has("key")) {
-               JsonElement var5 = var0.get("key");
-               if (!var5.isJsonPrimitive() || !var5.getAsJsonPrimitive().isNumber()) {
-                  return false;
-               }
-
-               double var6 = var5.getAsDouble();
-               if (!Double.isFinite(var6) || var6 < -2.1474836E9F || var6 > 2.147483647E9) {
-                  return false;
-               }
-
-               var10 = var5.getAsInt();
-            }
-
-            if (!(var2 instanceof MenuModule)) {
-               var2.setEnabled(var3, true);
-            }
-
-            var2.setKeybind(var10);
-            if (var0.has("settings") && var0.get("settings").isJsonObject()) {
-               JsonObject var11 = var0.getAsJsonObject("settings");
-               return I_method_88280957(var2.getSettings(), var11, var2.getName());
-            } else {
-               return !var0.has("settings");
-            }
-         } catch (iiIIiIiI_Class203 var8) {
-            I_field_a567c40b.put(var1, var0.deepCopy());
-            VelumClient.I_field_ab0f6068
-               .warn("Config: \u043d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u044b\u0439 \u043c\u043e\u0434\u0443\u043b\u044c {}", var1);
-            return false;
-         } catch (Exception var9) {
-            VelumClient.I_field_ab0f6068
-               .warn(
-                  "Config: \u043d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u043c\u043e\u0434\u0443\u043b\u044c {}",
-                  var1,
-                  var9
-               );
-            return false;
+            hasEnabled = true;
+            var3 = var4.getAsBoolean() && !i_method_45e34af1(var2);
          }
-      } else {
+
+         if (var0.has("key")) {
+            JsonElement var5 = var0.get("key");
+            if (!var5.isJsonPrimitive() || !var5.getAsJsonPrimitive().isNumber()) {
+               return false;
+            }
+            double var6 = var5.getAsDouble();
+            if (!Double.isFinite(var6) || var6 < -2.1474836E9F || var6 > 2.147483647E9) {
+               return false;
+            }
+            var10 = var5.getAsInt();
+         }
+
+         boolean settingsOk = true;
+         if (var0.has("settings")) {
+            if (!var0.get("settings").isJsonObject()) {
+               return false;
+            }
+            settingsOk = I_method_88280957(var2.getSettings(), var0.getAsJsonObject("settings"), var2.getName());
+         }
+
+         // Menu is a UI controller, not a persistent gameplay state. Its mode/key are restored,
+         // but it must remain disabled until the player explicitly opens the GUI.
+         if (!(var2 instanceof MenuModule) && hasEnabled) {
+            var2.setEnabled(var3, true);
+         }
+         if (var0.has("key")) {
+            var2.setKeybind(var10);
+         }
+         return settingsOk;
+      } catch (iiIIiIiI_Class203 var8) {
+         I_field_a567c40b.put(var1, var0.deepCopy());
+         VelumClient.I_field_ab0f6068.warn("Config: неизвестный модуль {}", var1);
+         return false;
+      } catch (Exception var9) {
+         VelumClient.I_field_ab0f6068.warn("Config: не удалось загрузить модуль {}", var1, var9);
          return false;
       }
    }

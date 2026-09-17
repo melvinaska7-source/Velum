@@ -58,14 +58,20 @@ extends Module {
         if (!window && !bl && !(MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216)) {
             return;
         }
+        this.I_method_7e9b4d21();
+        super.onEnable();
+    }
+
+    /** Opens the selected GUI and keeps the Menu lifecycle flag in sync. */
+    public Screen I_method_7e9b4d21() {
         this.I_field_bf52cf84 = this.I_method_83034dbb();
         I_field_5a = true;
         I_field_3a9bda27.setScreen(this.I_field_bf52cf84);
-        SoundsModule iIIIiIiii_Class24 = VelumClient.getInstance().getModuleManager().getModule(SoundsModule.class);
-        if (iIIIiIiii_Class24.isEnabled()) {
-            iiIiIIIII_Class417.I_field_34b2ba6c.I_method_87d2e181(iIIIiIiii_Class24.I_method_45ee5ef());
+        SoundsModule sounds = VelumClient.getInstance().getModuleManager().getModule(SoundsModule.class);
+        if (sounds != null && sounds.isEnabled()) {
+            iiIiIIIII_Class417.I_field_34b2ba6c.I_method_87d2e181(sounds.I_method_45ee5ef());
         }
-        super.onEnable();
+        return this.I_field_bf52cf84;
     }
 
     public Screen I_method_83034dbb() {
