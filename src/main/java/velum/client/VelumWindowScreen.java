@@ -48,6 +48,8 @@ public final class VelumWindowScreen extends IiiIIiiiI_Class207 {
 
     @Override
     public void render(III ctx) {
+        final double mouseX = ctx.I_method_b1c3e152();
+        final double mouseY = ctx.i_method_b1d26d32();
         final float t = Math.min(1.0f, (System.currentTimeMillis() - openedAt) / 260.0f);
         final float eased = 1.0f - (float)Math.pow(1.0f - t, 3.0);
         final float scale = 0.965f + 0.035f * eased;
@@ -235,14 +237,14 @@ public final class VelumWindowScreen extends IiiIIiiiI_Class207 {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button != 0) return super.mouseClicked(mouseX, mouseY, button);
+    public void onMouseClicked(double mouseX, double mouseY, IiIII_Class9 button) {
+        if (button != IiIII_Class9.I_field_2f4c8d6c) return;
         float w = Math.min(WINDOW_W, width - 28.0f);
         float h = Math.min(WINDOW_H, height - 28.0f);
         float x = (width - w) * 0.5f;
         float y = (height - h) * 0.5f;
 
-        if (!inside(mouseX, mouseY, x, y, w, h)) return true;
+        if (!inside(mouseX, mouseY, x, y, w, h)) return;
 
         float sidebarW = 178.0f;
         float cy = y + 88.0f;
@@ -251,7 +253,7 @@ public final class VelumWindowScreen extends IiiIIiiiI_Class207 {
                 category = cat;
                 selected = null;
                 scroll = 0.0f;
-                return true;
+                return;
             }
             cy += 40.0f;
         }
@@ -269,10 +271,10 @@ public final class VelumWindowScreen extends IiiIIiiiI_Class207 {
             ModuleEntry module = modules.get(i);
             selected = module;
             module.setEnabled(!module.isEnabled(), true);
-            return true;
+            return;
         }
 
-        return true;
+        return;
     }
 
     @Override
