@@ -3076,3 +3076,6 @@ modules.settings.trainer.difficulty.cheater=Читер
 modules.settings.trainer.rotation_speed=Скорость вращения
 modules.settings.trainer.best_record=Ваш рекорд
 hud.dynamic_island.statuses.trainer=Тренер
+modules.settings.middle_click.wind_charge=Заряд ветра
+modules.settings.middle_click.wind_charge_key=Клавиша заряда ветра
+middle_click.no_wind_charge=Нет заряда ветра в инвентаре

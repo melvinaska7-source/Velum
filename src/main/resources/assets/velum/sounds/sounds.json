@@ -1,0 +1,17 @@
+{
+  "totem.xylophone": {
+    "sounds": [
+      { "name": "velum:totem/xylophone", "stream": false }
+    ]
+  },
+  "totem.bro9i": {
+    "sounds": [
+      { "name": "velum:totem/bro9i", "stream": false }
+    ]
+  },
+  "totem.nothing": {
+    "sounds": [
+      { "name": "velum:totem/nothing", "stream": false }
+    ]
+  }
+}

@@ -2,6 +2,8 @@ package velum.client;
 
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import pyvelum.events.window.KeyPressEvent;
@@ -23,10 +25,13 @@ import ua.mintantileak.spk.Compile;
 public class MiddleClickModule
 extends Module {
     private MultiSelectSetting I_field_bbe3ba6c;
-    private MultiSelectSetting.Nested1_42856060 I_field_51de8227;
-    private MultiSelectSetting.Nested1_42856060 i_field_51de8227;
-    private KeybindSetting I_field_ba20522c;
-    private KeybindSetting i_field_ba20522c;
+    private MultiSelectSetting.Nested1_42856060 I_field_51de8227;   // pearl
+    private MultiSelectSetting.Nested1_42856060 i_field_51de8227;   // friend
+    private MultiSelectSetting.Nested1_42856060 II_field_51de8227;  // wind charge
+    private KeybindSetting I_field_ba20522c;                        // friend key
+    private KeybindSetting i_field_ba20522c;                        // pearl key
+    private KeybindSetting II_field_ba20522c;                       // wind charge key
+
     private final IiIIIiII_Class69<KeyPressEvent> I_field_3d936f41 = keyPressEvent -> this.I_method_59ba7f3f(keyPressEvent.getKey(), keyPressEvent.getAction());
     private final IiIIIiII_Class69<MouseEvent> i_field_3d936f41 = mouseEvent -> this.I_method_59ba7f3f(mouseEvent.getButton(), mouseEvent.getAction());
 
@@ -39,12 +44,16 @@ extends Module {
         this.I_field_bbe3ba6c = new MultiSelectSetting(this, "modules.settings.middle_click.actions").I_method_702bd95a(1);
         this.I_field_51de8227 = new MultiSelectSetting.Nested1_42856060(this.I_field_bbe3ba6c, "modules.settings.middle_click.pearl").select();
         this.i_field_51de8227 = new MultiSelectSetting.Nested1_42856060(this.I_field_bbe3ba6c, "modules.settings.middle_click.friend");
+        this.II_field_51de8227 = new MultiSelectSetting.Nested1_42856060(this.I_field_bbe3ba6c, "modules.settings.middle_click.wind_charge");
+
         this.I_field_ba20522c = new KeybindSetting(this, "modules.settings.middle_click.friend_key", () -> !this.i_field_51de8227.isSelected());
         this.i_field_ba20522c = new KeybindSetting(this, "modules.settings.middle_click.pearl_key", () -> !this.I_field_51de8227.isSelected());
+        this.II_field_ba20522c = new KeybindSetting(this, "modules.settings.middle_click.wind_charge_key", () -> !this.II_field_51de8227.isSelected());
     }
 
     private void I_method_59ba7f3f(int n, int n2) {
         if (MiddleClickModule.I_field_3a9bda27.currentScreen == null && n2 == 1) {
+            // --- Друг ---
             if (this.i_field_51de8227.isSelected() && this.I_field_ba20522c.I_method_51ee2d08(n)) {
                 if (MiddleClickModule.I_field_3a9bda27.targetedEntity instanceof PlayerEntity) {
                     String string = MiddleClickModule.I_field_3a9bda27.targetedEntity.getName().getString();
@@ -55,13 +64,41 @@ extends Module {
                         iiIIiiII_Class77.I_method_19c94376(string);
                     }
                 } else if (MiddleClickModule.I_field_3a9bda27.targetedEntity instanceof SlimeEntity) {
-                    iIIIIIIii_Class260.II_method_e8fd4864(Text.of((String)IiIiIIII_Class81.I_method_f25a980a("middle_click.slime_error")));
+                    iIIIIIIii_Class260.II_method_e8fd4864(Text.of(IiIiIIII_Class81.I_method_f25a980a("middle_click.slime_error")));
                 }
             }
+
+            // --- Жемчуг эндера (как было) ---
             if (this.I_field_51de8227.isSelected() && this.i_field_ba20522c.I_method_51ee2d08(n)) {
                 IiIIIIii_Class68.I_field_108dc26c.I_method_ee61a647(Items.ENDER_PEARL);
             }
+
+            // --- Заряд ветра ---
+            if (this.II_field_51de8227.isSelected() && this.II_field_ba20522c.I_method_51ee2d08(n)) {
+                PlayerEntity player = MiddleClickModule.I_field_3a9bda27.player;
+                if (player == null) {
+                    return;
+                }
+                if (!this.II_method_hasItem(player, Items.WIND_CHARGE)) {
+                    // нет заряда ветра в инвентаре — пишем в чат с префиксом
+                    iIIIIIIii_Class260.II_method_e8fd4864(
+                        Text.of(IiIiIIII_Class81.I_method_f25a980a("middle_click.no_wind_charge"))
+                    );
+                } else {
+                    IiIIIIii_Class68.I_field_108dc26c.I_method_ee61a647(Items.WIND_CHARGE);
+                }
+            }
         }
     }
-}
 
+    /** Проверяем, есть ли предмет в инвентаре игрока. */
+    private boolean II_method_hasItem(PlayerEntity player, Item item) {
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            ItemStack stack = player.getInventory().getStack(i);
+            if (!stack.isEmpty() && stack.isOf(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
