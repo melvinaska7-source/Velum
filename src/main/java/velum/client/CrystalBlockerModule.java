@@ -1,0 +1,167 @@
+package velum.client;
+
+import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import ua.mintantileak.spk.Compile;
+
+@ModuleInfo(
+   name = "Crystal Blocker",
+   III_method_a89e5834 = "modules.descriptions.crystal_blocker",
+   category = ModuleCategory.COMBAT
+)
+public class CrystalBlockerModule extends Module {
+   private static final double SEARCH_RADIUS = 5.0;
+   private static final double REACH = 4.5;
+
+   private final iiIiIIiii_Class424 I_field_991c1e8c = new iiIiIIiii_Class424();
+   private BlockPos I_field_670402ba;
+
+   @Override
+   public void onDisable() {
+      this.I_field_670402ba = null;
+   }
+
+   @Override
+   @Compile(
+      obfuscation = 4
+   )
+   public void II_method_6642fd22() {
+      if (I_field_3a9bda27.player == null || I_field_3a9bda27.world == null) {
+         return;
+      }
+
+      // сбрасываем цель, если обсидиан исчез или сверху уже что-то стоит
+      if (this.I_field_670402ba != null) {
+         if (!I_field_3a9bda27.world.getBlockState(this.I_field_670402ba).isOf(Blocks.OBSIDIAN)
+            || !I_field_3a9bda27.world.getBlockState(this.I_field_670402ba.up()).isAir()) {
+            this.I_field_670402ba = null;
+         }
+      }
+
+      // ищем новый обсидиан
+      if (this.I_field_670402ba == null) {
+         this.I_field_670402ba = this.I_method_5f2a91c3();
+      }
+
+      if (this.I_field_670402ba == null) {
+         return;
+      }
+
+      // факела нет — модуль не работает
+      int var1 = this.I_method_2d8f7a44();
+      if (var1 == -1) {
+         return;
+      }
+
+      // анти-спам
+      if (!this.I_field_991c1e8c.I_method_58432069(50L)) {
+         return;
+      }
+
+      this.I_method_7c31e5b8(var1, this.I_field_670402ba);
+      this.I_field_991c1e8c.I_method_23e11e3f();
+      this.I_field_670402ba = null;
+
+      super.II_method_6642fd22();
+   }
+
+   /**
+    * Ищет ближайший обсидиан в радиусе 5 блоков с воздухом сверху.
+    */
+   private BlockPos I_method_5f2a91c3() {
+      BlockPos var1 = I_field_3a9bda27.player.getBlockPos();
+      BlockPos var2 = null;
+      double var3 = Double.MAX_VALUE;
+
+      for (BlockPos var7 : BlockPos.iterate(
+         var1.add(-5, -5, -5),
+         var1.add(5, 5, 5)
+      )) {
+         if (I_field_3a9bda27.world.getBlockState(var7).isOf(Blocks.OBSIDIAN)
+            && I_field_3a9bda27.world.getBlockState(var7.up()).isAir()) {
+
+            Vec3d var8 = new Vec3d(var7.getX() + 0.5, var7.getY() + 1.0, var7.getZ() + 0.5);
+            double var9 = I_field_3a9bda27.player.getEyePos().squaredDistanceTo(var8);
+
+            if (var9 <= REACH * REACH && var9 < var3) {
+               var3 = var9;
+               var2 = var7.toImmutable();
+            }
+         }
+      }
+
+      return var2;
+   }
+
+   /**
+    * Ищет факел в инвентаре. Возвращает индекс слота инвентаря или -1.
+    */
+   private int I_method_2d8f7a44() {
+      for (int var1 = 0; var1 < 36; var1++) {
+         ItemStack var2 = I_field_3a9bda27.player.getInventory().getStack(var1);
+         if (!var2.isEmpty() && var2.getItem() == Items.TORCH) {
+            return var1;
+         }
+      }
+
+      return -1;
+   }
+
+   /**
+    * Ставит факел на обсидиан. Если факел не в хотбаре — свапает его в активный слот.
+    */
+   private void I_method_7c31e5b8(int var1, BlockPos var2) {
+      // факел лежит в основном инвентаре — меняем с активным слотом хотбара
+      if (var1 >= 9 && var1 <= 35) {
+         I_field_3a9bda27.interactionManager.clickSlot(
+            I_field_3a9bda27.player.playerScreenHandler.syncId,
+            var1,
+            I_field_3a9bda27.player.getInventory().selectedSlot,
+            SlotActionType.SWAP,
+            I_field_3a9bda27.player
+         );
+         var1 = I_field_3a9bda27.player.getInventory().selectedSlot;
+      }
+
+      Vec3d var3 = new Vec3d(var2.getX() + 0.5, var2.getY() + 1.0, var2.getZ() + 0.5);
+
+      // поворот на точку постановки
+      float[] var4 = this.I_method_c10d9523(var3);
+      VelumClient.getInstance().I_method_58785402().I_method_a10b10c7(new iiIIiIIii_Class404(var4[0], var4[1]));
+
+      int var5 = I_field_3a9bda27.player.getInventory().selectedSlot;
+      I_field_3a9bda27.player.getInventory().selectedSlot = var1;
+
+      BlockHitResult var6 = new BlockHitResult(var3, Direction.UP, var2, false);
+      I_field_3a9bda27.interactionManager.interactBlock(I_field_3a9bda27.player, Hand.MAIN_HAND, var6);
+      I_field_3a9bda27.player.swingHand(Hand.MAIN_HAND);
+
+      I_field_3a9bda27.player.getInventory().selectedSlot = var5;
+   }
+
+   private float[] I_method_c10d9523(Vec3d var1) {
+      Vec3d var2 = new Vec3d(
+         I_field_3a9bda27.player.getX(),
+         I_field_3a9bda27.player.getY() + I_field_3a9bda27.player.getEyeHeight(I_field_3a9bda27.player.getPose()),
+         I_field_3a9bda27.player.getZ()
+      );
+      double var3 = var1.x - var2.x;
+      double var5 = var1.y - var2.y;
+      double var7 = var1.z - var2.z;
+      double var9 = Math.sqrt(var3 * var3 + var7 * var7);
+      float var11 = (float)Math.toDegrees(Math.atan2(var7, var3)) - 90.0F;
+      float var12 = (float)(-Math.toDegrees(Math.atan2(var5, var9)));
+      return new float[]{
+         I_field_3a9bda27.player.getYaw() + MathHelper.wrapDegrees(var11 - I_field_3a9bda27.player.getYaw()),
+         I_field_3a9bda27.player.getPitch() + MathHelper.wrapDegrees(var12 - I_field_3a9bda27.player.getPitch())
+      };
+   }
+}
