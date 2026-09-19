@@ -475,9 +475,6 @@ public class IiiIiIiiI_Class215 extends IiiIIiiiI_Class207 implements IiiIiIIiI_
          .I_method_8939bffd(this.I_method_358d385f("menu/swing", () -> "Swing Animations", iiIIIIII_Class193::new))
          .I_method_8939bffd(this.I_method_358d385f("menu/builder", () -> "Inventory Builder", IiiIiIiII_Class213::new))
          .I_method_8939bffd(this.I_method_358d385f("menu/esp", () -> "ESP", IiiiiIIi_Class122::new))
-         .I_method_8939bffd(
-            this.I_method_358d385f("menu/assist", () -> IiIiIIII_Class81.I_method_f25a980a("menu.modern.shortcuts.item_binds"), iIIiIiiI_Class151::new)
-         )
          .I_method_8939bffd(this.I_method_358d385f("menu/autobuy", () -> "Auto Buy", IiiIIIiI_Class99::new))
          .I_method_8939bffd(
             this.I_method_358d385f(

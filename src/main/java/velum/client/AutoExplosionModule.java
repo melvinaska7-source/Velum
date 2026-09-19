@@ -2,12 +2,12 @@ package velum.client;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -24,28 +24,29 @@ import ua.mintantileak.spk.Compile;
    category = ModuleCategory.COMBAT
 )
 public class AutoExplosionModule extends Module {
-   private MultiSelectSetting I_field_bbe3ba6c;
-   private MultiSelectSetting.Nested1_42856060 I_field_51de8227;
-   private MultiSelectSetting.Nested1_42856060 i_field_51de8227;
-   private MultiSelectSetting.Nested1_42856060 II_field_51de8227;
-   private final iiIiIIiii_Class424 I_field_991c1e8c = new iiIiIIiii_Class424();
-   private final iiIiIIiii_Class424 i_field_991c1e8c = new iiIiIIiii_Class424();
-   private BlockPos I_field_670402ba;
-   private BlockPos i_field_670402ba;
-   private int I_field_49 = -1;
+   private static final double REACH = 4.5;
+   private static final int PLACE_TIMEOUT_TICKS = 20; // сколько тиков ждём появления кристалла
+
+   private final iiIiIIiii_Class424 I_field_991c1e8c = new iiIiIIiii_Class424(); // таймер постановки
+   private final iiIiIIiii_Class424 i_field_991c1e8c = new iiIiIIiii_Class424(); // таймер атаки
+
+   private BlockPos I_field_670402ba;  // цель: позиция воздуха НАД обсидианом
+   private int i_field_49 = 0;         // тики ожидания появления кристалла
+   private int II_field_49 = -1;       // id кристалла, который мы поставили
+
    private final IiIIIiII_Class69<MouseEvent> I_field_3d936f41 = var1 -> {
       if (I_field_3a9bda27.player != null && I_field_3a9bda27.world != null) {
          if (I_field_3a9bda27.currentScreen == null) {
             if (var1.getButton() == 1 && var1.getAction() == 1) {
-               if (I_field_3a9bda27.player.getMainHandStack().isEmpty() || I_field_3a9bda27.player.getMainHandStack().getItem() instanceof SwordItem) {
+               if (I_field_3a9bda27.player.getMainHandStack().isEmpty()
+                  || I_field_3a9bda27.player.getMainHandStack().getItem() instanceof SwordItem) {
                   if (I_field_3a9bda27.crosshairTarget instanceof BlockHitResult var2) {
                      if (I_field_3a9bda27.world.getBlockState(var2.getBlockPos()).isOf(Blocks.OBSIDIAN)) {
                         BlockPos var4 = var2.getBlockPos().up();
                         if (I_field_3a9bda27.world.getBlockState(var4).isAir()) {
-                           if (!this.I_method_b041f136(var4.getY())) {
-                              this.I_field_670402ba = var4.toImmutable();
-                              this.I_field_991c1e8c.I_method_23e11e3f();
-                           }
+                           this.I_field_670402ba = var4.toImmutable();
+                           this.i_field_49 = 0;
+                           this.II_field_49 = -1;
                         }
                      }
                   }
@@ -55,172 +56,151 @@ public class AutoExplosionModule extends Module {
       }
    };
 
-   public AutoExplosionModule() {
-      this.IiI_method_5b9269cc();
-   }
-
-   @Compile(
-      obfuscation = 4
-   )
-   private void IiI_method_5b9269cc() {
-      this.I_field_bbe3ba6c = new MultiSelectSetting(this, "\u041d\u0435 \u0432\u0437\u0440\u044b\u0432\u0430\u0442\u044c");
-      this.I_field_51de8227 = new MultiSelectSetting.Nested1_42856060(this.I_field_bbe3ba6c, "\u0421\u0435\u0431\u044f").select();
-      this.i_field_51de8227 = new MultiSelectSetting.Nested1_42856060(this.I_field_bbe3ba6c, "\u0414\u0440\u0443\u0437\u0435\u0439").select();
-      this.II_field_51de8227 = new MultiSelectSetting.Nested1_42856060(this.I_field_bbe3ba6c, "\u041f\u0440\u0435\u0434\u043c\u0435\u0442\u044b").select();
-   }
-
    @Override
    public void onDisable() {
       this.I_field_670402ba = null;
-      this.i_field_670402ba = null;
+      this.II_field_49 = -1;
+      this.i_field_49 = 0;
    }
 
    @Override
+   @Compile(
+      obfuscation = 4
+   )
    public void II_method_6642fd22() {
-      if (I_field_3a9bda27.player != null && I_field_3a9bda27.world != null) {
-         iIIiiIiII_Class309 var1 = iIIiiIiIi_Class310.I_method_6a489695();
-         iIIiiiIii_Class316 var2 = (iIIiiiIii_Class316)var1.I_method_5d34dd7d(Items.END_CRYSTAL);
-         if (var2 == null) {
+      if (I_field_3a9bda27.player == null || I_field_3a9bda27.world == null) {
+         return;
+      }
+
+      // --- ЭТАП 1: ставим кристалл ---
+      if (this.I_field_670402ba != null) {
+         // цель ещё валидна? (обсидиан на месте, сверху воздух)
+         if (!I_field_3a9bda27.world.getBlockState(this.I_field_670402ba.down()).isOf(Blocks.OBSIDIAN)
+            || !I_field_3a9bda27.world.getBlockState(this.I_field_670402ba).isAir()) {
             this.I_field_670402ba = null;
-            this.i_field_670402ba = null;
          } else {
-            if (this.I_field_670402ba != null && this.I_field_991c1e8c.I_method_58432069(1L)) {
-               if (!this.I_method_b041f136(this.I_field_670402ba.getY())) {
-                  this.I_method_704015b1(var2.I_method_dfe89252(), this.I_field_670402ba);
-                  this.i_field_670402ba = this.I_field_670402ba;
-               }
-
+            int var1 = this.I_method_2d8f7a44();
+            if (var1 == -1) {
+               // кристалла нет в инвентаре — сброс
                this.I_field_670402ba = null;
+            } else if (this.I_field_991c1e8c.I_method_58432069(100L)) {
+               this.I_method_704015b1(var1, this.I_field_670402ba);
                this.I_field_991c1e8c.I_method_23e11e3f();
+               // цель НЕ сбрасываем — переходим в режим ожидания сущности
             }
-
-            EndCrystalEntity var3 = this.I_method_c883c77a(this.i_field_670402ba);
-            if (var3 != null) {
-               Vec3d var4 = var3.getPos().add(0.0, 0.5, 0.0);
-               float[] var5 = this.I_method_c10d9523(var4);
-               VelumClient.getInstance().I_method_58785402().I_method_a10b10c7(new iiIIiIIii_Class404(var5[0], var5[1]));
-               this.I_method_7d886e76(var3);
-            }
-
-            super.II_method_6642fd22();
          }
-      }
-   }
 
-   private void I_method_704015b1(int var1, BlockPos var2) {
-      if (I_field_3a9bda27.player != null && I_field_3a9bda27.world != null) {
-         int var3 = var1 - 36;
-         if (var3 >= 0 && var3 <= 8) {
-            BlockPos var4 = var2.down();
-            Vec3d var5 = new Vec3d(var4.getX() + 0.5, var4.getY() + 1.0, var4.getZ() + 0.5);
-            float[] var6 = this.I_method_c10d9523(var5);
-            VelumClient.getInstance().I_method_58785402().I_method_a10b10c7(new iiIIiIIii_Class404(var6[0], var6[1]));
-            int var7 = I_field_3a9bda27.player.getInventory().selectedSlot;
-            I_field_3a9bda27.player.getInventory().selectedSlot = var3;
-            BlockHitResult var8 = new BlockHitResult(var5, Direction.UP, var4, false);
-            I_field_3a9bda27.interactionManager.interactBlock(I_field_3a9bda27.player, Hand.MAIN_HAND, var8);
+         super.II_method_6642fd22();
+         return;
+      }
+
+      // --- ЭТАП 2: атакуем поставленный кристалл ---
+      EndCrystalEntity var2 = this.II_method_9b21c4d5();
+      if (var2 != null) {
+         if (this.i_field_991c1e8c.I_method_58432069(150L)
+            && I_field_3a9bda27.player.getAttackCooldownProgress(1.0F) >= 1.0F) {
+
+            Vec3d var3 = var2.getPos().add(0.0, 0.5, 0.0);
+            float[] var4 = this.I_method_c10d9523(var3);
+            VelumClient.getInstance().I_method_58785402().I_method_a10b10c7(new iiIIiIIii_Class404(var4[0], var4[1]));
+
+            I_field_3a9bda27.interactionManager.attackEntity(I_field_3a9bda27.player, var2);
             I_field_3a9bda27.player.swingHand(Hand.MAIN_HAND);
-            I_field_3a9bda27.player.getInventory().selectedSlot = var7;
 
-            for (Entity var10 : I_field_3a9bda27.world.getEntities()) {
-               if (var10 instanceof EndCrystalEntity var11 && var11.squaredDistanceTo(var5) < 1.0) {
-                  return;
-               }
-            }
-         }
-      }
-   }
-
-   private EndCrystalEntity I_method_c883c77a(BlockPos var1) {
-      if (var1 == null) {
-         return null;
-      } else {
-         Box var2 = new Box(var1.getX(), var1.getY(), var1.getZ(), var1.getX() + 1.0, var1.getY() + 2.0, var1.getZ() + 1.0);
-
-         for (Entity var4 : I_field_3a9bda27.world.getOtherEntities(null, var2)) {
-            if (var4 instanceof EndCrystalEntity var5 && var5.isAlive()) {
-               return var5;
-            }
-         }
-
-         return null;
-      }
-   }
-
-   private void I_method_7d886e76(EndCrystalEntity var1) {
-      if (this.I_method_7d886e7a(var1)) {
-         if (this.i_field_991c1e8c.I_method_58432069(80L)) {
-            I_field_3a9bda27.interactionManager.attackEntity(I_field_3a9bda27.player, var1);
-            I_field_3a9bda27.player.swingHand(Hand.MAIN_HAND);
-            this.I_field_49 = var1.getId();
             this.i_field_991c1e8c.I_method_23e11e3f();
-         }
-      }
-   }
-
-   private boolean I_method_7d886e7a(EndCrystalEntity var1) {
-      if (var1 == null || !var1.isAlive()) {
-         return false;
-      } else if (this.i_method_c0f8425a(var1)) {
-         return false;
-      } else if (I_field_3a9bda27.player.distanceTo(var1) > 4.0) {
-         return false;
-      } else {
-         return this.I_field_49 == var1.getId() && !this.i_field_991c1e8c.I_method_58432069(300L)
-            ? false
-            : I_field_3a9bda27.player.getAttackCooldownProgress(1.0F) >= 1.0F;
-      }
-   }
-
-   private boolean i_method_c0f8425a(EndCrystalEntity var1) {
-      if (this.I_method_b041f136(var1.getY())) {
-         return true;
-      } else {
-         return this.i_field_51de8227.isSelected() && this.II_method_8dd51203(var1)
-            ? true
-            : this.II_field_51de8227.isSelected() && this.Ii_method_d144e5e3(var1);
-      }
-   }
-
-   private boolean I_method_b041f136(double var1) {
-      return this.I_field_51de8227.isSelected() && var1 <= I_field_3a9bda27.player.getY() + 0.1;
-   }
-
-   private boolean II_method_8dd51203(EndCrystalEntity var1) {
-      Box var2 = var1.getBoundingBox().expand(6.0);
-
-      for (PlayerEntity var4 : I_field_3a9bda27.world.getEntitiesByClass(PlayerEntity.class, var2, var0 -> var0 != I_field_3a9bda27.player)) {
-         if (var4.isAlive() && VelumClient.getInstance().I_method_7a5acaeb().I_method_19c9437a(var4.getName().getString())) {
-            return true;
+            this.II_field_49 = -1;
          }
       }
 
-      return false;
+      super.II_method_6642fd22();
    }
 
-   private boolean Ii_method_d144e5e3(EndCrystalEntity var1) {
-      Box var2 = var1.getBoundingBox().expand(6.0);
+   /**
+    * Ищет сущность кристалла на запомненной позиции постановки.
+    * Ждёт до PLACE_TIMEOUT_TICKS тиков, потом сбрасывает.
+    */
+   private EndCrystalEntity II_method_9b21c4d5() {
+      if (this.II_field_670402ba_check()) {
+         return null;
+      }
 
-      for (ItemEntity var4 : I_field_3a9bda27.world.getEntitiesByClass(ItemEntity.class, var2, var0 -> true)) {
-         if (var4 != null && var4.getStack() != null) {
-            Item var5 = var4.getStack().getItem();
-            if (var5 == Items.TOTEM_OF_UNDYING
-               || var5 == Items.END_CRYSTAL
-               || var5 == Items.ENCHANTED_GOLDEN_APPLE
-               || var5 == Items.NETHERITE_HELMET
-               || var5 == Items.NETHERITE_CHESTPLATE
-               || var5 == Items.NETHERITE_LEGGINGS
-               || var5 == Items.NETHERITE_BOOTS
-               || var5 == Items.NETHERITE_SWORD
-               || var5 == Items.DIAMOND_SWORD
-               || var5 == Items.ELYTRA
-               || var5 == Items.TRIDENT) {
-               return true;
-            }
+      Box var1 = new Box(
+         this.I_field_670402ba.getX(), this.I_field_670402ba.getY(), this.I_field_670402ba.getZ(),
+         this.I_field_670402ba.getX() + 1.0, this.I_field_670402ba.getY() + 2.0, this.I_field_670402ba.getZ() + 1.0
+      );
+
+      EndCrystalEntity var2 = null;
+      for (Entity var6 : I_field_3a9bda27.world.getOtherEntities(null, var1)) {
+         if (var6 instanceof EndCrystalEntity var7 && var7.isAlive()) {
+            var2 = var7;
+            break;
          }
       }
 
-      return false;
+      if (var2 != null) {
+         this.II_field_49 = var2.getId();
+         return var2;
+      }
+
+      // кристалл ещё не появился / уже исчез
+      if (++this.i_field_49 > PLACE_TIMEOUT_TICKS) {
+         this.II_field_49 = -1;
+         this.i_field_49 = 0;
+      }
+
+      return null;
+   }
+
+   /**
+    * Вспомогательная проверка: есть ли у нас запомненный id кристалла в ожидании атаки.
+    */
+   private boolean II_field_670402ba_check() {
+      return this.II_field_49 != -1 ? false : this.I_field_670402ba == null;
+   }
+
+   /**
+    * Ищет энд-кристалл в инвентаре. Возвращает индекс слота или -1.
+    */
+   private int I_method_2d8f7a44() {
+      for (int var1 = 0; var1 < 36; var1++) {
+         ItemStack var2 = I_field_3a9bda27.player.getInventory().getStack(var1);
+         if (!var2.isEmpty() && var2.getItem() == Items.END_CRYSTAL) {
+            return var1;
+         }
+      }
+
+      return -1;
+   }
+
+   /**
+    * Ставит кристалл на позицию. Если кристалл не в хотбаре — свапает через clickSlot.
+    */
+   private void I_method_704015b1(int var1, BlockPos var2) {
+      if (var1 >= 9 && var1 <= 35) {
+         I_field_3a9bda27.interactionManager.clickSlot(
+            I_field_3a9bda27.player.playerScreenHandler.syncId,
+            var1,
+            I_field_3a9bda27.player.getInventory().selectedSlot,
+            SlotActionType.SWAP,
+            I_field_3a9bda27.player
+         );
+         var1 = I_field_3a9bda27.player.getInventory().selectedSlot;
+      }
+
+      BlockPos var3 = var2.down();
+      Vec3d var4 = new Vec3d(var3.getX() + 0.5, var3.getY() + 1.0, var3.getZ() + 0.5);
+
+      float[] var5 = this.I_method_c10d9523(var4);
+      VelumClient.getInstance().I_method_58785402().I_method_a10b10c7(new iiIIiIIii_Class404(var5[0], var5[1]));
+
+      int var6 = I_field_3a9bda27.player.getInventory().selectedSlot;
+      I_field_3a9bda27.player.getInventory().selectedSlot = var1;
+
+      BlockHitResult var7 = new BlockHitResult(var4, Direction.UP, var3, false);
+      I_field_3a9bda27.interactionManager.interactBlock(I_field_3a9bda27.player, Hand.MAIN_HAND, var7);
+      I_field_3a9bda27.player.swingHand(Hand.MAIN_HAND);
+
+      I_field_3a9bda27.player.getInventory().selectedSlot = var6;
    }
 
    private float[] I_method_c10d9523(Vec3d var1) {
