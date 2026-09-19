@@ -122,6 +122,7 @@ import velum.client.StrafeModule;
 import velum.client.SuperFireworkModule;
 import velum.client.TimerModule;
 import velum.client.WaterSpeedModule;
+import velum.client.CrystalBlockerModule;
 import velum.client.AdminskyModule;
 import ua.mintantileak.spk.Compile;
 
@@ -180,7 +181,6 @@ public class ModuleManager {
     @Compile(obfuscation=4)
     public final void registerModules() {
         this.registerModule(new AuraModule());
-        this.registerModule(new TrainerModule());
         this.registerModule(new AimAssistModule());
         this.registerModule(new AutoTotemModule());
         this.registerModule(new TriggerBotModule());

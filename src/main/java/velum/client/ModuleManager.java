@@ -122,6 +122,7 @@ import velum.client.StrafeModule;
 import velum.client.SuperFireworkModule;
 import velum.client.TimerModule;
 import velum.client.WaterSpeedModule;
+import velum.client.CrystalBlockerModule;
 import velum.client.AdminskyModule;
 import ua.mintantileak.spk.Compile;
 
@@ -264,7 +265,7 @@ public class ModuleManager {
         this.registerModule(new ElytraUtilsModule());
         this.registerModule(new FastItemUseModule());
         this.registerModule(new AutoResellModule());
-        this.registerModule(new BaseFinderModule());
+        this.registerModule(new BaseFinderModule()); 
         this.registerModule(new PanicModule());
         this.registerModule(new AuctionModule());
         this.registerModule(new InventoryBuilderModule());
@@ -284,6 +285,7 @@ public class ModuleManager {
         this.registerModule(new AssistModule());
         this.registerModule(new SoundsModule());
         this.registerModule(new AntiAimModule());
+        this.registerModule(new CrystalBlockerModule());
         this.snapshotModuleSettings();
     }
 
