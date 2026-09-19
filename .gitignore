@@ -6,4 +6,6 @@ run/
 *.ipr
 *.iws
 *.log
-
+*.tar.gz
+*.zip
+*.tar
