@@ -1025,13 +1025,7 @@ implements IiiIiIIiI_Class211 {
 
    @Override
    public float i_method_98423e0f() {
-      if (!this.closing) {
-         return 0.0F;
-      }
-      if (this.closeStart == 0L) {
-         this.closeStart = System.currentTimeMillis();
-      }
-      return Math.min(1.0F, Math.max(0.0F, (float)(System.currentTimeMillis() - this.closeStart) / 300.0F));
+      return this.closing ? this.III_method_e51d2e6f() : 0.0F;
    }
 
    @Override
