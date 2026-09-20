@@ -9,7 +9,6 @@ import velum.client.VelumClient;
 import velum.client.IiiIIiiiI_Class207;
 import velum.client.IiiIiIiiI_Class215;
 import velum.client.IiiIiIiii_Class216;
-import velum.client.Premium; // NEW
 import velum.client.iIIiIIiIi_Class294;
 
 public class IiiIiIIII_Class209
@@ -17,13 +16,8 @@ implements iIIiIIiIi_Class294 {
     private final IiIIIiII_Class69<HudRenderEvent> I_field_3d936f41 = hudRenderEvent -> {
         boolean bl;
         IiiIIiiiI_Class207 iiiIIiiiI_Class207 = VelumClient.getInstance().I_method_96982062();
-        MenuModule iIiIIiiIi_Class78 = VelumClient.getInstance().getModuleManager().getModule(MenuModule.class);
-        if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && iIiIIiiIi_Class78.I_method_4bdd4450().isSelected() && !(iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215)) {
+        if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && VelumClient.getInstance().getModuleManager().getModule(MenuModule.class).I_method_4bdd4450().isSelected() && !(iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215)) {
             VelumClient.getInstance().I_method_577f3d5a(new IiiIiIiiI_Class215());
-        }
-        // NEW: держим актуальный инстанс премиум-гуи для анимации закрытия
-        if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && iIiIIiiIi_Class78.IiI_method_4bdd4461().isSelected() && !(iiiIIiiiI_Class207 instanceof Premium)) {
-            VelumClient.getInstance().I_method_577f3d5a(new Premium());
         }
         boolean bl2 = bl = IiiIiIIII_Class209.I_field_3a9bda27.currentScreen instanceof IiiIIiiiI_Class207 || IiiIiIIII_Class209.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216;
         if (!bl && VelumClient.getInstance().getModuleManager().getModule(MenuModule.class).isEnabled()) {
@@ -43,3 +37,4 @@ implements iIIiIIiIi_Class294 {
         VelumClient.getInstance().I_method_7897deab().I_method_2257cd48(this);
     }
 }
+

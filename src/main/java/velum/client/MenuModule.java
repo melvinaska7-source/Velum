@@ -13,7 +13,6 @@ import velum.client.IiiIIiiiI_Class207;
 import velum.client.IiiIiIIII_Class209;
 import velum.client.IiiIiIiiI_Class215;
 import velum.client.IiiIiIiii_Class216;
-import velum.client.Premium; // NEW: третий вид ClickGUI
 import velum.client.iIIIIIIII_Class257;
 import velum.client.Module;
 import velum.client.iiIiIIIII_Class417;
@@ -24,13 +23,11 @@ public class MenuModule
 extends Module {
     private static final IiiIiIIII_Class209 I_field_a5d83a6c = new IiiIiIIII_Class209();
     private ModeSetting I_field_bbe33e6c;
-    private ModeSetting.Nested1_42765c60 I_field_500d0627;   // Панели
-    private ModeSetting.Nested1_42765c60 i_field_500d0627;   // Новая
-    private ModeSetting.Nested1_42765c60 ii_field_500d0627;  // NEW: Премиум
+    private ModeSetting.Nested1_42765c60 I_field_500d0627;
+    private ModeSetting.Nested1_42765c60 i_field_500d0627;
     private KeybindSetting I_field_ba20522c;
     private Screen I_field_bf52cf84;
     private IiiIiIiii_Class216 I_field_a5e7424c;
-    private Premium Ii_field_a5e7424c; // NEW: кэш премиум-гуи
     private static boolean I_field_5a;
 
     public MenuModule() {
@@ -42,21 +39,16 @@ extends Module {
         this.I_field_bbe33e6c = new ModeSetting(this, "modules.settings.menu.mode");
         this.I_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.dropdown");
         this.i_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.modern").select();
-        this.ii_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.premium"); // NEW
         this.I_field_ba20522c = new KeybindSetting(this, "modules.settings.menu.hide_key").I_method_4288e15a(342);
     }
 
     @Override
     public void onEnable() {
         boolean bl = this.i_field_500d0627.isSelected();
-        boolean bl2 = this.ii_field_500d0627.isSelected(); // NEW
         if (bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiiI_Class215) {
             return;
         }
-        if (bl2 && MenuModule.I_field_3a9bda27.currentScreen instanceof Premium) { // NEW
-            return;
-        }
-        if (!bl && !bl2 && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216) {
+        if (!bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216) {
             return;
         }
         this.I_field_bf52cf84 = this.I_method_83034dbb();
@@ -70,12 +62,6 @@ extends Module {
     }
 
     public Screen I_method_83034dbb() {
-        if (this.ii_field_500d0627.isSelected()) { // NEW: Премиум
-            if (this.Ii_field_a5e7424c == null) {
-                this.Ii_field_a5e7424c = new Premium();
-            }
-            return this.Ii_field_a5e7424c;
-        }
         if (this.i_field_500d0627.isSelected()) {
             IiiIIiiiI_Class207 iiiIIiiiI_Class207 = VelumClient.getInstance().I_method_96982062();
             IiiIIiiiI_Class207 iiiIIiiiI_Class2072 = iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215 ? iiiIIiiiI_Class207 : new IiiIiIiiI_Class215();
@@ -124,14 +110,8 @@ extends Module {
     }
 
     @Generated
-    public ModeSetting.Nested1_42765c60 IiI_method_4bdd4461() { // NEW: геттер премиум-режима
-        return this.ii_field_500d0627;
-    }
-
-    @Generated
     public KeybindSetting I_method_20c0695() {
         return this.I_field_ba20522c;
     }
 }
 
-// мелвиняшка фембой
