@@ -9,7 +9,7 @@ import velum.client.VelumClient;
 import velum.client.IiiIIiiiI_Class207;
 import velum.client.IiiIiIiiI_Class215;
 import velum.client.IiiIiIiii_Class216;
-import velum.client.Premium; // NEW
+import velum.client.IiiIiIiii_Class217; // NEW
 import velum.client.iIIiIIiIi_Class294;
 
 public class IiiIiIIII_Class209
@@ -21,9 +21,8 @@ implements iIIiIIiIi_Class294 {
         if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && iIiIIiiIi_Class78.I_method_4bdd4450().isSelected() && !(iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215)) {
             VelumClient.getInstance().I_method_577f3d5a(new IiiIiIiiI_Class215());
         }
-        // NEW: держим актуальный инстанс премиум-гуи для анимации закрытия
-        if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && iIiIIiiIi_Class78.IiI_method_4bdd4461().isSelected() && !(iiiIIiiiI_Class207 instanceof Premium)) {
-            VelumClient.getInstance().I_method_577f3d5a(new Premium());
+        if (IiiIiIIII_Class209.I_field_3a9bda27.currentScreen == null && iIiIIiiIi_Class78.IiI_method_4bdd4461().isSelected() && !(iiiIIiiiI_Class207 instanceof IiiIiIiii_Class217)) { // NEW
+            VelumClient.getInstance().I_method_577f3d5a(new IiiIiIiii_Class217());
         }
         boolean bl2 = bl = IiiIiIIII_Class209.I_field_3a9bda27.currentScreen instanceof IiiIIiiiI_Class207 || IiiIiIIII_Class209.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216;
         if (!bl && VelumClient.getInstance().getModuleManager().getModule(MenuModule.class).isEnabled()) {
