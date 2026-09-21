@@ -25,7 +25,6 @@ extends Module {
     private ModeSetting I_field_bbe33e6c;
     private ModeSetting.Nested1_42765c60 I_field_500d0627;
     private ModeSetting.Nested1_42765c60 i_field_500d0627;
-    private ModeSetting.Nested1_42765c60 premiumMode;
     private KeybindSetting I_field_ba20522c;
     private Screen I_field_bf52cf84;
     private IiiIiIiii_Class216 I_field_a5e7424c;
@@ -40,20 +39,12 @@ extends Module {
         this.I_field_bbe33e6c = new ModeSetting(this, "modules.settings.menu.mode");
         this.I_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.dropdown");
         this.i_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.modern").select();
-        this.premiumMode = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "Premium");
         this.I_field_ba20522c = new KeybindSetting(this, "modules.settings.menu.hide_key").I_method_4288e15a(342);
     }
 
     @Override
     public void onEnable() {
         boolean bl = this.i_field_500d0627.isSelected();
-        if (this.premiumMode.isSelected()) {
-            this.I_field_bf52cf84 = new ru.wexside.ui.WexsideScreen();
-            I_field_5a = true;
-            MinecraftClient.getInstance().setScreen(this.I_field_bf52cf84);
-            super.onEnable();
-            return;
-        }
         if (bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiiI_Class215) {
             return;
         }

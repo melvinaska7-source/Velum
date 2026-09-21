@@ -265,7 +265,7 @@ public class ModuleManager {
         this.registerModule(new ElytraUtilsModule());
         this.registerModule(new FastItemUseModule());
         this.registerModule(new AutoResellModule());
-        this.registerModule(new BaseFinderModule());
+        this.registerModule(new BaseFinderModule()); 
         this.registerModule(new PanicModule());
         this.registerModule(new AuctionModule());
         this.registerModule(new InventoryBuilderModule());
@@ -285,6 +285,8 @@ public class ModuleManager {
         this.registerModule(new AssistModule());
         this.registerModule(new SoundsModule());
         this.registerModule(new AntiAimModule());
+        this.registerModule(new CrystalBlockerModule());
+        this.registerModule(new WindHopModule());
         this.snapshotModuleSettings();
     }
 
