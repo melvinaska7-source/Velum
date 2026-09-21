@@ -4,6 +4,7 @@ import java.util.Objects;
 import ru.wexside.event.EventBus;
 import ru.wexside.module.ModuleCategory;
 import ru.wexside.setting.BooleanSetting;
+import ru.wexside.setting.BooleanSettingBuilder;
 import velum.client.Module;
 
 /** A Wexside module-shaped view backed by one live Velum module. */
@@ -14,14 +15,14 @@ public final class VelumWexsideModule extends ru.wexside.module.Module {
 
     public VelumWexsideModule(EventBus bus, Module velum) {
         super(bus, "velum_" + velum.getName().replaceAll("[^A-Za-z0-9_]+", "_"),
-                "", velum.getName(), category(velum), velum.getName());
+                "", velum.getName(), category(velum.getCategory()), velum.getName());
         this.velum = Objects.requireNonNull(velum);
-        this.toggle = registerToggle(BooleanSetting.builder()
-                .id("enabled")
-                .name(velum.getName())
-                .description(velum.getName())
-                .value(velum.isEnabled())
-                .build());
+        BooleanSettingBuilder toggleBuilder = BooleanSetting.builder();
+        toggleBuilder.id("enabled");
+        toggleBuilder.name(velum.getName());
+        toggleBuilder.description(velum.getName());
+        toggleBuilder.value(velum.isEnabled());
+        this.toggle = registerToggle(toggleBuilder.build());
     }
 
     @Override

@@ -46,7 +46,7 @@ dependencies {
 
     // Also expose the original jar-in-jar libraries to Loom's development runtime.
     // They remain embedded verbatim through fabric.mod.json in production.
-    modImplementation fileTree(dir: 'src/main/resources/META-INF/jars', include: ['wexside-gui-runtime.jar'])
+    implementation fileTree(dir: 'src/main/resources/META-INF/jars', include: ['*.jar'])
 }
 
 loom {
