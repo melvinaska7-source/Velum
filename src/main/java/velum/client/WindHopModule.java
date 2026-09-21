@@ -2,8 +2,6 @@ package velum.client;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.client.input.Input;          // <-- ПРАВИЛЬНЫЙ пакет
-import net.minecraft.util.PlayerInput;           // <-- ПРАВИЛЬНЫЙ пакет
 import ua.mintantileak.spk.Compile;
 
 @ModuleInfo(
@@ -16,29 +14,15 @@ public class WindHopModule extends Module {
     @Override
     @Compile(obfuscation = 4)
     public void II_method_6642fd22() {
-        if (I_field_3a9bda27.player == null || I_field_3a9bda27.options == null) {
-            return;
-        }
+        if (I_field_3a9bda27.player == null || I_field_3a9bda27.options == null) return;
 
         ItemStack mainHand = I_field_3a9bda27.player.getMainHandStack();
+        if (mainHand.isEmpty() || mainHand.getItem() != Items.WIND_CHARGE) return;
 
-        if (!mainHand.isEmpty() && mainHand.getItem() == Items.WIND_CHARGE) {
-            if (I_field_3a9bda27.options.useKey.isPressed()) {
-
-                // player.input — это net.minecraft.client.input.Input
-                // у него есть поле playerInput типа net.minecraft.util.PlayerInput
-                PlayerInput current = I_field_3a9bda27.player.input.playerInput;
-
-                I_field_3a9bda27.player.input.playerInput = new PlayerInput(
-                    current.forward(),   // forward
-                    current.backward(),  // backward
-                    current.left(),      // left
-                    current.right(),     // right
-                    true,                // jump  <-- прыжок
-                    current.sneak(),     // sneak (НЕ shift!)
-                    current.sprint()     // sprint
-                );
-            }
+        // ПКМ зажата → прыгаем
+        if (I_field_3a9bda27.options.useKey.isPressed()
+                && I_field_3a9bda27.player.isOnGround()) {
+            I_field_3a9bda27.player.jump();   // velocity.y = 0.42 автоматически
         }
 
         super.II_method_6642fd22();

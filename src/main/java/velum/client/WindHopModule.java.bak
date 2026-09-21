@@ -2,7 +2,8 @@ package velum.client;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.world.entity.player.Input;   // правильный пакет для 1.21.4
+import net.minecraft.client.input.Input;          // <-- ПРАВИЛЬНЫЙ пакет
+import net.minecraft.util.PlayerInput;           // <-- ПРАВИЛЬНЫЙ пакет
 import ua.mintantileak.spk.Compile;
 
 @ModuleInfo(
@@ -24,15 +25,17 @@ public class WindHopModule extends Module {
         if (!mainHand.isEmpty() && mainHand.getItem() == Items.WIND_CHARGE) {
             if (I_field_3a9bda27.options.useKey.isPressed()) {
 
-                Input current = I_field_3a9bda27.player.input.playerInput;
+                // player.input — это net.minecraft.client.input.Input
+                // у него есть поле playerInput типа net.minecraft.util.PlayerInput
+                PlayerInput current = I_field_3a9bda27.player.input.playerInput;
 
-                I_field_3a9bda27.player.input.playerInput = new Input(
+                I_field_3a9bda27.player.input.playerInput = new PlayerInput(
                     current.forward(),   // forward
                     current.backward(),  // backward
                     current.left(),      // left
                     current.right(),     // right
                     true,                // jump  <-- прыжок
-                    current.sneak(),     // sneak (было shift())
+                    current.sneak(),     // sneak (НЕ shift!)
                     current.sprint()     // sprint
                 );
             }
