@@ -4,7 +4,6 @@ import ru.wexside.config.LocalConfigCatalog;
 import ru.wexside.event.EventBus;
 import ru.wexside.event.EventBusImpl;
 import ru.wexside.misc.ClientProfile;
-import ru.wexside.misc.ClientRole;
 import ru.wexside.misc.ConfigRegistry;
 import ru.wexside.misc.ContainerDisplaySettings;
 import ru.wexside.module.ModuleManager;
@@ -12,12 +11,10 @@ import ru.wexside.util.ClickGuiPanel;
 import ru.wexside.util.GuiDrawApi;
 import velum.client.wexside.VelumWexsideClickGuiPanel;
 import velum.client.wexside.VelumWexsideModuleManager;
+import velum.client.wexside.VelumWexsideRenderDriver;
 
-/**
- * Compatibility facade used by the untouched Wexside GUI classes.
- * It deliberately does not bootstrap the Wexside client or its modules.
- */
-public class WexSideClient {
+/** Velum-owned compatibility facade for the Wexside GUI layer. */
+public final class WexSideClient {
     private static final WexSideClient INSTANCE = new WexSideClient();
     private final EventBus eventBus = new EventBusImpl();
     private final ConfigRegistry configRegistry = new ConfigRegistry();
@@ -28,6 +25,9 @@ public class WexSideClient {
             "Velum", "Velum", "", "0", false, false, new byte[0]);
     private final ClickGuiPanel miscellaneous = new VelumWexsideClickGuiPanel(
             moduleManager, containerDisplaySettings, localConfigCatalog);
+    private final GuiDrawApi guiRenderer = new GuiDrawApi(new VelumWexsideRenderDriver());
+
+    private WexSideClient() {}
 
     public static WexSideClient getInstance() { return INSTANCE; }
     public ModuleManager getModuleManager() { return moduleManager; }
@@ -36,16 +36,6 @@ public class WexSideClient {
     public LocalConfigCatalog getLocalConfigCatalog() { return localConfigCatalog; }
     public ConfigRegistry getConfigRegistry() { return configRegistry; }
     public static EventBus getEventBus() { return INSTANCE.eventBus; }
-    public static GuiDrawApi getGuiRenderer() { return getHudRenderer(); }
-    public static GuiDrawApi getHudRenderer() { return GuiDrawApiHolder.get(); }
-
-    private static final class GuiDrawApiHolder {
-        private static GuiDrawApi value;
-        static GuiDrawApi get() {
-            if (value == null) {
-                value = new GuiDrawApi(new ru.wexside.render.WexGlobals(ru.wexside.render.ClientRenderPipelines.GUI_BATCH));
-            }
-            return value;
-        }
-    }
+    public static GuiDrawApi getGuiRenderer() { return INSTANCE.guiRenderer; }
+    public static GuiDrawApi getHudRenderer() { return INSTANCE.guiRenderer; }
 }
