@@ -215,7 +215,7 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
 
    @Override
    public boolean charTyped(char chr, int modifiers) {
-      if (this.I_input.length() < 16 && Character.isLetterOrDigit(chr) || chr == '_') {
+      if (this.I_input.length() < 16 && (Character.isLetterOrDigit(chr) || chr == '_') && chr < 128) {
          this.I_input.append(chr);
          return true;
       }
