@@ -14,18 +14,20 @@ import ua.mintantileak.spk.Compile;
 
 public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 {
    // ── новое главное меню: 2 ряда "пилюль" вместо иконок ──────────────
-   private static final String[] I_btnLabel = {"Одиночная игра", "Сетевая игра", "Настройки", "Выход"};
-   private static final boolean[] I_btnPrimary = {true, false, false, false};
+   private static final int I_BTN_COUNT = 5;
+   private static final String[] I_btnLabel = {"Одиночная игра", "Сетевая игра", "Настройки", "Аккаунты", "Выход"};
+   private static final boolean[] I_btnPrimary = {true, false, false, false, false};
    private final IiiiIiIii_Class236[] I_btnHover = new IiiiIiIii_Class236[]{
+      new IiiiIiIii_Class236(180L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
       new IiiiIiIii_Class236(180L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
       new IiiiIiIii_Class236(180L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
       new IiiiIiIii_Class236(180L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
       new IiiiIiIii_Class236(180L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
    };
-   private final float[] I_btnX = new float[4];
-   private final float[] I_btnY = new float[4];
-   private final float[] I_btnW = new float[4];
-   private final float[] I_btnH = new float[4];
+   private final float[] I_btnX = new float[I_BTN_COUNT];
+   private final float[] I_btnY = new float[I_BTN_COUNT];
+   private final float[] I_btnW = new float[I_BTN_COUNT];
+   private final float[] I_btnH = new float[I_BTN_COUNT];
    private static boolean I_field_5a;
    private static IiiIIiiIi_Class206 I_field_710ea66c;
    private static IiiIIiiII_Class205 I_field_710ea28c;
@@ -105,7 +107,8 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
          case 0 -> I_field_3a9bda27.setScreen(new SelectWorldScreen(this));
          case 1 -> I_field_3a9bda27.setScreen(new MultiplayerScreen(this));
          case 2 -> I_field_3a9bda27.setScreen(new OptionsScreen(this, I_field_3a9bda27.options));
-         case 3 -> {
+         case 3 -> I_field_3a9bda27.setScreen(new AccountsScreen(this));
+         case 4 -> {
             if (VelumClient.getInstance().getModuleManager().getModule(SoundsModule.class).Ii_method_54c1f4f3().isSelected()) {
                iiIIiiiIi_Class414.iI_method_8d7ec562();
             }
@@ -116,25 +119,31 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
    }
 
    private void I_drawMenuPills(III var1, float var2, float var3) {
-      float var4 = 118.0F;
-      float var5 = 26.0F;
-      float var6 = 6.0F;
+      float var4 = 114.0F;
+      float var5 = 24.0F;
+      float var6 = 5.0F;
       float var7 = var4 * 2.0F + var6;
       float var8 = 20.0F;
       float var9 = 4.0F;
-      float var10 = (var7 - var9) / 2.0F;
+      float var10 = (var7 - var9 * 2.0F) / 3.0F;
       float var11 = this.width / 2.0F;
       float var12 = (this.height > 500 ? this.height / 2.0F + 20.0F : this.height / 1.25F) - var5 - var8 / 2.0F - var9 / 2.0F - var3;
 
-      float[] var13 = new float[]{var11 - var4 - var6 / 2.0F, var11 + var6 / 2.0F, var11 - var7 / 2.0F, var11 - var7 / 2.0F + var10 + var9};
-      float[] var14 = new float[]{var12, var12, var12 + var5 + var9, var12 + var5 + var9};
-      float[] var15 = new float[]{var4, var4, var10, var10};
-      float[] var16 = new float[]{var5, var5, var8, var8};
+      float[] var13 = new float[]{
+         var11 - var4 - var6 / 2.0F,
+         var11 + var6 / 2.0F,
+         var11 - var7 / 2.0F,
+         var11 - var7 / 2.0F + var10 + var9,
+         var11 - var7 / 2.0F + (var10 + var9) * 2.0F
+      };
+      float[] var14 = new float[]{var12, var12, var12 + var5 + var9, var12 + var5 + var9, var12 + var5 + var9};
+      float[] var15 = new float[]{var4, var4, var10, var10, var10};
+      float[] var16 = new float[]{var5, var5, var8, var8, var8};
 
       IIiIIi_Class10 var17 = IIiIiI_Class11.Ii_field_857c0621.I_method_3a2d5e3(11.0F);
-      IIiIIi_Class10 var18 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(10.0F);
+      IIiIIi_Class10 var18 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(9.0F);
 
-      for (int var19 = 0; var19 < 4; ++var19) {
+      for (int var19 = 0; var19 < I_BTN_COUNT; ++var19) {
          this.I_btnX[var19] = var13[var19];
          this.I_btnY[var19] = var14[var19];
          this.I_btnW[var19] = var15[var19];
@@ -266,7 +275,7 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
       );
 
       // ── новый блок кнопок (2 ряда "пилюль") ──
-      for (int var44 = 0; var44 < 4; ++var44) {
+      for (int var44 = 0; var44 < I_BTN_COUNT; ++var44) {
          boolean var45 = this.I_btnX[var44] != 0.0F
             && var1.I_method_b1c3e152() >= this.I_btnX[var44]
             && var1.I_method_b1c3e152() <= this.I_btnX[var44] + this.I_btnW[var44]
@@ -310,7 +319,7 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
          if (!this.I_method_ce2e8263()
             || !VelumClient.getInstance().I_method_35687482().I_method_35128395().I_method_60a3f448((float)var1, (float)var3, var5.I_method_6d899712())) {
             if (var5.I_method_6d899712() == 0) {
-               for (int var7 = 0; var7 < 4; ++var7) {
+               for (int var7 = 0; var7 < I_BTN_COUNT; ++var7) {
                   if (this.I_btnX[var7] != 0.0F
                      && var1 >= this.I_btnX[var7]
                      && var1 <= this.I_btnX[var7] + this.I_btnW[var7]
