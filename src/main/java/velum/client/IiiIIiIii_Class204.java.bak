@@ -1,22 +1,24 @@
 package velum.client;
 
 import globals.client.WorldKey;
-import java.time.LocalTime;
-import java.util.concurrent.ThreadLocalRandom;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
-import net.minecraft.util.math.MathHelper;
 import pyvelum.utility.render.ColorRGBA;
 import ua.mintantileak.profile.Profile;
 import ua.mintantileak.spk.Compile;
 
+/**
+ * Главное меню. Плоский тёмный фон + логотип "velocity." + 5 кнопок-"пилюль"
+ * (2 ряда: 2 основные сверху, 3 второстепенные снизу). Никакого фонового
+ * фото/параллакса/часов/ника — минимальный вид как в макете.
+ */
 public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 {
-   // ── новое главное меню: 2 ряда "пилюль" вместо иконок ──────────────
    private static final int I_BTN_COUNT = 5;
    private static final String[] I_btnLabel = {"Одиночная игра", "Сетевая игра", "Настройки", "Аккаунты", "Выход"};
    private static final boolean[] I_btnPrimary = {true, false, false, false, false};
+   private static boolean I_field_5a;
+
    private final IiiiIiIii_Class236[] I_btnHover = new IiiiIiIii_Class236[]{
       new IiiiIiIii_Class236(180L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
       new IiiiIiIii_Class236(180L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
@@ -28,34 +30,11 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
    private final float[] I_btnY = new float[I_BTN_COUNT];
    private final float[] I_btnW = new float[I_BTN_COUNT];
    private final float[] I_btnH = new float[I_BTN_COUNT];
-   private static boolean I_field_5a;
-   private static IiiIIiiIi_Class206 I_field_710ea66c;
-   private static IiiIIiiII_Class205 I_field_710ea28c;
-   private static final long I_field_4a = 1500L;
-   private boolean i_field_5a;
-   private long i_field_4a;
-   private double I_field_44;
-   private double i_field_44;
-   private float I_field_46;
-   private boolean II_field_5a;
-   private final IiiiIiIii_Class236 I_field_dc7facc = new IiiiIiIii_Class236(800L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac);
-   private final ColorRGBA I_field_d0c8ec5 = new ColorRGBA(171.0F, 254.0F, 255.0F);
-   private final ColorRGBA i_field_d0c8ec5 = new ColorRGBA(203.0F, 254.0F, 255.0F);
-   private final long II_field_4a = this.I_field_dc7facc.I_method_6ac4da73();
-   private final iiIiIIiii_Class424 I_field_991c1e8c = new iiIiIIiii_Class424();
-   private float i_field_46;
-   private float II_field_46;
-   private long Ii_field_4a = System.currentTimeMillis();
-   private final iiIiIIiii_Class424 i_field_991c1e8c = new iiIiIIiii_Class424();
-   private boolean Ii_field_5a;
-   private final IiiiIiiIi_Class238 I_field_dd60e8c = new IiiiIiiIi_Class238(300L, new ColorRGBA(255.0F, 255.0F, 255.0F), IiiiIiiII_Class237.Iii_field_dd60aac);
 
    @Compile(
       obfuscation = 4
    )
    public void init() {
-      I_method_f0183f35();
-      I_method_f0183b55();
       if (!I_field_5a) {
          I_field_5a = true;
 
@@ -81,27 +60,6 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
       super.init();
    }
 
-   private static IiiIIiiIi_Class206 I_method_f0183f35() {
-      if (I_field_710ea66c == null) {
-         int var0 = LocalTime.now().getHour();
-         boolean var1 = var0 >= 6 && var0 < 19;
-         int var2 = IiiIIiiIi_Class206.I_method_2d8cb612();
-         int var3 = IiiIIiiIi_Class206.i_method_2d9b41f2() - var2;
-         int var4 = var1 ? ThreadLocalRandom.current().nextInt(var2) : var2 + ThreadLocalRandom.current().nextInt(Math.max(1, var3));
-         I_field_710ea66c = new IiiIIiiIi_Class206(var4);
-      }
-
-      return I_field_710ea66c;
-   }
-
-   private static IiiIIiiII_Class205 I_method_f0183b55() {
-      if (I_field_710ea28c == null) {
-         I_field_710ea28c = new IiiIIiiII_Class205(() -> I_method_f0183f35().I_method_2d8cb61f());
-      }
-
-      return I_field_710ea28c;
-   }
-
    private void I_runAction(int var1) {
       switch (var1) {
          case 0 -> I_field_3a9bda27.setScreen(new SelectWorldScreen(this));
@@ -118,312 +76,91 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
       }
    }
 
-   private void I_drawMenuPills(III var1, float var2, float var3) {
-      float var4 = 114.0F;
-      float var5 = 24.0F;
-      float var6 = 5.0F;
-      float var7 = var4 * 2.0F + var6;
-      float var8 = 20.0F;
-      float var9 = 4.0F;
-      float var10 = (var7 - var9 * 2.0F) / 3.0F;
-      float var11 = this.width / 2.0F;
-      float var12 = (this.height > 500 ? this.height / 2.0F + 20.0F : this.height / 1.25F) - var5 - var8 / 2.0F - var9 / 2.0F - var3;
-
-      float[] var13 = new float[]{
-         var11 - var4 - var6 / 2.0F,
-         var11 + var6 / 2.0F,
-         var11 - var7 / 2.0F,
-         var11 - var7 / 2.0F + var10 + var9,
-         var11 - var7 / 2.0F + (var10 + var9) * 2.0F
-      };
-      float[] var14 = new float[]{var12, var12, var12 + var5 + var9, var12 + var5 + var9, var12 + var5 + var9};
-      float[] var15 = new float[]{var4, var4, var10, var10, var10};
-      float[] var16 = new float[]{var5, var5, var8, var8, var8};
-
-      IIiIIi_Class10 var17 = IIiIiI_Class11.Ii_field_857c0621.I_method_3a2d5e3(11.0F);
-      IIiIIi_Class10 var18 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(9.0F);
-
-      for (int var19 = 0; var19 < I_BTN_COUNT; ++var19) {
-         this.I_btnX[var19] = var13[var19];
-         this.I_btnY[var19] = var14[var19];
-         this.I_btnW[var19] = var15[var19];
-         this.I_btnH[var19] = var16[var19];
-
-         float var20 = var13[var19];
-         float var21 = var14[var19];
-         float var22 = var15[var19];
-         float var23 = var16[var19];
-         float var24 = this.I_btnHover[var19].I_method_6ac4da6f();
-         IIiii_Class8 var25 = IIiii_Class8.I_method_893b2757(var23 / 2.0F);
-
-         if (I_btnPrimary[var19]) {
-            var1.drawRoundedRect(var20, var21, var22, var23, var25, ColorRGBA.WHITE.withAlpha(255.0F * var2));
-            IIiIIi_Class10 var26 = var17;
-            float var27 = var26.I_method_2c375926(I_btnLabel[var19]);
-            var1.drawText(var26, I_btnLabel[var19], var20 + (var22 - var27) / 2.0F, var21 + (var23 - var26.I_method_a649725c()) / 2.0F, new ColorRGBA(18.0F, 18.0F, 24.0F).withAlpha(255.0F * var2));
-         } else {
-            var1.drawRoundedRect(var20, var21, var22, var23, var25, new ColorRGBA(32.0F, 32.0F, 40.0F).withAlpha((150.0F + 55.0F * var24) * var2));
-            var1.drawRoundedBorder(var20, var21, var22, var23, 0.6F, var25, ColorRGBA.WHITE.withAlpha((35.0F + 55.0F * var24) * var2));
-            IIiIIi_Class10 var28 = var18;
-            float var29 = var28.I_method_2c375926(I_btnLabel[var19]);
-            ColorRGBA var30 = var24 > 0.5F ? ColorRGBA.WHITE : new ColorRGBA(170.0F, 170.0F, 182.0F);
-            var1.drawText(var28, I_btnLabel[var19], var20 + (var22 - var29) / 2.0F, var21 + (var23 - var28.I_method_a649725c()) / 2.0F, var30.withAlpha(255.0F * var2));
-         }
-      }
-   }
-
    @Override
    public void render(III var1) {
-      IIiIIi_Class10 var2 = IIiIiI_Class11.ii_field_857c0621.I_method_3a2d5e3(65.0F);
-      IIiIIi_Class10 var3 = IIiIiI_Class11.i_field_857c0621.I_method_3a2d5e3(16.0F);
-      IIiIIi_Class10 var4 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(10.0F);
-      float var5 = 1.0F - I_method_f0183f35().I_method_2d8cb60f();
-      float var6 = 80.0F;
-      float var7 = 205.0F * (1.0F - this.I_field_dc7facc.I_method_6ac4da6f()) * var5;
-      float var8 = iIIiiiiiI_Class319.I_method_5f7ff5cf(var6, -120.0, this.I_field_dc7facc.I_method_6ac4da6f());
-      this.I_field_dc7facc.I_method_edd72835(this.II_field_5a);
-      var1.drawRoundedRect(0.0F, 0.0F, this.width, this.height, IIiii_Class8.I_field_2d98a52c, ColorRGBA.BLACK);
-      long var9 = System.currentTimeMillis();
-      float var11 = Math.min(0.1F, (float)(var9 - this.Ii_field_4a) / 1000.0F);
-      this.Ii_field_4a = var9;
-      this.I_method_fca6301b(var9, var11);
+      var1.drawRoundedRect(0.0F, 0.0F, this.width, this.height, IIiii_Class8.I_field_2d98a52c, new ColorRGBA(18.0F, 18.0F, 23.0F).withAlpha(255.0F));
+
+      IIiIIi_Class10 var2 = IIiIiI_Class11.ii_field_857c0621.I_method_3a2d5e3(48.0F);
+      float var3 = var2.I_method_2c375926("velocity.");
+      float var4 = this.height / 2.0F - 90.0F;
+      var1.drawText(var2, "velocity.", this.width / 2.0F - var3 / 2.0F, var4, ColorRGBA.WHITE);
+
+      float var5 = 114.0F;
+      float var6 = 24.0F;
+      float var7 = 5.0F;
+      float var8 = var5 * 2.0F + var7;
+      float var9 = 20.0F;
+      float var10 = 4.0F;
+      float var11 = (var8 - var10 * 2.0F) / 3.0F;
       float var12 = this.width / 2.0F;
-      float var13 = this.height / 2.0F;
-      float var14 = (10.0F + 6.0F * this.I_field_dc7facc.I_method_6ac4da6f()) * var5;
-      float var15 = MathHelper.clamp((var1.I_method_b1c3e152() - var12) / Math.max(1.0F, var12), -1.0F, 1.0F) * var14;
-      float var16 = MathHelper.clamp((var1.i_method_b1d26d32() - var13) / Math.max(1.0F, var13), -1.0F, 1.0F) * var14;
-      float var17 = 1.0F - (float)Math.pow(0.0025F, var11);
-      this.i_field_46 = this.i_field_46 + (var15 - this.i_field_46) * var17;
-      this.II_field_46 = this.II_field_46 + (var16 - this.II_field_46) * var17;
-      I_method_f0183f35()
-         .I_method_493e8287(var1, this.width, this.height, this.i_field_46, this.II_field_46, this.I_field_dc7facc.I_method_6ac4da6f(), this.I_field_46);
-      boolean var18 = I_field_3a9bda27.getOverlay() != null;
-      float var19 = var18 ? 0.5F : 1.4F;
-      float var20 = (var18 ? 1.0F : 1.0F - this.I_field_dc7facc.I_method_6ac4da6f()) * var5;
-      if (var20 > 0.01F) {
-         iIiiIIiii_Class360.I_field_6425294c.I_method_533784a1(var19);
-         var1.drawBlurredRect(0.0F, 0.0F, this.width, this.height, 15.0F, IIiii_Class8.I_field_2d98a52c, ColorRGBA.WHITE.withAlpha(255.0F * var20));
-      }
+      float var13 = var4 + var2.I_method_a649725c() + 26.0F;
 
-      float var21 = Math.min(130.0F, this.height * 0.38F);
-      var1.drawRoundedRect(
-         0.0F,
-         this.height - var21,
-         this.width,
-         var21,
-         IIiii_Class8.I_field_2d98a52c,
-         new IiiII_Class13(new ColorRGBA(0.0F, 0.0F, 0.0F, 0.0F), new ColorRGBA(0.0F, 0.0F, 0.0F, (int)(90.0F * var5)))
-      );
-      if (this.i_field_991c1e8c.I_method_58432069(250L)) {
-         double var22 = I_field_3a9bda27.getWindow().getScaleFactor();
-         float var24 = var6 + var2.I_method_a649725c() * 0.5F;
-         ColorRGBA var25 = ColorRGBA.fromPixel(this.width / 2.0F * (float)var22, I_field_3a9bda27.getWindow().getHeight() - var24 * (float)var22);
-         this.Ii_field_5a = (var25.getRed() + var25.getGreen() + var25.getBlue()) / 3.0F > 120.0F;
-         this.i_field_991c1e8c.I_method_23e11e3f();
-      }
+      float[] var14 = new float[]{
+         var12 - var5 - var7 / 2.0F,
+         var12 + var7 / 2.0F,
+         var12 - var8 / 2.0F,
+         var12 - var8 / 2.0F + var11 + var10,
+         var12 - var8 / 2.0F + (var11 + var10) * 2.0F
+      };
+      float[] var15 = new float[]{var13, var13, var13 + var6 + var10, var13 + var6 + var10, var13 + var6 + var10};
+      float[] var16 = new float[]{var5, var5, var11, var11, var11};
+      float[] var17 = new float[]{var6, var6, var9, var9, var9};
 
-      this.I_field_dd60e8c.I_method_8895420(this.Ii_field_5a ? new ColorRGBA(28.0F, 28.0F, 30.0F) : ColorRGBA.WHITE);
-      ColorRGBA var40 = this.I_field_dd60e8c.I_method_915b8ae().withAlpha(var7);
-      String var23 = iIIIIiIiI_Class267.II_method_6d1277fe();
-      var1.drawCenteredText(var3, var23, this.width / 2.0F, var8 - 23.0F, var40);
-      String var41 = iIIIIiIiI_Class267.i_method_8e352841();
-      String[] var42 = var41.split(":");
-      String var26 = var42.length > 0 ? var42[0] : var41;
-      String var27 = var42.length > 1 ? var42[1] : "";
-      float var28 = var2.I_method_2c375926(var26);
-      float var29 = var2.I_method_2c375926(":");
-      float var30 = var2.I_method_2c375926(var27);
-      float var31 = var28 + var29 + var30;
-      float var32 = this.width / 2.0F - var31 / 2.0F;
-      float var33 = 1.0F + 0.008F * (float)Math.sin((float)var9 * 0.00185F);
-      iIiiiIIiI_Class371.II_method_e18635ac(var1.getMatrices(), this.width / 2.0F, var8 + var2.I_method_a649725c() / 2.0F, var33);
-      float var34 = var8 - var2.I_method_a649725c() * 0.1F;
-      var1.drawText(var2, var26, var32, var8, var40);
-      var1.drawText(var2, ":", var32 + var28, var34, var40);
-      var1.drawText(var2, var27, var32 + var28 + var29, var8, var40);
-      iIiiiIIiI_Class371.I_method_10503b11(var1.getMatrices());
-      float var35 = (1.0F - this.I_field_dc7facc.I_method_6ac4da6f()) * var5;
-      float var36 = 6.0F * this.I_field_dc7facc.I_method_6ac4da6f();
-      var1.drawCenteredText(
-         var4, IiIiIIII_Class81.I_method_f25a980a("mainmenu.next"), this.width / 2.0F, this.height - 70 + var36, ColorRGBA.WHITE.withAlpha(180.0F * var35)
-      );
-      if (this.height > 400) {
-         float var37 = 26.0F;
-         float var38 = this.width / 2.0F - var37 / 2.0F;
-         float var39 = this.height - 54 + var36;
-         if (IIIIi_Class2.Ii_method_57601446()) {
-            var1.drawRoundedTexture(
-               IIIIi_Class2.I_method_79e9d9ee(),
-               var38,
-               var39,
-               var37,
-               var37,
-               IIiii_Class8.I_method_893b2757(var37 / 2.0F),
-               ColorRGBA.WHITE.withAlpha(255.0F * var35)
-            );
-         } else {
-            var1.drawRoundedRect(var38, var39, var37, var37, IIiii_Class8.I_method_893b2757(var37 / 2.0F), ColorRGBA.WHITE.withAlpha(45.0F * var35));
-         }
-      }
+      IIiIIi_Class10 var18 = IIiIiI_Class11.Ii_field_857c0621.I_method_3a2d5e3(11.0F);
+      IIiIIi_Class10 var19 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(9.0F);
+      int var20 = var1.I_method_b1c3e152();
+      int var21 = var1.i_method_b1d26d32();
 
-      var1.drawCenteredText(
-         IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(11.0F),
-         Profile.getUsername(),
-         this.width / 2.0F,
-         this.height - 22 + var36,
-         ColorRGBA.WHITE.withAlpha(255.0F * var35)
-      );
+      for (int var22 = 0; var22 < I_BTN_COUNT; ++var22) {
+         this.I_btnX[var22] = var14[var22];
+         this.I_btnY[var22] = var15[var22];
+         this.I_btnW[var22] = var16[var22];
+         this.I_btnH[var22] = var17[var22];
 
-      // ── новый блок кнопок (2 ряда "пилюль") ──
-      for (int var44 = 0; var44 < I_BTN_COUNT; ++var44) {
-         boolean var45 = this.I_btnX[var44] != 0.0F
-            && var1.I_method_b1c3e152() >= this.I_btnX[var44]
-            && var1.I_method_b1c3e152() <= this.I_btnX[var44] + this.I_btnW[var44]
-            && var1.i_method_b1d26d32() >= this.I_btnY[var44]
-            && var1.i_method_b1d26d32() <= this.I_btnY[var44] + this.I_btnH[var44];
-         boolean var46 = this.I_btnHover[var44].I_method_6ac4da6f() > 0.5F;
-         if (var45 && !var46) {
+         float var23 = var14[var22];
+         float var24 = var15[var22];
+         float var25 = var16[var22];
+         float var26 = var17[var22];
+         boolean var27 = var20 >= var23 && var20 <= var23 + var25 && var21 >= var24 && var21 <= var24 + var26;
+         boolean var28 = this.I_btnHover[var22].I_method_6ac4da6f() > 0.5F;
+         if (var27 && !var28) {
             iIIIiIIiI_Class275.I_method_e7d43867(iIIIiIIIi_Class274.i_field_aa52e62c);
          }
-         this.I_btnHover[var44].I_method_edd72835(var45);
-      }
-      this.I_drawMenuPills(var1, var5, var36);
+         this.I_btnHover[var22].I_method_edd72835(var27);
+         float var29 = this.I_btnHover[var22].I_method_6ac4da6f();
+         IIiii_Class8 var30 = IIiii_Class8.I_method_893b2757(var26 / 2.0F);
 
-      if (this.I_method_ce2e8263()) {
-         VelumClient.getInstance().I_method_35687482().I_method_35128395().render(var1, var5);
+         if (I_btnPrimary[var22]) {
+            var1.drawRoundedRect(var23, var24, var25, var26, var30, new ColorRGBA(242.0F, 242.0F, 246.0F));
+            float var31 = var18.I_method_2c375926(I_btnLabel[var22]);
+            var1.drawText(var18, I_btnLabel[var22], var23 + (var25 - var31) / 2.0F, var24 + (var26 - var18.I_method_a649725c()) / 2.0F, new ColorRGBA(18.0F, 18.0F, 24.0F));
+         } else {
+            var1.drawRoundedRect(var23, var24, var25, var26, var30, new ColorRGBA(30.0F, 30.0F, 38.0F).withAlpha(205.0F));
+            var1.drawRoundedBorder(var23, var24, var25, var26, 0.6F, var30, ColorRGBA.WHITE.withAlpha(20.0F + 55.0F * var29));
+            float var32 = var19.I_method_2c375926(I_btnLabel[var22]);
+            ColorRGBA var33 = var29 > 0.5F ? ColorRGBA.WHITE : new ColorRGBA(170.0F, 170.0F, 182.0F);
+            var1.drawText(var19, I_btnLabel[var22], var23 + (var25 - var32) / 2.0F, var24 + (var26 - var19.I_method_a649725c()) / 2.0F, var33);
+         }
       }
-
-      I_method_f0183f35().I_method_1146ee07(var1, this.width, this.height);
-      I_method_f0183b55().I_method_3e377827(var1, this.width, this.height, var5, this.I_field_dc7facc.I_method_6ac4da6f());
    }
 
-   private void I_method_fca6301b(long var1, float var3) {
-      if (this.i_field_5a && !I_method_f0183f35().i_method_2d9b4203() && var1 - this.i_field_4a >= 1500L) {
-         this.i_field_5a = false;
-         this.II_field_5a = false;
-         I_method_f0183f35().I_method_2d8cb61f();
-      }
-
-      float var4 = this.i_field_5a && !I_method_f0183f35().i_method_2d9b4203() ? MathHelper.clamp((float)(var1 - this.i_field_4a) / 1500.0F, 0.0F, 1.0F) : 0.0F;
-      this.I_field_46 = this.I_field_46 + (var4 - this.I_field_46) * (1.0F - (float)Math.pow(6.0E-4F, var3));
-   }
-
-   @Compile(
-      obfuscation = 1
-   )
    @Override
    public void onMouseClicked(double var1, double var3, IiIII_Class9 var5) {
-      if (I_method_f0183f35().i_method_2d9b4203()) {
-         I_method_f0183f35().I_method_ab3304c8(var1, var3, var5.I_method_6d899712());
-      } else if (!I_method_f0183b55().I_method_22a524a8(var1, var3, var5.I_method_6d899712())) {
-         if (!this.I_method_ce2e8263()
-            || !VelumClient.getInstance().I_method_35687482().I_method_35128395().I_method_60a3f448((float)var1, (float)var3, var5.I_method_6d899712())) {
-            if (var5.I_method_6d899712() == 0) {
-               for (int var7 = 0; var7 < I_BTN_COUNT; ++var7) {
-                  if (this.I_btnX[var7] != 0.0F
-                     && var1 >= this.I_btnX[var7]
-                     && var1 <= this.I_btnX[var7] + this.I_btnW[var7]
-                     && var3 >= this.I_btnY[var7]
-                     && var3 <= this.I_btnY[var7] + this.I_btnH[var7]
-                     && this.I_btnHover[var7].I_method_6ac4da6f() == 1.0F) {
-                     this.I_runAction(var7);
-                     return;
-                  }
-               }
-            }
-
-            if (var5.I_method_6d899712() == 0) {
-               this.i_field_5a = true;
-               this.i_field_4a = System.currentTimeMillis();
-               this.I_field_44 = var1;
-               this.i_field_44 = var3;
-            }
-
-            super.onMouseClicked(var1, var3, var5);
-         }
-      }
-   }
-
-   @Override
-   public void onMouseReleased(double var1, double var3, IiIII_Class9 var5) {
-      if (I_method_f0183f35().i_method_2d9b4203()) {
-         I_method_f0183f35().II_method_5d11b2e5(var1, var3, var5.I_method_6d899712());
-      } else {
-         if (this.i_field_5a && var5.I_method_6d899712() == 0) {
-            this.i_field_5a = false;
-            if (System.currentTimeMillis() - this.i_field_4a < 1500L && this.I_field_991c1e8c.I_method_58432069(this.II_field_4a)) {
-               this.II_field_5a = !this.II_field_5a;
-               this.I_field_991c1e8c.I_method_23e11e3f();
+      if (var5.I_method_6d899712() == 0) {
+         for (int var6 = 0; var6 < I_BTN_COUNT; ++var6) {
+            if (this.I_btnX[var6] != 0.0F
+               && var1 >= this.I_btnX[var6]
+               && var1 <= this.I_btnX[var6] + this.I_btnW[var6]
+               && var3 >= this.I_btnY[var6]
+               && var3 <= this.I_btnY[var6] + this.I_btnH[var6]
+               && this.I_btnHover[var6].I_method_6ac4da6f() == 1.0F) {
+               this.I_runAction(var6);
+               return;
             }
          }
       }
-   }
 
-   @Override
-   public void onMouseDragged(double var1, double var3, IiIII_Class9 var5, double var6, double var8) {
-      if (I_method_f0183f35().i_method_2d9b4203()) {
-         I_method_f0183f35().i_method_47fa6ce8(var1, var3, var5.I_method_6d899712());
-      } else {
-         if (this.i_field_5a && (Math.abs(var1 - this.I_field_44) > 6.0 || Math.abs(var3 - this.i_field_44) > 6.0)) {
-            this.i_field_5a = false;
-         }
-      }
-   }
-
-   public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-      if (I_method_f0183f35().i_method_2d9b4203()) {
-         I_method_f0183f35().I_method_840a6e03(verticalAmount);
-         return true;
-      } else {
-         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-      }
-   }
-
-   @Compile(
-      obfuscation = 1
-   )
-   public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-      if (I_method_f0183f35().i_method_2d9b4203()) {
-         if (keyCode == 256) {
-            I_method_f0183f35().i_method_2d9b41ff();
-         }
-
-         if (keyCode == 263) {
-            I_method_f0183f35().I_method_840a80c8(-1);
-         }
-
-         if (keyCode == 262) {
-            I_method_f0183f35().I_method_840a80c8(1);
-         }
-
-         return true;
-      } else if (I_method_f0183b55().I_method_22ede008(keyCode, scanCode, modifiers)) {
-         return true;
-      } else {
-         if (keyCode == 69) {
-            VelumClient.getInstance().I_method_9a720c62().I_method_bcf65f();
-         }
-
-         if (keyCode == 82) {
-            MinecraftClient.getInstance().setScreen(new MultiplayerScreen(this));
-         }
-
-         if (keyCode == 84) {
-            MinecraftClient.getInstance().setScreen(new SelectWorldScreen(this));
-         }
-
-         return super.keyPressed(keyCode, scanCode, modifiers);
-      }
-   }
-
-   private boolean I_method_ce2e8263() {
-      return VelumClient.getInstance().I_method_be969482().I_method_f1206e83()
-         && VelumClient.getInstance()
-            .I_method_35687482()
-            .I_method_35128395()
-            .i_method_c0baaa28()
-            .stream()
-            .anyMatch(var0 -> var0 instanceof IiiIIIIIi_Class194);
+      super.onMouseClicked(var1, var3, var5);
    }
 
    public boolean shouldCloseOnEsc() {
