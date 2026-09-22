@@ -80,9 +80,9 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
    public void render(III var1) {
       var1.drawRoundedRect(0.0F, 0.0F, this.width, this.height, IIiii_Class8.I_field_2d98a52c, new ColorRGBA(18.0F, 18.0F, 23.0F).withAlpha(255.0F));
 
-      IIiIIi_Class10 var2 = IIiIiI_Class11.ii_field_857c0621.I_method_3a2d5e3(65.0F);
+      IIiIIi_Class10 var2 = IIiIiI_Class11.ii_field_857c0621.I_method_3a2d5e3(20.0F);
       float var3 = var2.I_method_2c375926("velocity.");
-      float var4 = this.height / 2.0F - 105.0F;
+      float var4 = this.height / 2.0F - 70.0F;
       var1.drawText(var2, "velocity.", this.width / 2.0F - var3 / 2.0F, var4, ColorRGBA.WHITE);
 
       float var5 = 114.0F;
@@ -93,7 +93,7 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
       float var10 = 4.0F;
       float var11 = (var8 - var10 * 2.0F) / 3.0F;
       float var12 = this.width / 2.0F;
-      float var13 = var4 + var2.I_method_a649725c() + 40.0F;
+      float var13 = var4 + var2.I_method_a649725c() + 34.0F;
 
       float[] var14 = new float[]{
          var12 - var5 - var7 / 2.0F,
@@ -106,7 +106,7 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
       float[] var16 = new float[]{var5, var5, var11, var11, var11};
       float[] var17 = new float[]{var6, var6, var9, var9, var9};
 
-      IIiIIi_Class10 var18 = IIiIiI_Class11.Ii_field_857c0621.I_method_3a2d5e3(11.0F);
+      IIiIIi_Class10 var18 = IIiIiI_Class11.I_field_857c0621.I_method_3a2d5e3(10.0F);
       IIiIIi_Class10 var19 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(9.0F);
       int var20 = var1.I_method_b1c3e152();
       int var21 = var1.i_method_b1d26d32();
