@@ -27,7 +27,7 @@ public class AccountsWidget {
 
    public boolean open;
    private boolean I_target;
-   private final IiiiIiIii_Class236 I_anim = new IiiiIiIii_Class236(260L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac);
+   private final IiiiIiIii_Class236 I_anim = new IiiiIiIii_Class236(380L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac);
    private final List<String> I_accounts = new ArrayList<>();
    private final StringBuilder I_input = new StringBuilder();
    private String I_error;
@@ -126,6 +126,7 @@ public class AccountsWidget {
    }
 
    public void render(III iII, int screenW, int screenH, int mouseX, int mouseY) {
+      this.I_anim.I_method_edd72835(this.I_target);
       float var100 = this.I_anim.I_method_6ac4da6f();
       this.open = this.I_target || var100 > 0.001F;
       if (!this.open) {
@@ -140,7 +141,7 @@ public class AccountsWidget {
       this.I_cardX = screenW / 2.0F - this.I_cardW / 2.0F;
       this.I_cardY = screenH / 2.0F - this.I_cardH / 2.0F;
 
-      float var101 = 0.94F + 0.06F * var100;
+      float var101 = 0.88F + 0.12F * var100;
       iIiiiIIiI_Class371.II_method_e18635ac(iII.getMatrices(), this.I_cardX + this.I_cardW / 2.0F, this.I_cardY + this.I_cardH / 2.0F, var101);
 
       iII.drawRoundedRect(this.I_cardX, this.I_cardY, this.I_cardW, this.I_cardH, IIiii_Class8.I_method_893b2757(10.0F), new ColorRGBA(20.0F, 21.0F, 26.0F).withAlpha(250.0F * var100));

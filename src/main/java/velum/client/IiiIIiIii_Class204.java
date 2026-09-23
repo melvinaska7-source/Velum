@@ -25,9 +25,9 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
    private static final String[] I_btnLabel = {"Одиночная игра", "Сетевая игра", "Сменить аккаунт"};
    private static final boolean[] I_btnAccent = {false, false, true};
    private final IiiiIiIii_Class236[] I_btnHover = new IiiiIiIii_Class236[]{
-      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
-      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
-      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
+      new IiiiIiIii_Class236(420L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
+      new IiiiIiIii_Class236(420L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
+      new IiiiIiIii_Class236(420L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
    };
    private final float[] I_btnX = new float[I_BTN_COUNT];
    private final float[] I_btnY = new float[I_BTN_COUNT];
@@ -36,8 +36,8 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
 
    private static final String[] I_navLabel = {"Настройки", "Выход"};
    private final IiiiIiIii_Class236[] I_navHover = new IiiiIiIii_Class236[]{
-      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
-      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
+      new IiiiIiIii_Class236(420L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
+      new IiiiIiIii_Class236(420L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
    };
    private final float[] I_navX = new float[2];
    private final float[] I_navY = new float[2];

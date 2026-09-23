@@ -25,9 +25,9 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
    private static final String[] I_btnLabel = {"Одиночная игра", "Сетевая игра", "Сменить аккаунт"};
    private static final boolean[] I_btnAccent = {false, false, true};
    private final IiiiIiIii_Class236[] I_btnHover = new IiiiIiIii_Class236[]{
-      new IiiiIiIii_Class236(150L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
-      new IiiiIiIii_Class236(150L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
-      new IiiiIiIii_Class236(150L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
+      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
+      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
+      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
    };
    private final float[] I_btnX = new float[I_BTN_COUNT];
    private final float[] I_btnY = new float[I_BTN_COUNT];
@@ -36,8 +36,8 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
 
    private static final String[] I_navLabel = {"Настройки", "Выход"};
    private final IiiiIiIii_Class236[] I_navHover = new IiiiIiIii_Class236[]{
-      new IiiiIiIii_Class236(150L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
-      new IiiiIiIii_Class236(150L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
+      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
+      new IiiiIiIii_Class236(320L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac)
    };
    private final float[] I_navX = new float[2];
    private final float[] I_navY = new float[2];
@@ -179,7 +179,7 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
 
          ColorRGBA var17;
          if (I_btnAccent[var12]) {
-            var17 = new ColorRGBA(212.0F + 23.0F * var16, 95.0F + 10.0F * var16, 12.0F + 3.0F * var16);
+            var17 = new ColorRGBA(37.0F + 22.0F * var16, 99.0F + 31.0F * var16, 235.0F + 11.0F * var16);
          } else {
             var17 = new ColorRGBA(20.0F + 8.0F * var16, 23.0F + 8.0F * var16, 29.0F + 9.0F * var16);
          }
