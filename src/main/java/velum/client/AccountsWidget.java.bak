@@ -13,7 +13,6 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 import moscow.velum.mixin.minecraft.client.IMinecraftClient;
 import net.minecraft.client.session.Session;
-import net.minecraft.util.math.MathHelper;
 import pyvelum.utility.render.ColorRGBA;
 
 /**
@@ -26,8 +25,6 @@ public class AccountsWidget {
    private static final Type I_listType = new TypeToken<List<String>>() {}.getType();
 
    public boolean open;
-   private boolean I_target;
-   private final IiiiIiIii_Class236 I_anim = new IiiiIiIii_Class236(260L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac);
    private final List<String> I_accounts = new ArrayList<>();
    private final StringBuilder I_input = new StringBuilder();
    private String I_error;
@@ -45,13 +42,6 @@ public class AccountsWidget {
          this.I_loaded = true;
       }
       this.open = true;
-      this.I_target = true;
-      this.I_anim.I_method_edd72835(true);
-   }
-
-   private void I_closeWidget() {
-      this.I_target = false;
-      this.I_anim.I_method_edd72835(false);
    }
 
    private void I_load() {
@@ -118,7 +108,7 @@ public class AccountsWidget {
       Session var2 = new Session(var1, I_offlineUuid(var1), "0", Optional.empty(), Optional.empty(), Session.AccountType.LEGACY);
       ((IMinecraftClient) var0).setSession(var2);
       VelumClient.I_field_ab0f6068.info("[Accounts] switched to: {}", var1);
-      this.I_closeWidget();
+      this.open = false;
    }
 
    private float I_rowY(int var1) {
@@ -126,13 +116,11 @@ public class AccountsWidget {
    }
 
    public void render(III iII, int screenW, int screenH, int mouseX, int mouseY) {
-      float var100 = this.I_anim.I_method_6ac4da6f();
-      this.open = this.I_target || var100 > 0.001F;
       if (!this.open) {
          return;
       }
 
-      iII.drawRoundedRect(0.0F, 0.0F, screenW, screenH, IIiii_Class8.I_field_2d98a52c, new ColorRGBA(0.0F, 0.0F, 0.0F).withAlpha(150.0F * var100));
+      iII.drawRoundedRect(0.0F, 0.0F, screenW, screenH, IIiii_Class8.I_field_2d98a52c, new ColorRGBA(0.0F, 0.0F, 0.0F).withAlpha(150.0F));
 
       int var1 = Math.max(1, this.I_accounts.size());
       this.I_cardW = 260.0F;
@@ -140,34 +128,24 @@ public class AccountsWidget {
       this.I_cardX = screenW / 2.0F - this.I_cardW / 2.0F;
       this.I_cardY = screenH / 2.0F - this.I_cardH / 2.0F;
 
-      float var101 = 0.94F + 0.06F * var100;
-      iIiiiIIiI_Class371.II_method_e18635ac(iII.getMatrices(), this.I_cardX + this.I_cardW / 2.0F, this.I_cardY + this.I_cardH / 2.0F, var101);
-
-      iII.drawRoundedRect(this.I_cardX, this.I_cardY, this.I_cardW, this.I_cardH, IIiii_Class8.I_method_893b2757(10.0F), new ColorRGBA(20.0F, 21.0F, 26.0F).withAlpha(250.0F * var100));
-      iII.drawRoundedBorder(this.I_cardX, this.I_cardY, this.I_cardW, this.I_cardH, 0.6F, IIiii_Class8.I_method_893b2757(10.0F), ColorRGBA.WHITE.withAlpha(28.0F * var100));
-
-      if (var100 < 0.6F) {
-         iIiiiIIiI_Class371.I_method_10503b11(iII.getMatrices());
-         return;
-      }
-
-      float var102 = MathHelper.clamp((var100 - 0.6F) / 0.4F, 0.0F, 1.0F);
+      iII.drawRoundedRect(this.I_cardX, this.I_cardY, this.I_cardW, this.I_cardH, IIiii_Class8.I_method_893b2757(10.0F), new ColorRGBA(20.0F, 21.0F, 26.0F).withAlpha(250.0F));
+      iII.drawRoundedBorder(this.I_cardX, this.I_cardY, this.I_cardW, this.I_cardH, 0.6F, IIiii_Class8.I_method_893b2757(10.0F), ColorRGBA.WHITE.withAlpha(28.0F));
 
       IIiIIi_Class10 var2 = IIiIiI_Class11.I_field_857c0621.I_method_3a2d5e3(10.0F);
       IIiIIi_Class10 var3 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(9.0F);
       IIiIIi_Class10 var4 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(8.0F);
 
-      iII.drawCenteredText(var2, "Смена аккаунта", this.I_cardX + this.I_cardW / 2.0F, this.I_cardY + 14.0F, ColorRGBA.WHITE.withAlpha(255.0F * var102));
+      iII.drawCenteredText(var2, "Смена аккаунта", this.I_cardX + this.I_cardW / 2.0F, this.I_cardY + 14.0F, ColorRGBA.WHITE);
 
       float var5 = this.I_cardX + this.I_cardW - 24.0F;
       boolean var6 = mouseX >= var5 && mouseX <= var5 + 16.0F && mouseY >= this.I_cardY + 10.0F && mouseY <= this.I_cardY + 26.0F;
-      iII.drawCenteredText(var3, "x", var5 + 8.0F, this.I_cardY + 12.0F, (var6 ? ColorRGBA.WHITE : new ColorRGBA(140.0F, 140.0F, 150.0F)).withAlpha(255.0F * var102));
+      iII.drawCenteredText(var3, "x", var5 + 8.0F, this.I_cardY + 12.0F, var6 ? ColorRGBA.WHITE : new ColorRGBA(140.0F, 140.0F, 150.0F));
 
       float var7 = this.I_cardX + 16.0F;
       float var8 = this.I_cardW - 32.0F;
 
       if (this.I_accounts.isEmpty()) {
-         iII.drawCenteredText(var4, "список пуст — добавь ник ниже", this.I_cardX + this.I_cardW / 2.0F, this.I_rowY(0) + 7.0F, ColorRGBA.WHITE.withAlpha(120.0F * var102));
+         iII.drawCenteredText(var4, "список пуст — добавь ник ниже", this.I_cardX + this.I_cardW / 2.0F, this.I_rowY(0) + 7.0F, ColorRGBA.WHITE.withAlpha(120.0F));
       }
 
       for (int var9 = 0; var9 < this.I_accounts.size(); ++var9) {
@@ -175,52 +153,50 @@ public class AccountsWidget {
          float var11 = this.I_rowY(var9);
          float var12 = var8 - 22.0F;
          boolean var13 = mouseX >= var7 && mouseX <= var7 + var12 && mouseY >= var11 && mouseY <= var11 + 18.0F;
-         iII.drawRoundedRect(var7, var11, var12, 18.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(32.0F, 32.0F, 40.0F).withAlpha((var13 ? 220.0F : 150.0F) * var102));
-         iII.drawText(var3, var10, var7 + 8.0F, var11 + (18.0F - var3.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(255.0F * var102));
+         iII.drawRoundedRect(var7, var11, var12, 18.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(32.0F, 32.0F, 40.0F).withAlpha(var13 ? 220.0F : 150.0F));
+         iII.drawText(var3, var10, var7 + 8.0F, var11 + (18.0F - var3.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
 
          float var14 = var7 + var8 - 18.0F;
          boolean var15 = mouseX >= var14 && mouseX <= var14 + 18.0F && mouseY >= var11 && mouseY <= var11 + 18.0F;
-         iII.drawRoundedRect(var14, var11, 18.0F, 18.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(64.0F, 24.0F, 24.0F).withAlpha((var15 ? 220.0F : 120.0F) * var102));
-         iII.drawCenteredText(var4, "x", var14 + 9.0F, var11 + (18.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(255.0F * var102));
+         iII.drawRoundedRect(var14, var11, 18.0F, 18.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(64.0F, 24.0F, 24.0F).withAlpha(var15 ? 220.0F : 120.0F));
+         iII.drawCenteredText(var4, "x", var14 + 9.0F, var11 + (18.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
       }
 
       float var16 = this.I_rowY(this.I_accounts.size()) + 4.0F;
       float var17 = var8 - 60.0F;
-      iII.drawRoundedRect(var7, var16, var17, 20.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(14.0F, 14.0F, 18.0F).withAlpha(230.0F * var102));
-      iII.drawRoundedBorder(var7, var16, var17, 20.0F, 0.5F, IIiii_Class8.I_method_893b2757(5.0F), ColorRGBA.WHITE.withAlpha(55.0F * var102));
+      iII.drawRoundedRect(var7, var16, var17, 20.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(14.0F, 14.0F, 18.0F).withAlpha(230.0F));
+      iII.drawRoundedBorder(var7, var16, var17, 20.0F, 0.5F, IIiii_Class8.I_method_893b2757(5.0F), ColorRGBA.WHITE.withAlpha(55.0F));
       String var18 = this.I_input.toString();
       boolean var19 = System.currentTimeMillis() % 1000L < 500L;
       if (var18.isEmpty()) {
-         iII.drawText(var4, "ник...", var7 + 7.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(90.0F * var102));
+         iII.drawText(var4, "ник...", var7 + 7.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(90.0F));
       } else {
-         iII.drawText(var4, var18 + (var19 ? "_" : ""), var7 + 7.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(255.0F * var102));
+         iII.drawText(var4, var18 + (var19 ? "_" : ""), var7 + 7.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
       }
 
       float var20 = var7 + var17 + 6.0F;
       float var21 = 54.0F;
       boolean var22 = mouseX >= var20 && mouseX <= var20 + var21 && mouseY >= var16 && mouseY <= var16 + 20.0F;
-      iII.drawRoundedRect(var20, var16, var21, 20.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(37.0F, 99.0F, 235.0F).withAlpha((var22 ? 255.0F : 225.0F) * var102));
-      iII.drawCenteredText(var4, "добавить", var20 + var21 / 2.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(255.0F * var102));
+      iII.drawRoundedRect(var20, var16, var21, 20.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(212.0F, 95.0F, 12.0F).withAlpha(var22 ? 255.0F : 225.0F));
+      iII.drawCenteredText(var4, "добавить", var20 + var21 / 2.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
 
       if (this.I_error != null) {
          if (System.currentTimeMillis() > this.I_errorUntil) {
             this.I_error = null;
          } else {
-            iII.drawCenteredText(var4, this.I_error, this.I_cardX + this.I_cardW / 2.0F, var16 + 26.0F, new ColorRGBA(255.0F, 110.0F, 110.0F).withAlpha(255.0F * var102));
+            iII.drawCenteredText(var4, this.I_error, this.I_cardX + this.I_cardW / 2.0F, var16 + 26.0F, new ColorRGBA(255.0F, 110.0F, 110.0F));
          }
       }
-
-      iIiiiIIiI_Class371.I_method_10503b11(iII.getMatrices());
    }
 
    public boolean onMouseClicked(net.minecraft.client.MinecraftClient var0, double mx, double my, int button) {
-      if (!this.I_target || button != 0) {
+      if (!this.open || button != 0) {
          return this.open;
       }
 
       float var1 = this.I_cardX + this.I_cardW - 24.0F;
       if (mx >= var1 && mx <= var1 + 16.0 && my >= this.I_cardY + 10.0 && my <= this.I_cardY + 26.0) {
-         this.I_closeWidget();
+         this.open = false;
          return true;
       }
 
@@ -250,13 +226,13 @@ public class AccountsWidget {
       }
 
       if (mx < this.I_cardX || mx > this.I_cardX + this.I_cardW || my < this.I_cardY || my > this.I_cardY + this.I_cardH) {
-         this.I_closeWidget();
+         this.open = false;
       }
       return true;
    }
 
    public boolean onCharTyped(char chr) {
-      if (!this.I_target) {
+      if (!this.open) {
          return false;
       }
       if (this.I_input.length() < 16 && (Character.isLetterOrDigit(chr) || chr == '_') && chr < 128) {
@@ -266,11 +242,11 @@ public class AccountsWidget {
    }
 
    public boolean onKeyPressed(int keyCode) {
-      if (!this.I_target) {
+      if (!this.open) {
          return false;
       }
       if (keyCode == 256) {
-         this.I_closeWidget();
+         this.open = false;
          return true;
       }
       if (keyCode == 259 && this.I_input.length() > 0) {
