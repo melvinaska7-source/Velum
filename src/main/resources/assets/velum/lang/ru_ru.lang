@@ -1167,6 +1167,19 @@ mainmenu.wallpaper.night2=Звёздная ночь
 mainmenu.wallpaper.night3=Закат в поле
 mainmenu.bar.language=Язык
 mainmenu.bar.wallpaper=Смена обоев
+mainmenu.title=velocity.
+mainmenu.singleplayer=Одиночная игра
+mainmenu.multiplayer=Сетевая игра
+mainmenu.settings=Настройки
+mainmenu.accounts=Аккаунты
+mainmenu.quit=Выход
+mainmenu.accounts.title=Аккаунты
+mainmenu.accounts.placeholder=ник...
+mainmenu.accounts.add=Добавить
+mainmenu.accounts.empty=список пуст. добавь ник ниже
+mainmenu.accounts.hint=Esc — назад, клик по нику — войти под ним
+mainmenu.accounts.error.invalid=ник: 3-16 символов, только A-Z 0-9 _
+mainmenu.accounts.error.duplicate=уже есть в списке
 
 # Дни недели
 time.days.monday=Понедельник
