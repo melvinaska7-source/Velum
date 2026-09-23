@@ -27,6 +27,8 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
    private static final Pattern I_namePattern = Pattern.compile("^[A-Za-z0-9_]{3,16}$");
    private static final File I_saveFile = new File(IiIIiIII_Class73.I_field_3a58077, "accounts.json");
    private static final Type I_listType = new TypeToken<List<String>>() {}.getType();
+   private static final long I_field_bootAt = System.currentTimeMillis();
+   private static final long I_field_textGraceMs = 1200L;
 
    private final Screen I_parent;
    private final List<String> I_accounts = new ArrayList<>();
@@ -74,12 +76,12 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
    private void I_addCurrentInput() {
       String var1 = this.I_input.toString().trim();
       if (!I_namePattern.matcher(var1).matches()) {
-         this.I_showError("\u043d\u0438\u043a: 3-16 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432, \u0442\u043e\u043b\u044c\u043a\u043e A-Z 0-9 _");
+         this.I_showError(IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.error.invalid"));
          return;
       }
       for (String var2 : this.I_accounts) {
          if (var2.equalsIgnoreCase(var1)) {
-            this.I_showError("\u0443\u0436\u0435 \u0435\u0441\u0442\u044c \u0432 \u0441\u043f\u0438\u0441\u043a\u0435");
+            this.I_showError(IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.error.duplicate"));
             return;
          }
       }
@@ -112,12 +114,16 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
 
    @Override
    public void render(III iII) {
+      boolean var50 = System.currentTimeMillis() - I_field_bootAt > I_field_textGraceMs;
       IIiIIi_Class10 var1 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(12.0F);
       IIiIIi_Class10 var2 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(10.0F);
       IIiIIi_Class10 var3 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(9.0F);
 
       iII.drawRoundedRect(0.0F, 0.0F, this.width, this.height, IIiii_Class8.I_field_2d98a52c, new ColorRGBA(16.0F, 16.0F, 20.0F).withAlpha(255.0F));
-      iII.drawCenteredText(var1, "\u0410\u043a\u043a\u0430\u0443\u043d\u0442\u044b", this.width / 2.0F, 24.0F, ColorRGBA.WHITE);
+      if (!var50) {
+         return;
+      }
+      iII.drawCenteredText(var1, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.title"), this.width / 2.0F, 24.0F, ColorRGBA.WHITE);
 
       float var4 = this.width / 2.0F - 130.0F;
       float var5 = 260.0F;
@@ -125,7 +131,7 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
       int var101 = iII.i_method_b1d26d32();
 
       if (this.I_accounts.isEmpty()) {
-         iII.drawCenteredText(var2, "\u0441\u043f\u0438\u0441\u043e\u043a \u043f\u0443\u0441\u0442. \u0434\u043e\u0431\u0430\u0432\u044c \u043d\u0438\u043a \u043d\u0438\u0436\u0435", this.width / 2.0F, this.I_rowY(0) + 6.0F, ColorRGBA.WHITE.withAlpha(140.0F));
+         iII.drawCenteredText(var2, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.empty"), this.width / 2.0F, this.I_rowY(0) + 6.0F, ColorRGBA.WHITE.withAlpha(140.0F));
       }
 
       for (int var6 = 0; var6 < this.I_accounts.size(); ++var6) {
@@ -150,14 +156,14 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
       boolean var16 = System.currentTimeMillis() % 1000L < 500L;
       iII.drawText(var2, var15 + (var16 ? "_" : ""), var4 + 8.0F, var13 + (22.0F - var2.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
       if (var15.isEmpty()) {
-         iII.drawText(var2, "\u043d\u0438\u043a...", var4 + 8.0F, var13 + (22.0F - var2.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(90.0F));
+         iII.drawText(var2, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.placeholder"), var4 + 8.0F, var13 + (22.0F - var2.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(90.0F));
       }
 
       float var17 = var4 + var14 + 6.0F;
       float var18 = 66.0F;
       boolean var19 = var100 >= var17 && var100 <= var17 + var18 && var101 >= var13 && var101 <= var13 + 22.0F;
       iII.drawRoundedRect(var17, var13, var18, 22.0F, IIiii_Class8.I_method_893b2757(5.0F), ColorRGBA.WHITE.withAlpha(var19 ? 255.0F : 225.0F));
-      iII.drawCenteredText(var2, "\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c", var17 + var18 / 2.0F, var13 + (22.0F - var2.I_method_a649725c()) / 2.0F, new ColorRGBA(18.0F, 18.0F, 24.0F));
+      iII.drawCenteredText(var2, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.add"), var17 + var18 / 2.0F, var13 + (22.0F - var2.I_method_a649725c()) / 2.0F, new ColorRGBA(18.0F, 18.0F, 24.0F));
 
       if (this.I_error != null) {
          if (System.currentTimeMillis() > this.I_errorUntil) {
@@ -167,7 +173,7 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
          }
       }
 
-      iII.drawCenteredText(var3, "Esc \u2014 \u043d\u0430\u0437\u0430\u0434, \u043a\u043b\u0438\u043a \u043f\u043e \u043d\u0438\u043a\u0443 \u2014 \u0432\u043e\u0439\u0442\u0438 \u043f\u043e\u0434 \u043d\u0438\u043c", this.width / 2.0F, this.height - 16.0F, ColorRGBA.WHITE.withAlpha(90.0F));
+      iII.drawCenteredText(var3, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.hint"), this.width / 2.0F, this.height - 16.0F, ColorRGBA.WHITE.withAlpha(90.0F));
    }
 
    @Override

@@ -38,6 +38,11 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
 
    public AccountsScreen(Screen parent) {
       this.I_parent = parent;
+      try {
+         IiIiIIII_Class81.I_method_b508148c();
+      } catch (Throwable var2) {
+         VelumClient.I_field_ab0f6068.warn("\u043d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u044f\u0437\u044b\u043a: {}", var2.toString());
+      }
       this.I_load();
    }
 
