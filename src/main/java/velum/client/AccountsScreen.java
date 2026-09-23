@@ -12,38 +12,36 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import moscow.velum.mixin.minecraft.client.IMinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.session.Session;
-import net.minecraft.text.Text;
 import pyvelum.utility.render.ColorRGBA;
 
 /**
- * Простой оффлайн (пиратка) менеджер ников. Хранит список ников в
- * Velum/accounts.json и переключает MinecraftClient.session при клике.
- * НЕ имеет ничего общего с настоящими Microsoft-аккаунтами: это просто
- * смена отображаемого ника/UUID, как это делает любой оффлайн-лаунчер.
+ * Встроенный оверлей смены (оффлайн) аккаунта, рисуется поверх главного меню.
+ * Не Screen — обычный виджет, которым владеет IiiIIiIii_Class204.
  */
-public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
+public class AccountsWidget {
    private static final Pattern I_namePattern = Pattern.compile("^[A-Za-z0-9_]{3,16}$");
    private static final File I_saveFile = new File(IiIIiIII_Class73.I_field_3a58077, "accounts.json");
    private static final Type I_listType = new TypeToken<List<String>>() {}.getType();
-   private static final long I_field_bootAt = System.currentTimeMillis();
-   private static final long I_field_textGraceMs = 1200L;
 
-   private final Screen I_parent;
+   public boolean open;
    private final List<String> I_accounts = new ArrayList<>();
    private final StringBuilder I_input = new StringBuilder();
    private String I_error;
    private long I_errorUntil;
+   private boolean I_loaded;
 
-   public AccountsScreen(Screen parent) {
-      this.I_parent = parent;
-      try {
-         IiIiIIII_Class81.I_method_b508148c();
-      } catch (Throwable var2) {
-         VelumClient.I_field_ab0f6068.warn("\u043d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u044f\u0437\u044b\u043a: {}", var2.toString());
+   private float I_cardX;
+   private float I_cardY;
+   private float I_cardW;
+   private float I_cardH;
+
+   public void openWidget() {
+      if (!this.I_loaded) {
+         this.I_load();
+         this.I_loaded = true;
       }
-      this.I_load();
+      this.open = true;
    }
 
    private void I_load() {
@@ -55,7 +53,7 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
                this.I_accounts.addAll(var2);
             }
          } catch (Exception var3) {
-            VelumClient.I_field_ab0f6068.warn("[Accounts] \u043d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c accounts.json: {}", var3.toString());
+            VelumClient.I_field_ab0f6068.warn("[Accounts] load failed: {}", var3.toString());
          }
       }
    }
@@ -69,7 +67,7 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
             IiIIiIII_Class73.I_field_fbd77e28.toJson(this.I_accounts, I_listType, var1);
          }
       } catch (Exception var2) {
-         VelumClient.I_field_ab0f6068.warn("[Accounts] \u043d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0441\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c accounts.json: {}", var2.toString());
+         VelumClient.I_field_ab0f6068.warn("[Accounts] save failed: {}", var2.toString());
       }
    }
 
@@ -81,12 +79,12 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
    private void I_addCurrentInput() {
       String var1 = this.I_input.toString().trim();
       if (!I_namePattern.matcher(var1).matches()) {
-         this.I_showError(IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.error.invalid"));
+         this.I_showError("3-16 симв., A-Z 0-9 _");
          return;
       }
       for (String var2 : this.I_accounts) {
          if (var2.equalsIgnoreCase(var1)) {
-            this.I_showError(IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.error.duplicate"));
+            this.I_showError("уже есть в списке");
             return;
          }
       }
@@ -106,113 +104,151 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
       return UUID.nameUUIDFromBytes(("OfflinePlayer:" + var0).getBytes(StandardCharsets.UTF_8));
    }
 
-   private void I_switchTo(String var1) {
+   private void I_switchTo(net.minecraft.client.MinecraftClient var0, String var1) {
       Session var2 = new Session(var1, I_offlineUuid(var1), "0", Optional.empty(), Optional.empty(), Session.AccountType.LEGACY);
-      ((IMinecraftClient) I_field_3a9bda27).setSession(var2);
-      VelumClient.I_field_ab0f6068.info("[Accounts] \u0430\u043a\u043a\u0430\u0443\u043d\u0442 \u043f\u0435\u0440\u0435\u043a\u043b\u044e\u0447\u0451\u043d \u043d\u0430: {}", var1);
-      this.close();
+      ((IMinecraftClient) var0).setSession(var2);
+      VelumClient.I_field_ab0f6068.info("[Accounts] switched to: {}", var1);
+      this.open = false;
    }
 
    private float I_rowY(int var1) {
-      return 68.0F + var1 * 26.0F;
+      return this.I_cardY + 56.0F + var1 * 24.0F;
    }
 
-   @Override
-   public void render(III iII) {
-      boolean var50 = System.currentTimeMillis() - I_field_bootAt > I_field_textGraceMs;
-      IIiIIi_Class10 var1 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(12.0F);
-      IIiIIi_Class10 var2 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(10.0F);
-      IIiIIi_Class10 var3 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(9.0F);
-
-      iII.drawRoundedRect(0.0F, 0.0F, this.width, this.height, IIiii_Class8.I_field_2d98a52c, new ColorRGBA(16.0F, 16.0F, 20.0F).withAlpha(255.0F));
-      if (!var50) {
+   public void render(III iII, int screenW, int screenH, int mouseX, int mouseY) {
+      if (!this.open) {
          return;
       }
-      iII.drawCenteredText(var1, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.title"), this.width / 2.0F, 24.0F, ColorRGBA.WHITE);
 
-      float var4 = this.width / 2.0F - 130.0F;
-      float var5 = 260.0F;
-      int var100 = iII.I_method_b1c3e152();
-      int var101 = iII.i_method_b1d26d32();
+      iII.drawRoundedRect(0.0F, 0.0F, screenW, screenH, IIiii_Class8.I_field_2d98a52c, new ColorRGBA(0.0F, 0.0F, 0.0F).withAlpha(150.0F));
+
+      int var1 = Math.max(1, this.I_accounts.size());
+      this.I_cardW = 260.0F;
+      this.I_cardH = 92.0F + var1 * 24.0F;
+      this.I_cardX = screenW / 2.0F - this.I_cardW / 2.0F;
+      this.I_cardY = screenH / 2.0F - this.I_cardH / 2.0F;
+
+      iII.drawRoundedRect(this.I_cardX, this.I_cardY, this.I_cardW, this.I_cardH, IIiii_Class8.I_method_893b2757(10.0F), new ColorRGBA(20.0F, 21.0F, 26.0F).withAlpha(250.0F));
+      iII.drawRoundedBorder(this.I_cardX, this.I_cardY, this.I_cardW, this.I_cardH, 0.6F, IIiii_Class8.I_method_893b2757(10.0F), ColorRGBA.WHITE.withAlpha(28.0F));
+
+      IIiIIi_Class10 var2 = IIiIiI_Class11.I_field_857c0621.I_method_3a2d5e3(10.0F);
+      IIiIIi_Class10 var3 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(9.0F);
+      IIiIIi_Class10 var4 = IIiIiI_Class11.II_field_857c0621.I_method_3a2d5e3(8.0F);
+
+      iII.drawCenteredText(var2, "Смена аккаунта", this.I_cardX + this.I_cardW / 2.0F, this.I_cardY + 14.0F, ColorRGBA.WHITE);
+
+      float var5 = this.I_cardX + this.I_cardW - 24.0F;
+      boolean var6 = mouseX >= var5 && mouseX <= var5 + 16.0F && mouseY >= this.I_cardY + 10.0F && mouseY <= this.I_cardY + 26.0F;
+      iII.drawCenteredText(var3, "x", var5 + 8.0F, this.I_cardY + 12.0F, var6 ? ColorRGBA.WHITE : new ColorRGBA(140.0F, 140.0F, 150.0F));
+
+      float var7 = this.I_cardX + 16.0F;
+      float var8 = this.I_cardW - 32.0F;
 
       if (this.I_accounts.isEmpty()) {
-         iII.drawCenteredText(var2, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.empty"), this.width / 2.0F, this.I_rowY(0) + 6.0F, ColorRGBA.WHITE.withAlpha(140.0F));
+         iII.drawCenteredText(var4, "список пуст — добавь ник ниже", this.I_cardX + this.I_cardW / 2.0F, this.I_rowY(0) + 7.0F, ColorRGBA.WHITE.withAlpha(120.0F));
       }
 
-      for (int var6 = 0; var6 < this.I_accounts.size(); ++var6) {
-         String var7 = this.I_accounts.get(var6);
-         float var8 = this.I_rowY(var6);
-         float var9 = var5 - 22.0F;
-         boolean var10 = var100 >= var4 && var100 <= var4 + var9 && var101 >= var8 && var101 <= var8 + 20.0F;
-         iII.drawRoundedRect(var4, var8, var9, 20.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(32.0F, 32.0F, 40.0F).withAlpha(var10 ? 210.0F : 150.0F));
-         iII.drawText(var2, var7, var4 + 8.0F, var8 + (20.0F - var2.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
+      for (int var9 = 0; var9 < this.I_accounts.size(); ++var9) {
+         String var10 = this.I_accounts.get(var9);
+         float var11 = this.I_rowY(var9);
+         float var12 = var8 - 22.0F;
+         boolean var13 = mouseX >= var7 && mouseX <= var7 + var12 && mouseY >= var11 && mouseY <= var11 + 18.0F;
+         iII.drawRoundedRect(var7, var11, var12, 18.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(32.0F, 32.0F, 40.0F).withAlpha(var13 ? 220.0F : 150.0F));
+         iII.drawText(var3, var10, var7 + 8.0F, var11 + (18.0F - var3.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
 
-         float var11 = var4 + var5 - 20.0F;
-         boolean var12 = var100 >= var11 && var100 <= var11 + 20.0F && var101 >= var8 && var101 <= var8 + 20.0F;
-         iII.drawRoundedRect(var11, var8, 20.0F, 20.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(64.0F, 24.0F, 24.0F).withAlpha(var12 ? 210.0F : 120.0F));
-         iII.drawCenteredText(var2, "x", var11 + 10.0F, var8 + (20.0F - var2.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
+         float var14 = var7 + var8 - 18.0F;
+         boolean var15 = mouseX >= var14 && mouseX <= var14 + 18.0F && mouseY >= var11 && mouseY <= var11 + 18.0F;
+         iII.drawRoundedRect(var14, var11, 18.0F, 18.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(64.0F, 24.0F, 24.0F).withAlpha(var15 ? 220.0F : 120.0F));
+         iII.drawCenteredText(var4, "x", var14 + 9.0F, var11 + (18.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
       }
 
-      float var13 = this.I_rowY(this.I_accounts.size()) + 6.0F;
-      float var14 = var5 - 72.0F;
-      iII.drawRoundedRect(var4, var13, var14, 22.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(24.0F, 24.0F, 30.0F).withAlpha(220.0F));
-      iII.drawRoundedBorder(var4, var13, var14, 22.0F, 0.6F, IIiii_Class8.I_method_893b2757(5.0F), ColorRGBA.WHITE.withAlpha(70.0F));
-      String var15 = this.I_input.toString();
-      boolean var16 = System.currentTimeMillis() % 1000L < 500L;
-      iII.drawText(var2, var15 + (var16 ? "_" : ""), var4 + 8.0F, var13 + (22.0F - var2.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
-      if (var15.isEmpty()) {
-         iII.drawText(var2, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.placeholder"), var4 + 8.0F, var13 + (22.0F - var2.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(90.0F));
+      float var16 = this.I_rowY(this.I_accounts.size()) + 4.0F;
+      float var17 = var8 - 60.0F;
+      iII.drawRoundedRect(var7, var16, var17, 20.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(14.0F, 14.0F, 18.0F).withAlpha(230.0F));
+      iII.drawRoundedBorder(var7, var16, var17, 20.0F, 0.5F, IIiii_Class8.I_method_893b2757(5.0F), ColorRGBA.WHITE.withAlpha(55.0F));
+      String var18 = this.I_input.toString();
+      boolean var19 = System.currentTimeMillis() % 1000L < 500L;
+      if (var18.isEmpty()) {
+         iII.drawText(var4, "ник...", var7 + 7.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE.withAlpha(90.0F));
+      } else {
+         iII.drawText(var4, var18 + (var19 ? "_" : ""), var7 + 7.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
       }
 
-      float var17 = var4 + var14 + 6.0F;
-      float var18 = 66.0F;
-      boolean var19 = var100 >= var17 && var100 <= var17 + var18 && var101 >= var13 && var101 <= var13 + 22.0F;
-      iII.drawRoundedRect(var17, var13, var18, 22.0F, IIiii_Class8.I_method_893b2757(5.0F), ColorRGBA.WHITE.withAlpha(var19 ? 255.0F : 225.0F));
-      iII.drawCenteredText(var2, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.add"), var17 + var18 / 2.0F, var13 + (22.0F - var2.I_method_a649725c()) / 2.0F, new ColorRGBA(18.0F, 18.0F, 24.0F));
+      float var20 = var7 + var17 + 6.0F;
+      float var21 = 54.0F;
+      boolean var22 = mouseX >= var20 && mouseX <= var20 + var21 && mouseY >= var16 && mouseY <= var16 + 20.0F;
+      iII.drawRoundedRect(var20, var16, var21, 20.0F, IIiii_Class8.I_method_893b2757(5.0F), new ColorRGBA(212.0F, 95.0F, 12.0F).withAlpha(var22 ? 255.0F : 225.0F));
+      iII.drawCenteredText(var4, "добавить", var20 + var21 / 2.0F, var16 + (20.0F - var4.I_method_a649725c()) / 2.0F, ColorRGBA.WHITE);
 
       if (this.I_error != null) {
          if (System.currentTimeMillis() > this.I_errorUntil) {
             this.I_error = null;
          } else {
-            iII.drawCenteredText(var3, this.I_error, this.width / 2.0F, var13 + 30.0F, new ColorRGBA(255.0F, 110.0F, 110.0F));
+            iII.drawCenteredText(var4, this.I_error, this.I_cardX + this.I_cardW / 2.0F, var16 + 26.0F, new ColorRGBA(255.0F, 110.0F, 110.0F));
          }
       }
-
-      iII.drawCenteredText(var3, IiIiIIII_Class81.I_method_f25a980a("mainmenu.accounts.hint"), this.width / 2.0F, this.height - 16.0F, ColorRGBA.WHITE.withAlpha(90.0F));
    }
 
-   @Override
-   public void onMouseClicked(double var1, double var3, IiIII_Class9 var5) {
-      if (var5.I_method_6d899712() != 0) {
-         return;
-      }
-      float var6 = this.width / 2.0F - 130.0F;
-      float var7 = 260.0F;
-
-      for (int var8 = 0; var8 < this.I_accounts.size(); ++var8) {
-         float var9 = this.I_rowY(var8);
-         float var10 = var6 + var7 - 20.0F;
-         if (var1 >= var10 && var1 <= var10 + 20.0 && var3 >= var9 && var3 <= var9 + 20.0) {
-            this.I_remove(var8);
-            return;
-         }
-         if (var1 >= var6 && var1 <= var10 - 2.0 && var3 >= var9 && var3 <= var9 + 20.0) {
-            this.I_switchTo(this.I_accounts.get(var8));
-            return;
-         }
+   public boolean onMouseClicked(net.minecraft.client.MinecraftClient var0, double mx, double my, int button) {
+      if (!this.open || button != 0) {
+         return this.open;
       }
 
-      float var11 = this.I_rowY(this.I_accounts.size()) + 6.0F;
-      float var12 = var7 - 72.0F;
-      float var13 = var6 + var12 + 6.0F;
-      float var14 = 66.0F;
-      if (var1 >= var13 && var1 <= var13 + var14 && var3 >= var11 && var3 <= var11 + 22.0) {
+      float var1 = this.I_cardX + this.I_cardW - 24.0F;
+      if (mx >= var1 && mx <= var1 + 16.0 && my >= this.I_cardY + 10.0 && my <= this.I_cardY + 26.0) {
+         this.open = false;
+         return true;
+      }
+
+      float var2 = this.I_cardX + 16.0F;
+      float var3 = this.I_cardW - 32.0F;
+
+      for (int var4 = 0; var4 < this.I_accounts.size(); ++var4) {
+         float var5 = this.I_rowY(var4);
+         float var6 = var2 + var3 - 18.0F;
+         if (mx >= var6 && mx <= var6 + 18.0 && my >= var5 && my <= var5 + 18.0) {
+            this.I_remove(var4);
+            return true;
+         }
+         if (mx >= var2 && mx <= var6 - 2.0 && my >= var5 && my <= var5 + 18.0) {
+            this.I_switchTo(var0, this.I_accounts.get(var4));
+            return true;
+         }
+      }
+
+      float var7 = this.I_rowY(this.I_accounts.size()) + 4.0F;
+      float var8 = var3 - 60.0F;
+      float var9 = var2 + var8 + 6.0F;
+      float var10 = 54.0F;
+      if (mx >= var9 && mx <= var9 + var10 && my >= var7 && my <= var7 + 20.0) {
          this.I_addCurrentInput();
+         return true;
       }
+
+      if (mx < this.I_cardX || mx > this.I_cardX + this.I_cardW || my < this.I_cardY || my > this.I_cardY + this.I_cardH) {
+         this.open = false;
+      }
+      return true;
    }
 
-   @Override
-   public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+   public boolean onCharTyped(char chr) {
+      if (!this.open) {
+         return false;
+      }
+      if (this.I_input.length() < 16 && (Character.isLetterOrDigit(chr) || chr == '_') && chr < 128) {
+         this.I_input.append(chr);
+      }
+      return true;
+   }
+
+   public boolean onKeyPressed(int keyCode) {
+      if (!this.open) {
+         return false;
+      }
+      if (keyCode == 256) {
+         this.open = false;
+         return true;
+      }
       if (keyCode == 259 && this.I_input.length() > 0) {
          this.I_input.deleteCharAt(this.I_input.length() - 1);
          return true;
@@ -221,25 +257,6 @@ public class AccountsScreen extends ii_Class4 implements iIIiIIiIi_Class294 {
          this.I_addCurrentInput();
          return true;
       }
-      return super.keyPressed(keyCode, scanCode, modifiers);
-   }
-
-   @Override
-   public boolean charTyped(char chr, int modifiers) {
-      if (this.I_input.length() < 16 && (Character.isLetterOrDigit(chr) || chr == '_') && chr < 128) {
-         this.I_input.append(chr);
-         return true;
-      }
-      return super.charTyped(chr, modifiers);
-   }
-
-   @Override
-   public void close() {
-      I_field_3a9bda27.setScreen(this.I_parent);
-   }
-
-   @Override
-   public boolean shouldCloseOnEsc() {
       return true;
    }
 }
