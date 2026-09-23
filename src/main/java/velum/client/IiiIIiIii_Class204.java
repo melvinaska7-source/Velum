@@ -15,9 +15,14 @@ import ua.mintantileak.spk.Compile;
  */
 public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 {
    private static final int I_BTN_COUNT = 5;
-   private static final String[] I_btnLabel = {"Одиночная игра", "Сетевая игра", "Настройки", "Аккаунты", "Выход"};
+   private static final String[] I_btnKey = {"mainmenu.singleplayer", "mainmenu.multiplayer", "mainmenu.settings", "mainmenu.accounts", "mainmenu.quit"};
    private static final boolean[] I_btnPrimary = {true, false, false, false, false};
    private static boolean I_field_5a;
+   // на старте клиента фоновый поток догружает глифы шрифтов в атлас;
+   // если рисовать текст раньше, чем он закончит, буквы получаются "битые".
+   // ждём немного перед первой реальной отрисовкой текста, чтобы не попасть в это окно.
+   private static final long I_field_bootAt = System.currentTimeMillis();
+   private static final long I_field_textGraceMs = 1200L;
 
    private final IiiiIiIii_Class236[] I_btnHover = new IiiiIiIii_Class236[]{
       new IiiiIiIii_Class236(180L, 0.0F, IiiiIiiII_Class237.III_field_dd60aac),
@@ -79,11 +84,15 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
    @Override
    public void render(III var1) {
       var1.drawRoundedRect(0.0F, 0.0F, this.width, this.height, IIiii_Class8.I_field_2d98a52c, new ColorRGBA(18.0F, 18.0F, 23.0F).withAlpha(255.0F));
+      boolean var50 = System.currentTimeMillis() - I_field_bootAt > I_field_textGraceMs;
 
       IIiIIi_Class10 var2 = IIiIiI_Class11.ii_field_857c0621.I_method_3a2d5e3(20.0F);
-      float var3 = var2.I_method_2c375926("velocity.");
       float var4 = this.height / 2.0F - 70.0F;
-      var1.drawText(var2, "velocity.", this.width / 2.0F - var3 / 2.0F, var4, ColorRGBA.WHITE);
+      if (var50) {
+         String var3str = IiIiIIII_Class81.I_method_f25a980a("mainmenu.title");
+         float var3 = var2.I_method_2c375926(var3str);
+         var1.drawText(var2, var3str, this.width / 2.0F - var3 / 2.0F, var4, ColorRGBA.WHITE);
+      }
 
       float var5 = 114.0F;
       float var6 = 24.0F;
@@ -121,6 +130,7 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
          float var24 = var15[var22];
          float var25 = var16[var22];
          float var26 = var17[var22];
+         String var26label = var50 ? IiIiIIII_Class81.I_method_f25a980a(I_btnKey[var22]) : null;
          boolean var27 = var20 >= var23 && var20 <= var23 + var25 && var21 >= var24 && var21 <= var24 + var26;
          boolean var28 = this.I_btnHover[var22].I_method_6ac4da6f() > 0.5F;
          if (var27 && !var28) {
@@ -132,14 +142,18 @@ public class IiiIIiIii_Class204 extends ii_Class4 implements iIIiIIiIi_Class294 
 
          if (I_btnPrimary[var22]) {
             var1.drawRoundedRect(var23, var24, var25, var26, var30, new ColorRGBA(242.0F, 242.0F, 246.0F));
-            float var31 = var18.I_method_2c375926(I_btnLabel[var22]);
-            var1.drawText(var18, I_btnLabel[var22], var23 + (var25 - var31) / 2.0F, var24 + (var26 - var18.I_method_a649725c()) / 2.0F, new ColorRGBA(18.0F, 18.0F, 24.0F));
+            if (var50) {
+               float var31 = var18.I_method_2c375926(var26label);
+               var1.drawText(var18, var26label, var23 + (var25 - var31) / 2.0F, var24 + (var26 - var18.I_method_a649725c()) / 2.0F, new ColorRGBA(18.0F, 18.0F, 24.0F));
+            }
          } else {
             var1.drawRoundedRect(var23, var24, var25, var26, var30, new ColorRGBA(30.0F, 30.0F, 38.0F).withAlpha(205.0F));
             var1.drawRoundedBorder(var23, var24, var25, var26, 0.6F, var30, ColorRGBA.WHITE.withAlpha(20.0F + 55.0F * var29));
-            float var32 = var19.I_method_2c375926(I_btnLabel[var22]);
-            ColorRGBA var33 = var29 > 0.5F ? ColorRGBA.WHITE : new ColorRGBA(170.0F, 170.0F, 182.0F);
-            var1.drawText(var19, I_btnLabel[var22], var23 + (var25 - var32) / 2.0F, var24 + (var26 - var19.I_method_a649725c()) / 2.0F, var33);
+            if (var50) {
+               float var32 = var19.I_method_2c375926(var26label);
+               ColorRGBA var33 = var29 > 0.5F ? ColorRGBA.WHITE : new ColorRGBA(170.0F, 170.0F, 182.0F);
+               var1.drawText(var19, var26label, var23 + (var25 - var32) / 2.0F, var24 + (var26 - var19.I_method_a649725c()) / 2.0F, var33);
+            }
          }
       }
    }
