@@ -7,7 +7,7 @@ import java.util.Set;
 import net.minecraft.client.util.InputUtil;
 import pyvelum.utility.render.ColorRGBA;
 
-/**
+/***
  * ClickGUI "Комета" — независимый режим меню (MenuModule.mode = cometa).
  * В отличие от "Новая"/"Панели", НЕ зависит от общей системы окон/компонентов
  * (IiiIIiiiI_Class207, IiiIiIIII_Class209, iii_Class8) — только от
