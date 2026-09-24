@@ -25,11 +25,9 @@ extends Module {
     private ModeSetting I_field_bbe33e6c;
     private ModeSetting.Nested1_42765c60 I_field_500d0627;
     private ModeSetting.Nested1_42765c60 i_field_500d0627;
-    private ModeSetting.Nested1_42765c60 II_field_500d0627;
     private KeybindSetting I_field_ba20522c;
     private Screen I_field_bf52cf84;
     private IiiIiIiii_Class216 I_field_a5e7424c;
-    private CometaClickGuiScreen I_field_cometa;
     private static boolean I_field_5a;
 
     public MenuModule() {
@@ -41,19 +39,16 @@ extends Module {
         this.I_field_bbe33e6c = new ModeSetting(this, "modules.settings.menu.mode");
         this.I_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.dropdown");
         this.i_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.modern").select();
-        this.II_field_500d0627 = new ModeSetting.Nested1_42765c60(this.I_field_bbe33e6c, "modules.settings.menu.mode.cometa");
         this.I_field_ba20522c = new KeybindSetting(this, "modules.settings.menu.hide_key").I_method_4288e15a(342);
     }
 
     @Override
     public void onEnable() {
-        if (this.i_field_500d0627.isSelected() && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiiI_Class215) {
+        boolean bl = this.i_field_500d0627.isSelected();
+        if (bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiiI_Class215) {
             return;
         }
-        if (this.I_field_500d0627.isSelected() && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216) {
-            return;
-        }
-        if (this.II_field_500d0627.isSelected() && MenuModule.I_field_3a9bda27.currentScreen instanceof CometaClickGuiScreen) {
+        if (!bl && MenuModule.I_field_3a9bda27.currentScreen instanceof IiiIiIiii_Class216) {
             return;
         }
         this.I_field_bf52cf84 = this.I_method_83034dbb();
@@ -72,12 +67,6 @@ extends Module {
             IiiIIiiiI_Class207 iiiIIiiiI_Class2072 = iiiIIiiiI_Class207 instanceof IiiIiIiiI_Class215 ? iiiIIiiiI_Class207 : new IiiIiIiiI_Class215();
             VelumClient.getInstance().I_method_577f3d5a(iiiIIiiiI_Class2072);
             return iiiIIiiiI_Class2072;
-        }
-        if (this.II_field_500d0627.isSelected()) {
-            if (this.I_field_cometa == null) {
-                this.I_field_cometa = new CometaClickGuiScreen();
-            }
-            return this.I_field_cometa;
         }
         if (this.I_field_a5e7424c == null) {
             this.I_field_a5e7424c = new IiiIiIiii_Class216();
