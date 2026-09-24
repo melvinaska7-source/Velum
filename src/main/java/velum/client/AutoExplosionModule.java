@@ -246,7 +246,7 @@ public class AutoExplosionModule extends Module {
         return -1;
     }
 
-    private void placeCrystalPacket BlockPos obsidianPos) {
+    private void placeCrystalPacket(BlockPos obsidianPos) {
         Vec3d hitVec = new Vec3d(obsidianPos.getX() + 0.5, obsidianPos.getY() + 1.0, obsidianPos.getZ() + 0.5);
         float[] rot = calculateRotations(hitVec);
         
