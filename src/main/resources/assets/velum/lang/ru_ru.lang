@@ -1656,6 +1656,7 @@ modules.settings.ambience.stars_color=Цвет звезд
 modules.settings.menu.mode=Режим
 modules.settings.menu.mode.dropdown=Панели
 modules.settings.menu.mode.modern=Новый
+modules.settings.menu.mode.cometa=Комета
 modules.settings.menu.hide_key=Клавиша скрытия
 
 # View Model
