@@ -9,3 +9,4 @@ run/
 *.tar.gz
 *.zip
 *.tar
+*.bak
